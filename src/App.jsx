@@ -549,7 +549,7 @@ export default function App() {
     // Service Portal View (End-to-End Workflow)
     // New Application Form View (Realistic CO Application)
     const ApplicationFormView = () => (
-        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
+        <div className="w-full space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
             <div className="flex items-center justify-between">
                 <button
                     onClick={() => setIsCreatingApp(false)}
