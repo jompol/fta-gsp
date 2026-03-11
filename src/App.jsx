@@ -54,7 +54,11 @@ import {
     CheckSquare,
     Printer,
     FileCheck,
-    Sticker
+    Sticker,
+    Lightbulb,
+    Compass,
+    Flag,
+    LineChart
 } from 'lucide-react';
 
 // --- UI Components ---
@@ -381,6 +385,153 @@ export default function App() {
                     </table>
                 </div>
             </Card>
+        </div>
+    );
+
+    // New Policy & Impact View (Section 15: Expected Results)
+    const PolicyImpactView = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+                        <Target className="text-blue-600" size={32} /> Policy & Impact Analytics
+                    </h1>
+                    <p className="text-slate-500 text-sm">การวิเคราะห์ผลลัพธ์เชิงยุทธศาสตร์และศักยภาพสินค้า (TOR Section 15)</p>
+                </div>
+                <div className="flex gap-2">
+                    <Badge variant="success">Data Freshness: 99.8%</Badge>
+                    <button className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg shadow-slate-200 hover:bg-slate-800 transition-all">
+                        <LineChart size={16} /> Strategy Report
+                    </button>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Market Expansion Tracking (Section 15.3) */}
+                <Card className="lg:col-span-2 p-6 bg-gradient-to-br from-white to-blue-50/20">
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                            <Globe size={18} className="text-blue-500" /> Market Expansion Tracking (Post-FTA Growth)
+                        </h3>
+                        <select className="bg-white border rounded-lg px-2 py-1 text-xs font-bold outline-none cursor-pointer">
+                            <option>RCEP Market</option>
+                            <option>ASEAN Market</option>
+                            <option>China Market</option>
+                        </select>
+                    </div>
+                    <div className="h-64 flex items-end justify-between gap-4 px-2 border-b border-l border-slate-100 relative">
+                        <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between pointer-events-none opacity-40">
+                            {[1, 2, 3, 4].map(l => <div key={l} className="border-t border-slate-100 w-full h-px"></div>)}
+                        </div>
+                        {[
+                            { m: 'Jan', pre: 40, post: 65 },
+                            { m: 'Feb', pre: 38, post: 72 },
+                            { m: 'Mar', pre: 45, post: 85 },
+                            { m: 'Apr', pre: 42, post: 78 },
+                            { m: 'May', pre: 48, post: 92 },
+                            { m: 'Jun', pre: 50, post: 110 },
+                        ].map((d, i) => (
+                            <div key={i} className="flex-1 h-full flex items-end gap-1.5 z-10 group">
+                                <div className="flex-1 bg-slate-200 rounded-t-sm transition-all" style={{ height: `${d.pre}%` }}></div>
+                                <div className="flex-1 bg-blue-600 rounded-t-sm transition-all group-hover:bg-blue-700 relative" style={{ height: `${Math.min(d.post, 100)}%` }}>
+                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">
+                                        Growth: +{((d.post - d.pre) / d.pre * 100).toFixed(0)}%
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-8 flex justify-center gap-8">
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
+                            <div className="w-3 h-3 bg-slate-200 rounded-full"></div> Pre-FTA Expansion
+                        </div>
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
+                            <div className="w-3 h-3 bg-blue-600 rounded-full"></div> Post-FTA Expansion
+                        </div>
+                    </div>
+                </Card>
+
+                {/* Opportunity Finder (Section 15.1) */}
+                <Card className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                        <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                            <Lightbulb size={18} className="text-amber-500" /> Opportunity Finder
+                        </h3>
+                        <Badge variant="purple">AI Suggest</Badge>
+                    </div>
+                    <p className="text-[11px] text-slate-500 leading-relaxed mb-6 font-medium italic underline">รายการสินค้าที่มีศักยภาพสูง (High Export) แต่สัดส่วนการใช้สิทธิยังต่ำ</p>
+                    <div className="space-y-5">
+                        {[
+                            { hs: '0810.90', name: 'Mangosteens', gap: '42%', val: '$850M' },
+                            { hs: '4001.22', name: 'Rubber TSR 20', gap: '35%', val: '$1,200M' },
+                            { hs: '1604.14', name: 'Canned Tuna', gap: '28%', val: '$650M' },
+                            { hs: '8415.10', name: 'Air Conditioners', gap: '22%', val: '$2,100M' },
+                        ].map((item, i) => (
+                            <div key={i} className="p-3 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all cursor-pointer">
+                                <div className="flex justify-between items-start mb-2">
+                                    <div>
+                                        <span className="text-[10px] font-mono font-bold text-blue-600">{item.hs}</span>
+                                        <h4 className="text-xs font-black text-slate-800 mt-0.5">{item.name}</h4>
+                                    </div>
+                                    <span className="text-xs font-black text-rose-500">Gap: {item.gap}</span>
+                                </div>
+                                <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase mt-2">
+                                    <span>Potential Value: <span className="text-slate-800">{item.val}</span></span>
+                                    <button className="text-blue-600 hover:underline">Analysis Plan</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Policy Support Insight (Section 15.2) */}
+                <Card className="p-6 border-l-4 border-l-indigo-600">
+                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <Compass size={20} className="text-indigo-600" /> Policy Support Insight (Negotiation Prep)
+                    </h3>
+                    <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
+                        <div className="flex items-start gap-4">
+                            <div className="p-2.5 bg-white text-indigo-600 rounded-xl shadow-sm"><Sparkles size={24} /></div>
+                            <div>
+                                <p className="text-sm font-bold text-indigo-900 leading-tight">FTA Negotiation Simulation (Thai-EU)</p>
+                                <p className="text-[11px] text-indigo-600 mt-2 leading-relaxed font-medium">หากมีการลดภาษีกลุ่มยานยนต์ไฟฟ้า (EV) ลงเหลือ 0% คาดการณ์ว่าจะเพิ่มมูลค่าการใช้สิทธิได้อีก <span className="font-bold text-indigo-900">$450M ต่อปี</span> และสร้างงานในไทยเพิ่มขึ้น 12%</p>
+                            </div>
+                        </div>
+                        <div className="mt-6 flex gap-3">
+                            <button className="flex-1 py-2.5 bg-indigo-600 text-white text-[11px] font-bold rounded-xl shadow-lg shadow-indigo-100 hover:bg-indigo-700">Explore Simulation</button>
+                            <button className="px-4 py-2.5 bg-white text-indigo-600 border border-indigo-200 text-[11px] font-bold rounded-xl">Download Scenario</button>
+                        </div>
+                    </div>
+                </Card>
+
+                {/* Strategic KPI Tracking */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <Flag size={20} className="text-emerald-500" /> Strategic Success Tracking (Section 14-15)
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        {[
+                            { label: 'User Satisfaction', kpi: '84.5%', target: '80%', status: 'success' },
+                            { label: 'SME Participation', kpi: '4,250', target: '4,000', status: 'success' },
+                            { label: 'CO Processing Time', kpi: '1.2h', target: '<2h', status: 'success' },
+                            { label: 'Export Competitiveness', kpi: '+15%', target: '+10%', status: 'success' },
+                        ].map((item, i) => (
+                            <div key={i} className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{item.label}</p>
+                                <div className="flex justify-between items-end mt-2">
+                                    <span className="text-2xl font-black text-slate-900">{item.kpi}</span>
+                                    <Badge variant={item.status === 'success' ? 'success' : 'warning'}>v Target</Badge>
+                                </div>
+                                <div className="h-1 w-full bg-slate-200 rounded-full mt-3 overflow-hidden">
+                                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: '90%' }}></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
         </div>
     );
 
@@ -1266,6 +1417,7 @@ export default function App() {
                 <nav className="flex-1 space-y-1 px-3 overflow-y-auto">
                     {[
                         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+                        { id: 'policy', label: 'Policy & Impact', icon: Target },
                         { id: 'services', label: 'Service Portal', icon: FileCheck },
                         { id: 'operations', label: 'Operations/CO', icon: ClipboardCheck },
                         { id: 'ai', label: 'AI Intelligence', icon: BrainCircuit },
@@ -1280,7 +1432,7 @@ export default function App() {
                             key={item.id}
                             onClick={() => handleTabChange(item.id)}
                             className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group ${activeTab === item.id
-                                    ? (item.id === 'ai' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/30')
+                                    ? (item.id === 'ai' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : (item.id === 'policy' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'))
                                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                                 }`}
                         >
@@ -1371,6 +1523,7 @@ export default function App() {
                     )}
 
                     {activeTab === 'dashboard' && <DashboardView />}
+                    {activeTab === 'policy' && <PolicyImpactView />}
                     {activeTab === 'services' && <ServicesView />}
                     {activeTab === 'operations' && <OperationsView />}
                     {activeTab === 'ai' && <AIIntelligenceView />}
