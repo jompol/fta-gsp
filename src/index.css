@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 /* Custom animation utilities for the demo */
@@ -15,9 +16,7 @@
   animation: fade-in 0.5s ease-out, slide-in-from-bottom-4 0.5s ease-out;
 }
 
-/* Font import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
+/* Font import moved to top */
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
