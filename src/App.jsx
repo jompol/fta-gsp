@@ -43,7 +43,7 @@ import {
 // --- UI Components ---
 
 const Card = ({ children, className = "" }) => (
-    <div className={`bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden ${className}`}>
+    <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden ${className}`}>
         {children}
     </div>
 );
@@ -405,8 +405,8 @@ export default function App() {
                             { file: 'TRS_China_2024.xlsx', task: 'HS Mapping', status: 'Completed', error: 0, date: '20/05/2024' },
                             { file: 'GSP_Stats_USA.csv', task: 'Currency Transform', status: 'Warning', error: 12, date: '19/05/2024' },
                         ].map((log, i) => (
-                            <div key={i} className="flex items-center justify-between p-3 border rounded-xl bg-slate-50/50">
-                                <div className="flex items-center gap-4"><div className="p-2 bg-white rounded-lg border shadow-sm"><FileSpreadsheet size={20} className="text-emerald-500" /></div><div><p className="text-sm font-bold text-slate-800">{log.file}</p><p className="text-[10px] text-slate-400 font-bold uppercase">{log.task}</p></div></div>
+                            <div key={i} className="flex items-center justify-between p-3 border border-slate-100 rounded-xl bg-slate-50/50">
+                                <div className="flex items-center gap-4"><div className="p-2 bg-white rounded-lg border border-slate-100 shadow-sm"><FileSpreadsheet size={20} className="text-emerald-500" /></div><div><p className="text-sm font-bold text-slate-800">{log.file}</p><p className="text-[10px] text-slate-400 font-bold uppercase">{log.task}</p></div></div>
                                 <div className="text-right"><Badge variant={log.status === 'Completed' ? 'success' : 'warning'}>{log.status}</Badge><p className="text-[10px] text-slate-400 mt-1 font-bold">{log.error} Errors Found</p></div>
                             </div>
                         ))}
@@ -482,7 +482,7 @@ export default function App() {
                     </div>
                 </div>
 
-                <div className="border rounded-xl overflow-hidden">
+                <div className="border border-slate-100 rounded-xl overflow-hidden">
                     <table className="w-full text-sm">
                         <thead className="bg-slate-50 border-b text-slate-500 font-bold">
                             <tr>
@@ -538,7 +538,7 @@ export default function App() {
                         <h3 className="font-bold text-slate-800 flex items-center gap-2"><FileJson size={18} /> Data Catalog Explorer</h3>
                         <div className="relative">
                             <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                            <input type="text" placeholder="ค้นหาชุดข้อมูล..." className="bg-white border rounded-lg py-1.5 pl-8 pr-3 text-xs outline-none focus:ring-1 focus:ring-blue-500" />
+                            <input type="text" placeholder="ค้นหาชุดข้อมูล..." className="bg-white border border-slate-100 rounded-lg py-1.5 pl-8 pr-3 text-xs outline-none focus:ring-1 focus:ring-blue-500" />
                         </div>
                     </div>
                     <div className="p-0">
@@ -633,7 +633,7 @@ export default function App() {
                             <h4 className="font-bold text-slate-800 mb-1 leading-tight">{rep.title}</h4>
                             <p className="text-xs text-slate-400 font-medium">{rep.period}</p>
                             <div className="mt-6 flex gap-2">
-                                <button className="flex-1 py-2 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 text-[10px] font-bold rounded-lg border transition-colors flex items-center justify-center gap-1.5 uppercase">
+                                <button className="flex-1 py-2 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 text-[10px] font-bold rounded-lg border border-slate-100 transition-colors flex items-center justify-center gap-1.5 uppercase">
                                     <Eye size={12} /> Preview
                                 </button>
                                 <button className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 uppercase shadow-md shadow-blue-100">
