@@ -35,9 +35,14 @@ import {
     Fingerprint,
     ClipboardCheck,
     History,
-    HardDrive,
     Users,
-    DatabaseZap
+    DatabaseZap,
+    BrainCircuit,
+    Sparkles,
+    MessageSquare,
+    AlertTriangle,
+    Zap,
+    Target
 } from 'lucide-react';
 
 // --- UI Components ---
@@ -55,6 +60,7 @@ const Badge = ({ children, variant = "default" }) => {
         warning: "bg-amber-100 text-amber-700",
         danger: "bg-rose-100 text-rose-700",
         info: "bg-blue-100 text-blue-700",
+        purple: "bg-purple-100 text-purple-700",
     };
     return <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${styles[variant]}`}>{children}</span>;
 };
@@ -440,6 +446,146 @@ export default function App() {
                     </div>
                 </div>
             </Card>
+        </div>
+    );
+
+    // New AI Intelligence View (Extended Concepts - Section 12.3.3)
+    const AIIntelligenceView = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+                        <BrainCircuit className="text-purple-600" size={32} /> AI Intelligence Portal
+                    </h1>
+                    <p className="text-slate-500 text-sm">การประยุกต์ใช้เทคโนโลยีปัญญาประดิษฐ์เพื่อการวิเคราะห์ข้อมูลเชิงรุก (Section 12.3.3.5)</p>
+                </div>
+                <div className="flex gap-2">
+                    <Badge variant="purple">AI Engine: GPT-4o Enhanced</Badge>
+                    <Badge variant="success">Model Updated: 12/03/2026</Badge>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Predictive Analytics Section */}
+                <Card className="lg:col-span-2 p-6 bg-gradient-to-br from-white to-purple-50/30">
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                            <TrendingUp size={20} className="text-purple-500" /> Export & Utilization Prediction (Next 6 Months)
+                        </h3>
+                        <button className="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-lg border border-purple-100 flex items-center gap-1">
+                            <Zap size={12} /> Run Forecasting
+                        </button>
+                    </div>
+                    <div className="h-60 flex items-end justify-between gap-3 px-2 border-b border-l border-slate-100">
+                        {[65, 72, 68, 85, 92, 98].map((h, i) => (
+                            <div key={i} className="flex-1 group relative flex flex-col items-center">
+                                <div className="absolute -top-10 bg-purple-900 text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-xl">
+                                    Predicted: ${h}M
+                                </div>
+                                <div
+                                    className="w-full bg-purple-500/80 group-hover:bg-purple-600 rounded-t-lg transition-all duration-500 relative shadow-lg shadow-purple-200"
+                                    style={{ height: `${h}%` }}
+                                >
+                                    <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] text-white font-bold">{h}%</div>
+                                </div>
+                                <div className="absolute -bottom-6 text-[10px] font-bold text-slate-400">Month {i + 1}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-12 flex items-start gap-4 p-4 bg-white border border-purple-100 rounded-2xl">
+                        <div className="p-2 bg-purple-50 text-purple-600 rounded-xl"><Sparkles size={20} /></div>
+                        <div>
+                            <p className="text-sm font-bold text-slate-800">AI Insights:</p>
+                            <p className="text-xs text-slate-500 leading-relaxed mt-1">คาดการณ์แนวโน้มการใช้สิทธิในกรอบ <span className="font-bold text-purple-600">RCEP</span> จะเพิ่มขึ้น <span className="font-bold text-emerald-600">14.2%</span> ในไตรมาสถัดไป เนื่องจากเทศกาลในจีนและเกาหลีใต้ แนะนำให้กองสิทธิฯ เตรียมมาตรการสนับสนุนผู้ประกอบการกลุ่มสินค้าเกษตร</p>
+                        </div>
+                    </div>
+                </Card>
+
+                {/* Anomaly Detection Section */}
+                <Card className="p-6 border-l-4 border-l-purple-500">
+                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <AlertTriangle size={20} className="text-amber-500" /> Smart Anomaly Detection
+                    </h3>
+                    <div className="space-y-4">
+                        {[
+                            { id: 'ANM-084', desc: 'พฤติกรรมขอ CO ผิดปกติ', risk: 'High', msg: 'มูลค่า FOB เกินค่าเฉลี่ย 300%' },
+                            { id: 'ANM-082', desc: 'การใช้สิทธิซ้ำซ้อน', risk: 'Med', msg: 'เลขที่ Invoice ซ้ำในระบบ GSP' },
+                            { id: 'ANM-079', desc: 'HS Code ไม่สอดคล้อง', risk: 'Low', msg: 'คำอธิบายสินค้าไม่ตรงกับพิกัด' },
+                        ].map((item, i) => (
+                            <div key={i} className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-amber-50 hover:border-amber-200 transition-all cursor-pointer">
+                                <div className="flex justify-between items-start mb-1">
+                                    <span className="text-[10px] font-mono font-bold text-purple-600">{item.id}</span>
+                                    <Badge variant={item.risk === 'High' ? 'danger' : 'warning'}>{item.risk} Risk</Badge>
+                                </div>
+                                <p className="text-xs font-bold text-slate-800">{item.desc}</p>
+                                <p className="text-[10px] text-slate-400 mt-1">{item.msg}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <button className="w-full mt-6 py-2.5 text-[10px] font-bold text-slate-400 hover:text-purple-600 border border-dashed rounded-xl transition-all uppercase tracking-widest">
+                        Scan All Transactions
+                    </button>
+                </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Smart HS Classifier */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <Target size={20} className="text-indigo-500" /> Smart HS Classifier (Auto Suggestion)
+                    </h3>
+                    <p className="text-xs text-slate-500 mb-6 font-medium">ช่วยเจ้าหน้าที่จำแนกพิกัดสินค้าจากชื่อสินค้าด้วย AI Natural Language Processing</p>
+                    <div className="space-y-4">
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder="พิมพ์ชื่อสินค้าเพื่อแนะนำพิกัด... (เช่น มะม่วงน้ำดอกไม้แช่เย็น)"
+                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 pl-4 pr-12 text-sm focus:border-purple-300 focus:ring-4 focus:ring-purple-500/5 outline-none transition-all"
+                            />
+                            <button className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-purple-600 text-white rounded-xl shadow-lg shadow-purple-200 hover:bg-purple-700">
+                                <Target size={18} />
+                            </button>
+                        </div>
+                        <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-between">
+                            <div>
+                                <p className="text-[10px] font-bold text-indigo-400 uppercase">AI Suggestion (98% Confidence)</p>
+                                <p className="text-lg font-black text-indigo-900 mt-0.5">0804.50.20</p>
+                                <p className="text-[11px] text-indigo-600">Fresh Guavas, Mangoes and Mangosteens</p>
+                            </div>
+                            <button className="px-4 py-2 bg-white text-indigo-600 font-bold text-xs rounded-xl shadow-sm border border-indigo-100 hover:bg-indigo-100">Apply Code</button>
+                        </div>
+                    </div>
+                </Card>
+
+                {/* AI Trade Assistant Chatbot */}
+                <Card className="p-6 bg-slate-900 text-white relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 blur-3xl pointer-events-none"></div>
+                    <h3 className="font-bold mb-4 flex items-center gap-2 text-purple-300">
+                        <MessageSquare size={20} /> AI Trade Policy Assistant
+                    </h3>
+                    <div className="space-y-4 h-48 overflow-y-auto mb-4 scrollbar-hide pr-2">
+                        <div className="flex justify-start">
+                            <div className="bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] border border-slate-700">
+                                <p className="text-xs leading-relaxed text-slate-300">สวัสดีครับ ผมคือผู้ช่วยอัจฉริยะ วันนี้ต้องการข้อมูลด้านกฎถิ่นกำเนิดสินค้าในกรอบความตกลงใดครับ?</p>
+                            </div>
+                        </div>
+                        <div className="flex justify-end">
+                            <div className="bg-purple-600 p-3 rounded-2xl rounded-tr-none max-w-[80%] shadow-lg shadow-purple-900/20">
+                                <p className="text-xs leading-relaxed">สรุปกฎ ROO ของสินค้าพิกัด 8703 ภายใต้ RCEP ให้หน่อย</p>
+                            </div>
+                        </div>
+                        <div className="flex justify-start">
+                            <div className="bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] border border-slate-700">
+                                <p className="text-xs leading-relaxed text-slate-300 italic animate-pulse">AI กำลังประมวลผลข้อมูลความตกลงล่าสุด...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex gap-2">
+                        <input type="text" placeholder="พิมพ์คำถามของคุณ..." className="flex-1 bg-white/10 border border-white/10 rounded-xl py-2 px-4 text-xs focus:ring-2 focus:ring-purple-500 outline-none" />
+                        <button className="p-2 bg-purple-600 rounded-xl hover:bg-purple-500 transition-colors"><ChevronRight size={18} /></button>
+                    </div>
+                </Card>
+            </div>
         </div>
     );
 
@@ -830,6 +976,7 @@ export default function App() {
                     {[
                         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
                         { id: 'operations', label: 'Operations/CO', icon: ClipboardCheck },
+                        { id: 'ai', label: 'AI Intelligence', icon: BrainCircuit },
                         { id: 'data', label: 'Data Integration', icon: Database },
                         { id: 'analytics', label: 'Analytics', icon: BarChart3 },
                         { id: 'governance', label: 'Governance', icon: ShieldCheck },
@@ -839,7 +986,9 @@ export default function App() {
                         <button
                             key={item.id}
                             onClick={() => handleTabChange(item.id)}
-                            className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group ${activeTab === item.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'text-slate-400 hover:text-white hover:bg-white/5'
+                            className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group ${activeTab === item.id
+                                    ? (item.id === 'ai' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/30')
+                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             <item.icon size={20} strokeWidth={activeTab === item.id ? 2.5 : 2} />
@@ -849,6 +998,7 @@ export default function App() {
                                     {item.label}
                                 </div>
                             )}
+                            {item.id === 'ai' && <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-400 rounded-full animate-ping"></div>}
                         </button>
                     ))}
                 </nav>
@@ -893,8 +1043,8 @@ export default function App() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                         <input
                             type="text"
-                            placeholder="Search by HS Code, Country, or Agreement..."
-                            className="w-full bg-slate-100 border-none rounded-xl py-2 pl-10 pr-4 text-xs font-medium focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none"
+                            placeholder="ค้นหาเลขอ้างอิง, พิกัด, หรือขอความช่วยเหลือจาก AI..."
+                            className="w-full bg-slate-100 border-none rounded-xl py-2 pl-10 pr-4 text-xs font-medium focus:ring-2 focus:ring-purple-500/20 focus:bg-white transition-all outline-none"
                         />
                     </div>
 
@@ -929,6 +1079,7 @@ export default function App() {
 
                     {activeTab === 'dashboard' && <DashboardView />}
                     {activeTab === 'operations' && <OperationsView />}
+                    {activeTab === 'ai' && <AIIntelligenceView />}
                     {activeTab === 'data' && <ETLView />}
                     {activeTab === 'analytics' && <AnalyticsView />}
                     {activeTab === 'governance' && <GovernanceView />}
@@ -943,10 +1094,10 @@ export default function App() {
                             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div> System Normal
                         </div>
                         <span className="text-[10px] text-slate-300">|</span>
-                        <span className="text-[10px] font-medium text-slate-400">Cloud Host: Google Cloud Platform (Thailand Region)</span>
+                        <span className="text-[10px] font-medium text-slate-400">AI Engine Powered by Department Data Lake</span>
                     </div>
                     <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                        Build Version 0.9.1-GOLD • {new Date().toLocaleDateString()}
+                        Build Version 1.0.2-PLATINUM • {new Date().toLocaleDateString()}
                     </div>
                 </footer>
 
