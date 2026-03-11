@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: fta-gsp-web
+    ports:
+      - "6000:80"
+    restart: always
