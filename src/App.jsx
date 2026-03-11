@@ -42,7 +42,12 @@ import {
     MessageSquare,
     AlertTriangle,
     Zap,
-    Target
+    Target,
+    HelpCircle,
+    PlayCircle,
+    BookOpen,
+    LifeBuoy,
+    Clock
 } from 'lucide-react';
 
 // --- UI Components ---
@@ -369,6 +374,92 @@ export default function App() {
                     </table>
                 </div>
             </Card>
+        </div>
+    );
+
+    // New Support & Help View (Section 2.11 & 11.5)
+    const SupportHelpView = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+                        <LifeBuoy className="text-blue-600" size={32} /> Help & Support Center
+                    </h1>
+                    <p className="text-slate-500 text-sm">ศูนย์ช่วยเหลือ คู่มือการใช้งาน และการติดตาม SLA (Section 2.11 & 11.5)</p>
+                </div>
+                <button className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-rose-200">
+                    <HelpCircle size={18} /> แจ้งปัญหาการใช้งาน (Helpdesk)
+                </button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* System Health & SLA Tracking (Section 11.5) */}
+                <Card className="p-6 border-t-4 border-t-emerald-500">
+                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <Zap size={18} className="text-emerald-500" /> System Health & SLA
+                    </h3>
+                    <div className="space-y-6">
+                        <div className="flex justify-between items-end">
+                            <div>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase">Uptime Score</p>
+                                <p className="text-3xl font-black text-slate-800">99.98%</p>
+                            </div>
+                            <Badge variant="success">Pass SLA</Badge>
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-[11px] font-bold">
+                                <span className="text-slate-500">Response Time (Avg.)</span>
+                                <span className="text-emerald-600">12 Mins</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-emerald-500 rounded-full" style={{ width: '95%' }}></div>
+                            </div>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <div className="flex items-center gap-3 mb-2">
+                                <Clock size={16} className="text-blue-500" />
+                                <span className="text-xs font-bold text-slate-700">Maintenance Window</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 leading-relaxed">รอบการปรับปรุงถัดไป: 15 เม.ย. 2567 (02:00 - 04:00 น.)<br />ระบบจะไม่สามารถใช้งานได้ชั่วคราวในช่วงเวลาดังกล่าว</p>
+                        </div>
+                    </div>
+                </Card>
+
+                {/* Training Materials (Section 2.11) */}
+                <Card className="lg:col-span-2 p-6">
+                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <BookOpen size={18} className="text-blue-500" /> Training Materials & Manuals
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {[
+                            { title: 'คู่มือสำหรับผู้ใช้งานทั่วไป (Front Office)', type: 'PDF / E-Book', icon: <FileText className="text-blue-500" />, size: '4.5 MB' },
+                            { title: 'การใช้งาน Dashboard เบื้องต้น', type: 'Video Tutorial', icon: <PlayCircle className="text-rose-500" />, duration: '12:45' },
+                            { title: 'คู่มือสำหรับผู้ใช้งาน (Admin)', type: 'PDF / E-Book', icon: <Settings className="text-slate-500" />, size: '8.2 MB' },
+                            { title: 'การบริหารจัดการ Data Catalog', type: 'Video Tutorial', icon: <PlayCircle className="text-rose-500" />, duration: '08:20' },
+                        ].map((item, i) => (
+                            <div key={i} className="p-4 border border-slate-100 rounded-2xl hover:bg-slate-50 transition-all cursor-pointer flex items-center gap-4 group">
+                                <div className="p-3 bg-slate-100 rounded-xl group-hover:scale-110 transition-transform">
+                                    {item.icon}
+                                </div>
+                                <div>
+                                    <p className="text-sm font-bold text-slate-800 leading-tight">{item.title}</p>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className="text-[10px] font-bold text-blue-600 uppercase">{item.type}</span>
+                                        <span className="text-[10px] text-slate-400 font-medium">• {item.size || item.duration}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-8 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="p-2 bg-white rounded-lg shadow-sm"><HelpCircle size={20} className="text-blue-600" /></div>
+                            <p className="text-xs font-bold text-blue-900">ต้องการความช่วยเหลือเพิ่มเติม? ติดต่อศูนย์ไอที โทร. 1234 หรือ Line: @DFT_Support</p>
+                        </div>
+                        <button className="px-4 py-2 bg-blue-600 text-white font-bold text-[10px] rounded-xl shadow-lg">Chat Live</button>
+                    </div>
+                </Card>
+            </div>
         </div>
     );
 
@@ -989,6 +1080,7 @@ export default function App() {
                         { id: 'governance', label: 'Governance', icon: ShieldCheck },
                         { id: 'reports', label: 'Reports', icon: FileText },
                         { id: 'security', label: 'Admin & Logs', icon: Lock },
+                        { id: 'support', label: 'Help & Support', icon: LifeBuoy },
                     ].map((item) => (
                         <button
                             key={item.id}
@@ -1092,6 +1184,7 @@ export default function App() {
                     {activeTab === 'governance' && <GovernanceView />}
                     {activeTab === 'reports' && <ReportsView />}
                     {activeTab === 'security' && <SecurityAdminView />}
+                    {activeTab === 'support' && <SupportHelpView />}
                 </div>
 
                 {/* Footer Status Bar */}
