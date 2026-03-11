@@ -1349,7 +1349,7 @@ export default function App() {
                             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div> System Normal
                         </div>
                         <span className="text-[10px] text-slate-300">|</span>
-                        <span className="text-[10px] font-medium text-slate-400">AI Engine Powered by Department Data Lake</span>
+                        <span className="text-[10px] font-medium text-slate-400">MFEC Public Company Limited</span>
                     </div>
                     <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
                         Build Version 1.0.2-PLATINUM • {new Date().toLocaleDateString()}
