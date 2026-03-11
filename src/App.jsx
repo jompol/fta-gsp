@@ -109,7 +109,7 @@ export default function App() {
             setTimeout(() => {
                 // Success
                 setUser({
-                    name: 'Komsan S.',
+                    name: 'Chalermpol C.',
                     role: 'Administrator',
                     department: 'Department of Foreign Trade',
                     id: 'DFT-' + Math.floor(Math.random() * 10000)
@@ -1076,7 +1076,7 @@ export default function App() {
                     <div className="p-0">
                         <div className="grid grid-cols-1 divide-y divide-slate-100">
                             {[
-                                { user: 'Komsan.S (Admin)', action: 'Data Correction: Ref. DFT2024-00142', target: 'Utilization Value', time: '10:45:12' },
+                                { user: 'Chalermpol.C (Admin)', action: 'Data Correction: Ref. DFT2024-00142', target: 'Utilization Value', time: '10:45:12' },
                                 { user: 'Manager.01', action: 'Update TRS Schedule', target: 'ASEAN-China TRS', time: '09:30:10' },
                                 { user: 'System (Auto)', action: 'System Hardening Check', target: 'Security Baseline', time: '03:00:00' },
                                 { user: 'Unknown IP', action: 'Unauthorized Access Blocked', target: 'Firewall Alert', time: 'เมื่อคืนนี้ 22:15' },
