@@ -722,16 +722,17 @@ export default function App() {
                     </div>
                     <div className="h-60 flex items-end justify-between gap-3 px-2 border-b border-l border-slate-100">
                         {[
-                            { month: 'Apr', val: 65 },
-                            { month: 'May', val: 72 },
-                            { month: 'Jun', val: 68 },
-                            { month: 'Jul', val: 85 },
-                            { month: 'Aug', val: 92 },
-                            { month: 'Sep', val: 98 }
+                            { month: 'เม.ย.', val: 65, export: 1250 },
+                            { month: 'พ.ค.', val: 72, export: 1480 },
+                            { month: 'มิ.ย.', val: 68, export: 1320 },
+                            { month: 'ก.ค.', val: 85, export: 1780 },
+                            { month: 'ส.ค.', val: 92, export: 1950 },
+                            { month: 'ก.ย.', val: 98, export: 2100 }
                         ].map((data, i) => (
                             <div key={i} className="flex-1 group relative flex flex-col items-center">
-                                <div className="absolute -top-10 bg-purple-900 text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-xl">
-                                    Predicted: ${data.val}M
+                                <div className="absolute -top-14 bg-purple-900 text-white text-[9px] py-1.5 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-xl whitespace-nowrap">
+                                    <p className="font-bold">Export: ${data.export}M</p>
+                                    <p>Utilization: {data.val}%</p>
                                 </div>
                                 <div
                                     className="w-full bg-purple-500/80 group-hover:bg-purple-600 rounded-t-lg transition-all duration-500 relative shadow-lg shadow-purple-200"
@@ -743,7 +744,46 @@ export default function App() {
                             </div>
                         ))}
                     </div>
-                    <div className="mt-12 flex items-start gap-4 p-4 bg-white border border-purple-100 rounded-2xl">
+
+                    {/* Data Summary Table */}
+                    <div className="mt-10 overflow-hidden rounded-xl border border-slate-100">
+                        <table className="w-full text-[11px]">
+                            <thead>
+                                <tr className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
+                                    <th className="py-2.5 px-3 text-left">เดือน</th>
+                                    <th className="py-2.5 px-3 text-right">มูลค่าส่งออก (USD)</th>
+                                    <th className="py-2.5 px-3 text-right">อัตราการใช้สิทธิ</th>
+                                    <th className="py-2.5 px-3 text-right">แนวโน้ม</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {[
+                                    { month: 'เม.ย. 2567', export: '$1,250M', rate: '65%', trend: '+3.2%', up: true },
+                                    { month: 'พ.ค. 2567', export: '$1,480M', rate: '72%', trend: '+7.0%', up: true },
+                                    { month: 'มิ.ย. 2567', export: '$1,320M', rate: '68%', trend: '-4.0%', up: false },
+                                    { month: 'ก.ค. 2567', export: '$1,780M', rate: '85%', trend: '+17.0%', up: true },
+                                    { month: 'ส.ค. 2567', export: '$1,950M', rate: '92%', trend: '+7.0%', up: true },
+                                    { month: 'ก.ย. 2567', export: '$2,100M', rate: '98%', trend: '+6.0%', up: true },
+                                ].map((row, i) => (
+                                    <tr key={i} className="hover:bg-purple-50/30 transition-colors">
+                                        <td className="py-2.5 px-3 font-bold text-slate-700">{row.month}</td>
+                                        <td className="py-2.5 px-3 text-right font-mono font-bold text-slate-800">{row.export}</td>
+                                        <td className="py-2.5 px-3 text-right">
+                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">{row.rate}</span>
+                                        </td>
+                                        <td className="py-2.5 px-3 text-right">
+                                            <span className={`inline-flex items-center gap-1 font-bold ${row.up ? 'text-emerald-600' : 'text-rose-500'}`}>
+                                                {row.up ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                                                {row.trend}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="mt-6 flex items-start gap-4 p-4 bg-white border border-purple-100 rounded-2xl">
                         <div className="p-2 bg-purple-50 text-purple-600 rounded-xl"><Sparkles size={20} /></div>
                         <div>
                             <p className="text-sm font-bold text-slate-800">AI Insights:</p>
