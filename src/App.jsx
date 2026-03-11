@@ -397,6 +397,32 @@ export default function App() {
                 ))}
             </div>
 
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <Card className="lg:col-span-2">
+                    <div className="p-4 border-b bg-slate-50 font-bold text-slate-800 flex items-center gap-2"><DatabaseZap size={18} className="text-amber-500" /> Data Cleansing & Transformation Log</div>
+                    <div className="p-4 space-y-4">
+                        {[
+                            { file: 'TRS_China_2024.xlsx', task: 'HS Mapping', status: 'Completed', error: 0, date: '20/05/2024' },
+                            { file: 'GSP_Stats_USA.csv', task: 'Currency Transform', status: 'Warning', error: 12, date: '19/05/2024' },
+                        ].map((log, i) => (
+                            <div key={i} className="flex items-center justify-between p-3 border rounded-xl bg-slate-50/50">
+                                <div className="flex items-center gap-4"><div className="p-2 bg-white rounded-lg border shadow-sm"><FileSpreadsheet size={20} className="text-emerald-500" /></div><div><p className="text-sm font-bold text-slate-800">{log.file}</p><p className="text-[10px] text-slate-400 font-bold uppercase">{log.task}</p></div></div>
+                                <div className="text-right"><Badge variant={log.status === 'Completed' ? 'success' : 'warning'}>{log.status}</Badge><p className="text-[10px] text-slate-400 mt-1 font-bold">{log.error} Errors Found</p></div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+                <Card className="p-6 bg-slate-900 text-white">
+                    <h3 className="font-bold mb-4 flex items-center gap-2 text-indigo-300"><HardDrive size={20} /> Data Warehouse (Section 3.4)</h3>
+                    <p className="text-xs text-slate-400 mb-6 leading-relaxed">โมเดลโครงสร้างข้อมูล (Star Schema) สำหรับการประมวลผลสถิติย้อนหลัง 10 ปี ครอบคลุม Tables, Views และ Materialized Views</p>
+                    <div className="space-y-3">
+                        {['FACT_UTILIZATION', 'DIM_HS_CODE', 'DIM_COUNTRY', 'DIM_AGREEMENT'].map(tbl => (
+                            <div key={tbl} className="p-2 bg-white/5 border border-white/10 rounded-lg font-mono text-[10px] text-indigo-200"># {tbl}</div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
             <Card>
                 <div className="p-6 border-b border-slate-100">
                     <h3 className="font-bold text-slate-800">การนำเข้าไฟล์ข้อมูลแบบ Manual (Bulk Upload)</h3>
