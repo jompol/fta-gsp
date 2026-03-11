@@ -62,9 +62,7 @@ import {
     ArrowLeft,
     ChevronDown,
     UploadCloud,
-    X,
-    Users,
-    Zap
+    X
 } from 'lucide-react';
 
 import dftLogo from './assets/logo-dft.png';
