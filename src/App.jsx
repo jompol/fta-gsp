@@ -1417,10 +1417,8 @@ export default function App() {
                 <nav className="flex-1 space-y-1 px-3 overflow-y-auto">
                     {[
                         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-                        { id: 'policy', label: 'Policy & Impact', icon: Target },
                         { id: 'services', label: 'Service Portal', icon: FileCheck },
                         { id: 'operations', label: 'Operations/CO', icon: ClipboardCheck },
-                        { id: 'ai', label: 'AI Intelligence', icon: BrainCircuit },
                         { id: 'data', label: 'Data Integration', icon: Database },
                         { id: 'analytics', label: 'Analytics', icon: BarChart3 },
                         { id: 'governance', label: 'Governance', icon: ShieldCheck },
@@ -1432,7 +1430,36 @@ export default function App() {
                             key={item.id}
                             onClick={() => handleTabChange(item.id)}
                             className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group ${activeTab === item.id
-                                    ? (item.id === 'ai' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : (item.id === 'policy' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'))
+                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                }`}
+                        >
+                            <item.icon size={20} strokeWidth={activeTab === item.id ? 2.5 : 2} />
+                            {isSidebarOpen && <span className="text-sm font-bold tracking-tight">{item.label}</span>}
+                            {!isSidebarOpen && (
+                                <div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl border border-white/10 whitespace-nowrap">
+                                    {item.label}
+                                </div>
+                            )}
+                        </button>
+                    ))}
+
+                    <div className="my-6">
+                        <div className="border-t border-white/10 mx-2"></div>
+                        <div className="mt-4 px-4 text-[10px] font-black text-slate-500 tracking-widest leading-loose">
+                            INNOVATION & PROPOSALS
+                        </div>
+                    </div>
+
+                    {[
+                        { id: 'policy', label: 'Policy & Impact', icon: Target },
+                        { id: 'ai', label: 'AI Intelligence', icon: BrainCircuit },
+                    ].map((item) => (
+                        <button
+                            key={item.id}
+                            onClick={() => handleTabChange(item.id)}
+                            className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group ${activeTab === item.id
+                                    ? (item.id === 'ai' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30')
                                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                                 }`}
                         >
