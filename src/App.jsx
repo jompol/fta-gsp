@@ -477,18 +477,25 @@ export default function App() {
                         </button>
                     </div>
                     <div className="h-60 flex items-end justify-between gap-3 px-2 border-b border-l border-slate-100">
-                        {[65, 72, 68, 85, 92, 98].map((h, i) => (
+                        {[
+                            { month: 'Apr', val: 65 },
+                            { month: 'May', val: 72 },
+                            { month: 'Jun', val: 68 },
+                            { month: 'Jul', val: 85 },
+                            { month: 'Aug', val: 92 },
+                            { month: 'Sep', val: 98 }
+                        ].map((data, i) => (
                             <div key={i} className="flex-1 group relative flex flex-col items-center">
                                 <div className="absolute -top-10 bg-purple-900 text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-xl">
-                                    Predicted: ${h}M
+                                    Predicted: ${data.val}M
                                 </div>
                                 <div
                                     className="w-full bg-purple-500/80 group-hover:bg-purple-600 rounded-t-lg transition-all duration-500 relative shadow-lg shadow-purple-200"
-                                    style={{ height: `${h}%` }}
+                                    style={{ height: `${data.val}%` }}
                                 >
-                                    <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] text-white font-bold">{h}%</div>
+                                    <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] text-white font-bold">{data.val}%</div>
                                 </div>
-                                <div className="absolute -bottom-6 text-[10px] font-bold text-slate-400">Month {i + 1}</div>
+                                <div className="absolute -bottom-6 text-[10px] font-bold text-slate-400">{data.month}</div>
                             </div>
                         ))}
                     </div>
