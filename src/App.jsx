@@ -32,7 +32,12 @@ import {
     Building2,
     Shield,
     LogIn,
-    Fingerprint
+    Fingerprint,
+    ClipboardCheck,
+    History,
+    HardDrive,
+    Users,
+    DatabaseZap
 } from 'lucide-react';
 
 // --- UI Components ---
@@ -291,6 +296,76 @@ export default function App() {
         </div>
     );
 
+    // New Operations View (Section 3.3.1.4-5)
+    const OperationsView = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Operation Monitoring</h1>
+                    <p className="text-slate-500 text-sm">ติดตามสถิติการออกหนังสือสำคัญและถิ่นกำเนิดสินค้า (Section 3.3.1.4)</p>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="p-6 border-l-4 border-l-blue-500">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">FOB Total Value</p>
+                    <h3 className="text-3xl font-black text-slate-900 mt-1">$12,450.8 M</h3>
+                    <div className="flex gap-2 mt-2">
+                        <Badge variant="info">USD</Badge>
+                        <Badge variant="info">THB 452.1 B</Badge>
+                    </div>
+                </Card>
+                <Card className="p-6 border-l-4 border-l-emerald-500">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">Total Net Weight</p>
+                    <h3 className="text-3xl font-black text-slate-900 mt-1">85,240.5</h3>
+                    <p className="text-xs text-slate-500 font-bold mt-2">Metric Tons (KGs)</p>
+                </Card>
+                <Card className="p-6 border-l-4 border-l-indigo-500">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">Total CO Pages</p>
+                    <h3 className="text-3xl font-black text-slate-900 mt-1">452,108</h3>
+                    <p className="text-xs text-slate-500 font-bold mt-2">Pages Issued</p>
+                </Card>
+            </div>
+
+            <Card>
+                <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
+                    <h3 className="flex items-center gap-2"><ClipboardCheck size={18} /> CO Issuance Detail (Section 3.3.1.5)</h3>
+                    <Badge variant="success">Real-time Sync</Badge>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                        <thead className="bg-slate-50/50 border-b text-slate-400 font-bold text-[11px]">
+                            <tr>
+                                <th className="p-4 text-left">เลขอ้างอิง (Ref No.)</th>
+                                <th className="p-4 text-left">ประเภทหนังสือสำคัญ</th>
+                                <th className="p-4 text-right">FOB Value</th>
+                                <th className="p-4 text-right">Net Weight</th>
+                                <th className="p-4 text-center">e-CO Status</th>
+                                <th className="p-4 text-center">Print Status</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y text-slate-600">
+                            {[
+                                { id: 'DFT2024-00142', type: 'Form D (ASEAN)', val: '$45,200', weight: '1,200 kg', eco: 'Electronic', print: 'Printed (2)' },
+                                { id: 'DFT2024-00143', type: 'Form E (ASEAN-China)', val: '$120,450', weight: '8,500 kg', eco: 'Electronic', print: 'Unprinted' },
+                                { id: 'DFT2024-00144', type: 'Form AK (ASEAN-Korea)', val: '$12,800', weight: '450 kg', eco: 'Manual', print: 'Printed (1)' },
+                            ].map((row, i) => (
+                                <tr key={i} className="hover:bg-slate-50">
+                                    <td className="p-4 font-mono font-bold text-blue-600">{row.id}</td>
+                                    <td className="p-4 font-medium">{row.type}</td>
+                                    <td className="p-4 text-right font-bold">{row.val}</td>
+                                    <td className="p-4 text-right">{row.weight}</td>
+                                    <td className="p-4 text-center"><Badge variant={row.eco === 'Electronic' ? 'success' : 'default'}>{row.eco}</Badge></td>
+                                    <td className="p-4 text-center text-xs font-bold text-slate-400">{row.print}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
+        </div>
+    );
+
     // 2. ETL View
     const ETLView = () => (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -546,67 +621,52 @@ export default function App() {
         </div>
     );
 
-    // 6. Security View (Restored view)
-    const SecurityView = () => (
+    const SecurityAdminView = () => (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Cybersecurity Monitoring</h1>
-                    <p className="text-slate-500 text-sm">การควบคุมสิทธิ์และการเฝ้าระวังความปลอดภัย (Section 3.6)</p>
+                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Security & Administration</h1>
+                    <p className="text-slate-500 text-sm">การควบคุมสิทธิ์ ประวัติการแก้ไข และความปลอดภัย (Section 2.8, 2.12, 3.6)</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card className="lg:col-span-1 p-6">
-                    <h3 className="font-bold text-slate-800 mb-4">Access Control Levels</h3>
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Users size={18} className="text-blue-600" /> User Roles & Group (Section 2.12)</h3>
                     <div className="space-y-4">
                         {[
-                            { role: 'Administrator', users: 3, desc: 'Full System Access & Governance', color: 'border-blue-500' },
-                            { role: 'DFT Officer', users: 45, desc: 'Data Analytics & Reports', color: 'border-emerald-500' },
-                            { role: 'Executive', users: 12, desc: 'Intelligence Dashboard Only', color: 'border-amber-500' },
+                            { role: 'Administrator', users: 3, color: 'border-blue-500' },
+                            { role: 'DFT Officer', users: 45, color: 'border-emerald-500' },
+                            { role: 'Executive', users: 12, color: 'border-amber-500' },
                         ].map((r, i) => (
-                            <div key={i} className={`p-4 bg-slate-50 border-l-4 ${r.color} rounded-r-xl`}>
-                                <div className="flex justify-between items-center mb-1">
-                                    <span className="font-bold text-sm text-slate-800">{r.role}</span>
-                                    <span className="text-xs font-bold text-slate-500">{r.users} Users</span>
-                                </div>
-                                <p className="text-[11px] text-slate-400">{r.desc}</p>
-                            </div>
+                            <div key={i} className={`p-4 bg-slate-50 border-l-4 ${r.color} rounded-r-xl flex justify-between items-center`}><span className="font-bold text-sm text-slate-800">{r.role}</span><span className="text-xs font-bold text-slate-500">{r.users} Users</span></div>
                         ))}
                     </div>
-                    <button className="w-full mt-6 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2">
-                        <Lock size={14} /> SSO / Active Directory Setup
-                    </button>
+                    <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100 flex items-center gap-3"><Fingerprint className="text-blue-600" size={24} /><div><p className="text-[11px] font-bold text-blue-900 uppercase">AD Status</p><p className="text-[10px] text-blue-600">Connected to Microsoft AD</p></div></div>
                 </Card>
 
-                <Card className="lg:col-span-2 p-6">
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="font-bold text-slate-800 flex items-center gap-2"><Lock size={18} className="text-rose-500" /> Security Audit Log</h3>
-                        <Badge variant="danger">High Alert (1)</Badge>
+                <Card className="lg:col-span-2">
+                    <div className="p-4 border-b bg-slate-50 font-bold text-slate-800 flex justify-between items-center">
+                        <h3 className="flex items-center gap-2"><History size={18} className="text-rose-500" /> Audit Trail & Data Correction (Section 3.2.2)</h3>
+                        <button className="text-[10px] text-blue-600 font-black uppercase">View Full Logs</button>
                     </div>
-                    <div className="space-y-3">
-                        {[
-                            { user: 'Komsan.S (Admin)', action: 'Data Export: TRS_CHINA_2024', status: 'Success', time: '10:45:12' },
-                            { user: 'System (Automated)', action: 'Daily Cloud Backup', status: 'Success', time: '03:00:00' },
-                            { user: '192.168.1.145 (Unknown)', action: 'Failed Login Attempt', status: 'Failed', time: 'เมื่อคืนนี้ 22:15' },
-                            { user: 'Manager.02', action: 'Update Access Rights: User_145', status: 'Success', time: 'เมื่อคืนนี้ 18:30' },
-                        ].map((log, i) => (
-                            <div key={i} className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
-                                <div className="flex items-center gap-3">
-                                    <div className={`p-2 rounded-lg ${log.status === 'Failed' ? 'bg-rose-100 text-rose-600' : 'bg-slate-100 text-slate-600'}`}>
-                                        {log.status === 'Failed' ? <Bell size={16} /> : <User size={16} />}
+                    <div className="p-0">
+                        <div className="grid grid-cols-1 divide-y">
+                            {[
+                                { user: 'Komsan.S (Admin)', action: 'Data Correction: Ref. DFT2024-00142', target: 'Utilization Value', time: '10:45:12' },
+                                { user: 'Manager.01', action: 'Update TRS Schedule', target: 'ASEAN-China TRS', time: '09:30:10' },
+                                { user: 'System (Auto)', action: 'System Hardening Check', target: 'Security Baseline', time: '03:00:00' },
+                                { user: 'Unknown IP', action: 'Unauthorized Access Blocked', target: 'Firewall Alert', time: 'เมื่อคืนนี้ 22:15' },
+                            ].map((log, i) => (
+                                <div key={i} className="p-4 hover:bg-slate-50 flex items-center justify-between text-sm">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-2 rounded-lg ${log.action.includes('Blocked') ? 'bg-rose-100 text-rose-600' : 'bg-slate-100 text-slate-600'}`}><Activity size={16} /></div>
+                                        <div><p className="font-bold text-slate-800">{log.user}</p><p className="text-[11px] text-slate-500 font-medium">{log.action}</p></div>
                                     </div>
-                                    <div>
-                                        <p className="text-xs font-bold text-slate-800">{log.user}</p>
-                                        <p className="text-[10px] text-slate-500 font-medium">{log.action}</p>
-                                    </div>
+                                    <div className="text-right"><p className="text-[11px] font-bold text-slate-400">{log.time}</p><span className="text-[9px] font-bold uppercase text-blue-600">{log.target}</span></div>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-[10px] font-bold text-slate-400">{log.time}</p>
-                                    <span className={`text-[9px] font-bold uppercase ${log.status === 'Failed' ? 'text-rose-600' : 'text-emerald-600'}`}>{log.status}</span>
-                                </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </Card>
             </div>
@@ -743,11 +803,12 @@ export default function App() {
                 <nav className="flex-1 space-y-1 px-3 overflow-y-auto">
                     {[
                         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+                        { id: 'operations', label: 'Operations/CO', icon: ClipboardCheck },
                         { id: 'data', label: 'Data Integration', icon: Database },
                         { id: 'analytics', label: 'Analytics', icon: BarChart3 },
                         { id: 'governance', label: 'Governance', icon: ShieldCheck },
-                        { id: 'security', label: 'Security', icon: Lock },
                         { id: 'reports', label: 'Reports', icon: FileText },
+                        { id: 'security', label: 'Admin & Logs', icon: Lock },
                     ].map((item) => (
                         <button
                             key={item.id}
@@ -841,11 +902,12 @@ export default function App() {
                     )}
 
                     {activeTab === 'dashboard' && <DashboardView />}
+                    {activeTab === 'operations' && <OperationsView />}
                     {activeTab === 'data' && <ETLView />}
                     {activeTab === 'analytics' && <AnalyticsView />}
                     {activeTab === 'governance' && <GovernanceView />}
                     {activeTab === 'reports' && <ReportsView />}
-                    {activeTab === 'security' && <SecurityView />}
+                    {activeTab === 'security' && <SecurityAdminView />}
                 </div>
 
                 {/* Footer Status Bar */}
