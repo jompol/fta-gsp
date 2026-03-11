@@ -48,7 +48,13 @@ import {
     PlayCircle,
     BookOpen,
     LifeBuoy,
-    Clock
+    Clock,
+    FilePlus,
+    ShieldQuestion,
+    CheckSquare,
+    Printer,
+    FileCheck,
+    Sticker
 } from 'lucide-react';
 
 // --- UI Components ---
@@ -375,6 +381,152 @@ export default function App() {
                     </table>
                 </div>
             </Card>
+        </div>
+    );
+
+    // Service Portal View (End-to-End Workflow)
+    const ServicesView = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+                        <ClipboardCheck className="text-blue-600" size={32} /> Service Hub: End-to-End Workflow
+                    </h1>
+                    <p className="text-slate-500 text-sm">การให้บริการครบวงจร: ยื่นคำขอ {'→'} ตรวจสอบ {'→'} อนุมัติ {'→'} ออกเอกสาร e-CO</p>
+                </div>
+                <button className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl text-sm font-bold shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all hover:scale-105">
+                    <FilePlus size={20} /> Create New Application
+                </button>
+            </div>
+
+            {/* Workflow Progress Bar */}
+            <Card className="p-8 bg-slate-900 text-white border-none shadow-2xl">
+                <div className="flex justify-between items-center relative">
+                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 z-0"></div>
+                    {[
+                        { step: 1, label: 'Submission', icon: FilePlus, status: 'Completed' },
+                        { step: 2, label: 'Smart Verification', icon: ShieldQuestion, status: 'In-Progress' },
+                        { step: 3, label: 'Official Approval', icon: CheckSquare, status: 'Pending' },
+                        { step: 4, label: 'e-Issuance', icon: Printer, status: 'Pending' },
+                    ].map((item, i) => (
+                        <div key={i} className="relative z-10 flex flex-col items-center gap-3 group cursor-pointer">
+                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${item.status === 'Completed' ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]' :
+                                    item.status === 'In-Progress' ? 'bg-blue-600 text-white animate-pulse shadow-[0_0_20px_rgba(37,99,235,0.4)]' :
+                                        'bg-slate-800 text-slate-500'
+                                }`}>
+                                <item.icon size={28} />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">Step {item.step}</p>
+                                <p className="text-xs font-bold">{item.label}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Card>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Active Applications List */}
+                <Card className="lg:col-span-2">
+                    <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
+                        <h3 className="flex items-center gap-2"><Activity size={18} className="text-blue-500" /> Active Applications Pipeline</h3>
+                        <div className="flex gap-2">
+                            <Badge variant="info">Total: 128</Badge>
+                            <Badge variant="warning">Urgent: 5</Badge>
+                        </div>
+                    </div>
+                    <div className="p-0">
+                        <div className="grid grid-cols-1 divide-y divide-slate-100">
+                            {[
+                                { ref: 'REQ-2024-8842', company: 'Thai Agri Export Co.', agreement: 'ASEAN-China (ACFTA)', status: 'Verifying', time: '2 ชม. ที่แล้ว', risk: 'Low' },
+                                { ref: 'REQ-2024-8843', company: 'Pacific Motors Ltd.', agreement: 'RCEP', status: 'Pending Approval', time: '4 ชม. ที่แล้ว', risk: 'Med' },
+                                { ref: 'REQ-2024-8844', company: 'Global Food Solutions', agreement: 'GSP (USA)', status: 'Approved', time: '6 ชม. ที่แล้ว', risk: 'Low' },
+                                { ref: 'REQ-2024-8845', company: 'Siam Electronics', agreement: 'ASEAN-Korea (AKFTA)', status: 'Issued', time: '1 วันที่แล้ว', risk: 'Low' },
+                            ].map((req, i) => (
+                                <div key={i} className="p-5 hover:bg-slate-50 flex items-center justify-between group transition-all">
+                                    <div className="flex items-center gap-5">
+                                        <div className={`p-3 rounded-2xl ${req.status === 'Issued' ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
+                                            <FileCheck size={24} />
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-mono font-black text-slate-900">{req.ref}</p>
+                                                <Badge variant={req.status === 'Issued' ? 'success' : req.status === 'Approved' ? 'info' : 'warning'}>{req.status}</Badge>
+                                            </div>
+                                            <p className="text-sm font-bold text-slate-600 mt-0.5">{req.company}</p>
+                                            <div className="flex gap-4 mt-2">
+                                                <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-tighter"><Globe size={10} /> {req.agreement}</span>
+                                                <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-tighter"><Clock size={10} /> {req.time}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="text-right">
+                                            <p className="text-[9px] font-bold text-slate-400 uppercase">Risk Score</p>
+                                            <span className={`text-xs font-black ${req.risk === 'Med' ? 'text-amber-500' : 'text-emerald-500'}`}>{req.risk}</span>
+                                        </div>
+                                        <button className="p-2 hover:bg-white hover:shadow-md border border-transparent hover:border-slate-200 rounded-xl transition-all">
+                                            <ChevronRight size={20} className="text-slate-300" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="p-4 border-t bg-slate-50/50 text-center">
+                        <button className="text-xs font-bold text-blue-600 hover:underline uppercase tracking-widest">View All Workflows</button>
+                    </div>
+                </Card>
+
+                {/* Issuance & e-Signature Section */}
+                <div className="space-y-6">
+                    <Card className="p-6 bg-gradient-to-br from-white to-blue-50/50 border-blue-100">
+                        <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2"><Printer size={18} className="text-blue-500" /> e-Issuance Center</h3>
+                        <div className="p-4 bg-white border border-blue-100 rounded-2xl shadow-sm relative overflow-hidden group cursor-pointer">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-blue-600 text-white rounded-bl-3xl flex items-center justify-center translate-x-1 -translate-y-1 group-hover:scale-110 transition-transform">
+                                <Sticker size={24} />
+                            </div>
+                            <p className="text-[10px] font-bold text-blue-600 uppercase">Latest Issued e-CO</p>
+                            <p className="text-lg font-black text-slate-900 mt-1">DFT-CN-2024012</p>
+                            <p className="text-xs text-slate-500 font-medium mt-1">Status: Secured by Digital Signature</p>
+                            <div className="mt-4 flex gap-2">
+                                <button className="flex-1 py-2 bg-blue-600 text-white text-[10px] font-bold rounded-xl shadow-lg">Download PDF</button>
+                                <button className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl"><Eye size={14} /></button>
+                            </div>
+                        </div>
+                        <div className="mt-6 space-y-3">
+                            <div className="flex justify-between items-center text-[11px] font-bold">
+                                <span className="text-slate-500 uppercase">Daily Issuance Limit</span>
+                                <span className="text-slate-900">452 / 1000</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-blue-500 rounded-full" style={{ width: '45%' }}></div>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card className="p-6 border-l-4 border-l-emerald-500">
+                        <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><CheckSquare size={18} className="text-emerald-500" /> Smart Approval Check</h3>
+                        <p className="text-[11px] text-slate-500 leading-relaxed mb-6 font-medium italic underline">ระบบประมวลผลกฎถิ่นกำเนิดสินค้าเบื้องต้นเพื่อช่วยเหลือเจ้าหน้าที่ (ROVERS PLUS Integration)</p>
+                        <div className="space-y-4">
+                            {[
+                                { label: 'Origin Criteria (RVC 40%)', status: 'Passed', color: 'bg-emerald-500' },
+                                { label: 'HS Code Consistency', status: 'Passed', color: 'bg-emerald-500' },
+                                { label: 'Exporter History Audit', status: 'Passed', color: 'bg-emerald-500' },
+                                { label: 'Supporting Documents', status: 'Warning', color: 'bg-amber-500' },
+                            ].map((check, i) => (
+                                <div key={i} className="flex items-center justify-between">
+                                    <span className="text-xs font-bold text-slate-700">{check.label}</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full ${check.color}`}></div>
+                                        <span className="text-[10px] font-black uppercase text-slate-400">{check.status}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
+                </div>
+            </div>
         </div>
     );
 
@@ -1074,6 +1226,7 @@ export default function App() {
                 <nav className="flex-1 space-y-1 px-3 overflow-y-auto">
                     {[
                         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+                        { id: 'services', label: 'Service Portal', icon: FileCheck },
                         { id: 'operations', label: 'Operations/CO', icon: ClipboardCheck },
                         { id: 'ai', label: 'AI Intelligence', icon: BrainCircuit },
                         { id: 'data', label: 'Data Integration', icon: Database },
@@ -1178,6 +1331,7 @@ export default function App() {
                     )}
 
                     {activeTab === 'dashboard' && <DashboardView />}
+                    {activeTab === 'services' && <ServicesView />}
                     {activeTab === 'operations' && <OperationsView />}
                     {activeTab === 'ai' && <AIIntelligenceView />}
                     {activeTab === 'data' && <ETLView />}
