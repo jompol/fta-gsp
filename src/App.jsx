@@ -35,6 +35,7 @@ import {
     Fingerprint,
     ClipboardCheck,
     History,
+    HardDrive,
     Users,
     DatabaseZap,
     BrainCircuit,
