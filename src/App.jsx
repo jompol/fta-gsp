@@ -344,7 +344,7 @@ export default function App() {
                                 <th className="p-4 text-center">Print Status</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y text-slate-600">
+                        <tbody className="divide-y divide-slate-100 text-slate-600">
                             {[
                                 { id: 'DFT2024-00142', type: 'Form D (ASEAN)', val: '$45,200', weight: '1,200 kg', eco: 'Electronic', print: 'Printed (2)' },
                                 { id: 'DFT2024-00143', type: 'Form E (ASEAN-China)', val: '$120,450', weight: '8,500 kg', eco: 'Electronic', print: 'Unprinted' },
@@ -493,7 +493,7 @@ export default function App() {
                                 <th className="p-3 text-center">แนวโน้ม (YoY)</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y text-slate-600">
+                        <tbody className="divide-y divide-slate-100 text-slate-600">
                             {[
                                 { country: 'จีน', exp: '4,520.5', act: '3,842.1', util: '84.99%', trend: '+12.4%', color: 'text-emerald-600' },
                                 { country: 'ญี่ปุ่น', exp: '2,145.2', act: '1,520.8', util: '70.89%', trend: '+5.1%', color: 'text-emerald-600' },
@@ -542,7 +542,7 @@ export default function App() {
                         </div>
                     </div>
                     <div className="p-0">
-                        <div className="grid grid-cols-1 divide-y">
+                        <div className="grid grid-cols-1 divide-y divide-slate-100">
                             {[
                                 { name: 'TB_FTA_UTILIZATION_STATS', desc: 'ข้อมูลสถิติการใช้สิทธิรายเดือน จำแนกตามพิกัดและประเทศ', owner: 'กองสิทธิฯ', level: 'Public', rows: '1.2M' },
                                 { name: 'TB_HS_CODE_MASTER', desc: 'ข้อมูลรหัสพิกัดศุลกากร 2-11 หลัก ปี 2012-2024', owner: 'ศูนย์ไอที', level: 'Public', rows: '45K' },
@@ -677,7 +677,7 @@ export default function App() {
                         <button className="text-[10px] text-blue-600 font-black uppercase">View Full Logs</button>
                     </div>
                     <div className="p-0">
-                        <div className="grid grid-cols-1 divide-y">
+                        <div className="grid grid-cols-1 divide-y divide-slate-100">
                             {[
                                 { user: 'Komsan.S (Admin)', action: 'Data Correction: Ref. DFT2024-00142', target: 'Utilization Value', time: '10:45:12' },
                                 { user: 'Manager.01', action: 'Update TRS Schedule', target: 'ASEAN-China TRS', time: '09:30:10' },
