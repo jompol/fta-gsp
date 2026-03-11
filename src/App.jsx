@@ -729,7 +729,7 @@ export default function App() {
                             { month: 'ส.ค.', val: 92, export: 1950 },
                             { month: 'ก.ย.', val: 98, export: 2100 }
                         ].map((data, i) => (
-                            <div key={i} className="flex-1 group relative flex flex-col items-center">
+                            <div key={i} className="flex-1 h-full group relative flex flex-col items-end justify-end">
                                 <div className="absolute -top-14 bg-purple-900 text-white text-[9px] py-1.5 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-xl whitespace-nowrap">
                                     <p className="font-bold">Export: ${data.export}M</p>
                                     <p>Utilization: {data.val}%</p>
