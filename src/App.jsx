@@ -61,6 +61,8 @@ import {
     LineChart
 } from 'lucide-react';
 
+import dftLogo from './assets/logo-dft.png';
+
 // --- UI Components ---
 
 const Card = ({ children, className = "" }) => (
@@ -1296,8 +1298,8 @@ export default function App() {
 
             <div className="w-full max-w-[440px] relative z-10 animate-in fade-in zoom-in-95 duration-700">
                 <div className="text-center mb-10">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 text-white rounded-[28px] shadow-2xl shadow-blue-200 mb-6 group cursor-default">
-                        <BarChart3 size={40} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-[24px] shadow-2xl shadow-blue-200 mb-6 group cursor-default p-2 border border-slate-100/50">
+                        <img src={dftLogo} alt="DFT Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform" />
                     </div>
                     <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-tight">FTA-GSP</h1>
                     <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[11px] mt-1">Intelligence Portal</p>
@@ -1403,8 +1405,8 @@ export default function App() {
             {/* Sidebar Navigation */}
             <aside className={`bg-slate-900 transition-all duration-300 flex flex-col z-30 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
                 <div className="p-6 mb-4 flex items-center gap-3 shrink-0">
-                    <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-900/40 shrink-0">
-                        <BarChart3 size={24} strokeWidth={2.5} />
+                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-blue-900/20 shrink-0 p-1">
+                        <img src={dftLogo} alt="DFT Logo" className="w-full h-full object-contain" />
                     </div>
                     {isSidebarOpen && (
                         <div className="overflow-hidden">
