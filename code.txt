@@ -1,0 +1,908 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  LayoutDashboard, 
+  Database, 
+  BarChart3, 
+  ShieldCheck, 
+  Lock, 
+  FileText, 
+  Search, 
+  Bell, 
+  User, 
+  Download, 
+  Filter, 
+  ChevronRight, 
+  ArrowUpRight, 
+  ArrowDownRight,
+  Server,
+  RefreshCw,
+  Eye,
+  Settings,
+  MoreVertical,
+  Activity,
+  Globe,
+  FileSpreadsheet,
+  Calendar,
+  Layers,
+  CheckCircle2,
+  FileJson,
+  PieChart,
+  TrendingUp,
+  LogIn,
+  LogOut,
+  Fingerprint,
+  Users,
+  DatabaseZap,
+  ClipboardCheck,
+  History,
+  HardDrive,
+  BrainCircuit,
+  Sparkles,
+  MessageSquare,
+  AlertTriangle,
+  Zap,
+  Target,
+  HelpCircle,
+  PlayCircle,
+  BookOpen,
+  LifeBuoy,
+  Clock,
+  Save,
+  FilePlus,
+  ShieldQuestion,
+  CheckSquare,
+  Printer,
+  FileCheck,
+  Sticker,
+  Lightbulb,
+  Compass,
+  Flag,
+  LineChart,
+  ArrowLeft,
+  ChevronDown,
+  UploadCloud,
+  X
+} from 'lucide-react';
+
+// --- UI Components ---
+
+const Card = ({ children, className = "" }) => (
+  <div className={`bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden ${className}`}>
+    {children}
+  </div>
+);
+
+const Badge = ({ children, variant = "default" }) => {
+  const styles = {
+    default: "bg-slate-100 text-slate-700",
+    success: "bg-emerald-100 text-emerald-700",
+    warning: "bg-amber-100 text-amber-700",
+    danger: "bg-rose-100 text-rose-700",
+    info: "bg-blue-100 text-blue-700",
+    purple: "bg-purple-100 text-purple-700",
+  };
+  return <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${styles[variant]}`}>{children}</span>;
+};
+
+// --- Main App Component ---
+
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginProcess, setLoginProcess] = useState(null);
+  
+  // State for Application Form
+  const [isCreatingApp, setIsCreatingApp] = useState(false);
+  const [formStep, setFormStep] = useState(1);
+
+  // Stats Data
+  const stats10Years = [
+    { year: 2015, export: 45.2, utilization: 28.1, pct: 62.1 },
+    { year: 2016, export: 48.5, utilization: 30.4, pct: 62.7 },
+    { year: 2017, export: 52.1, utilization: 35.8, pct: 68.7 },
+    { year: 2018, export: 55.4, utilization: 38.2, pct: 68.9 },
+    { year: 2019, export: 54.8, utilization: 37.5, pct: 68.4 },
+    { year: 2020, export: 50.2, utilization: 32.1, pct: 63.9 },
+    { year: 2021, export: 58.7, utilization: 42.4, pct: 72.2 },
+    { year: 2022, export: 65.4, utilization: 50.8, pct: 77.6 },
+    { year: 2023, export: 72.9, utilization: 58.2, pct: 79.8 },
+    { year: 2024, export: 84.2, utilization: 52.1, pct: 61.9 },
+  ];
+
+  const handleTabChange = (tabId) => {
+    setIsLoading(true);
+    setActiveTab(tabId);
+    setIsCreatingApp(false); // Reset form state when changing tabs
+    setTimeout(() => setIsLoading(false), 400);
+  };
+
+  const handleLogin = () => {
+    setLoginProcess('checking');
+    setTimeout(() => {
+      setLoginProcess('success');
+      setTimeout(() => {
+        setIsLoggedIn(true);
+        setLoginProcess(null);
+      }, 800);
+    }, 1500);
+  };
+
+  const handleLogout = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoggedIn(false);
+      setIsLoading(false);
+      setActiveTab('dashboard');
+    }, 600);
+  };
+
+  // --- Views ---
+
+  const SignInView = () => (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 relative overflow-hidden font-sans">
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100 rounded-full blur-[100px] opacity-30 -translate-y-1/2 translate-x-1/2"></div>
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-100 rounded-full blur-[100px] opacity-30 translate-y-1/2 -translate-x-1/2"></div>
+
+      <div className="w-full max-w-[440px] relative z-10 animate-in fade-in zoom-in-95 duration-700">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 text-white rounded-[28px] shadow-2xl shadow-blue-200 mb-6 group cursor-default">
+            <BarChart3 size={40} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
+          </div>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-tight">FTA-GSP</h1>
+          <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[11px] mt-1">Intelligence Portal</p>
+          <div className="h-1 w-12 bg-blue-600 mx-auto mt-6 rounded-full"></div>
+        </div>
+
+        <Card className="p-8 shadow-2xl shadow-slate-200 border-white/50 backdrop-blur-sm bg-white/90">
+          <div className="space-y-6">
+            <div className="text-center">
+              <h2 className="text-xl font-bold text-slate-800">เข้าสู่ระบบเจ้าหน้าที่</h2>
+              <p className="text-sm text-slate-400 mt-1">กรมการค้าต่างประเทศ (DFT)</p>
+            </div>
+            <button 
+              onClick={handleLogin}
+              disabled={loginProcess !== null}
+              className={`w-full group relative overflow-hidden flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-sm transition-all shadow-lg border-2 ${
+                loginProcess === 'success' ? 'bg-emerald-500 border-emerald-500 text-white' : 'bg-slate-900 border-slate-900 text-white hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98]'
+              }`}
+            >
+              {loginProcess === 'checking' ? <RefreshCw className="animate-spin" size={20} /> : loginProcess === 'success' ? <CheckCircle2 size={20} /> : <LogIn size={20} />}
+              <span>{loginProcess === 'checking' ? 'กำลังตรวจสอบสิทธิ์ AD...' : loginProcess === 'success' ? 'สำเร็จ! กำลังเข้าสู่ระบบ' : 'Sign in with Active Directory'}</span>
+            </button>
+            <div className="flex items-center gap-4 py-2">
+              <div className="h-[1px] flex-1 bg-slate-100"></div>
+              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">OR</span>
+              <div className="h-[1px] flex-1 bg-slate-100"></div>
+            </div>
+            <div className="space-y-4 text-center">
+               <p className="text-[10px] text-slate-400 font-medium">กรุณาใช้บัญชีเครือข่ายภายในในการเข้าสู่ระบบตามนโยบาย PDPA และความมั่นคงปลอดภัยไซเบอร์</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+
+  const DashboardView = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Intelligence Dashboard</h1>
+          <p className="text-slate-500 text-sm">สถิติภาพรวมและการใช้สิทธิประโยชน์ทางการค้า (Section 3.2.1)</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="bg-white p-1 rounded-lg border flex shadow-sm">
+            <button className="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white">รายปี</button>
+            <button className="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-600 hover:bg-slate-50">รายไตรมาส</button>
+          </div>
+          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition-all shadow-md shadow-blue-200">
+            <Download size={16} /> Export PDF/Excel
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { title: 'มูลค่าส่งออกรวม', val: '$84,250M', trend: '+12.5%', isUp: true, icon: Globe, color: 'text-blue-600' },
+          { title: 'มูลค่าการใช้สิทธิฯ', val: '$52,140M', trend: '+8.2%', isUp: true, icon: Activity, color: 'text-emerald-600' },
+          { title: 'สัดส่วนการใช้สิทธิ (%)', val: '61.89%', trend: '-2.1%', isUp: false, icon: BarChart3, color: 'text-amber-600' },
+          { title: 'จำนวนหนังสือรับรอง (ฉบับ)', val: '142,508', trend: '+15.4%', isUp: true, icon: FileText, color: 'text-indigo-600' },
+        ].map((kpi, i) => (
+          <Card key={i} className="p-5 hover:border-blue-300 transition-all cursor-default group">
+            <div className="flex justify-between items-start mb-3">
+              <div className={`p-2.5 rounded-xl bg-slate-50 ${kpi.color} group-hover:scale-110 transition-transform`}>
+                <kpi.icon size={20} />
+              </div>
+              <div className={`flex items-center gap-1 text-xs font-bold ${kpi.isUp ? 'text-emerald-600' : 'text-rose-600'}`}>
+                {kpi.isUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                {kpi.trend}
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-slate-900">{kpi.val}</h3>
+            <p className="text-slate-500 text-xs font-medium mt-1 uppercase tracking-tight">{kpi.title}</p>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2 p-6">
+          <div className="flex justify-between items-center mb-8">
+            <h3 className="font-bold text-slate-800 flex items-center gap-2"><TrendingUp size={18} className="text-blue-500" /> สถิติย้อนหลัง 10 ปี (2015 - 2024)</h3>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-blue-500 rounded-sm"></div><span className="text-[10px] font-bold text-slate-500">Utilization</span></div>
+              <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-slate-100 rounded-sm border"></div><span className="text-[10px] font-bold text-slate-500">Eligible Export</span></div>
+            </div>
+          </div>
+          <div className="relative h-64 w-full flex items-end justify-between gap-3 px-2">
+            <div className="absolute inset-x-0 top-0 h-full flex flex-col justify-between pointer-events-none opacity-50">
+               {[1, 2, 3, 4, 5].map(line => <div key={line} className="border-t border-slate-100 w-full"></div>)}
+            </div>
+            {stats10Years.map((data, i) => (
+              <div key={data.year} className="flex-1 group relative flex flex-col items-center z-10">
+                <div className="absolute -top-14 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] py-1.5 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all z-20 shadow-2xl scale-90 group-hover:scale-100">
+                   <p className="font-bold text-blue-400 mb-0.5">{data.year}</p>
+                   <p>Exp: ${data.export}M | Util: ${data.utilization}M</p>
+                </div>
+                <div className="w-full bg-slate-50 border border-slate-100 rounded-t-lg absolute bottom-0" style={{ height: `${data.export}%` }}></div>
+                <div className="w-full bg-blue-500 group-hover:bg-blue-600 rounded-t-lg relative transition-all duration-500" style={{ height: `${data.utilization}%` }}></div>
+                <div className="absolute -bottom-8 text-[10px] font-bold text-slate-400 group-hover:text-slate-900 transition-colors">{data.year}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-14 pt-6 border-t border-slate-50 flex justify-between items-center">
+             <div className="flex gap-4">
+                <div className="text-center"><p className="text-[10px] font-bold text-slate-400 uppercase">Avg. Utilization</p><p className="text-lg font-black text-slate-800">68.7%</p></div>
+                <div className="text-center border-l pl-4"><p className="text-[10px] font-bold text-slate-400 uppercase">Highest Year</p><p className="text-lg font-black text-emerald-600">2023</p></div>
+             </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2"><Filter size={18} className="text-emerald-500" /> Top 5 HS Codes (Export)</h3>
+          <div className="space-y-5">
+            {[
+              { code: '870323', name: 'รถยนต์นั่ง', val: '$12.5B', pct: 85 },
+              { code: '841510', name: 'เครื่องปรับอากาศ', val: '$8.2B', pct: 72 },
+              { code: '400122', name: 'ยางธรรมชาติ', val: '$6.7B', pct: 60 },
+              { code: '080450', name: 'มะม่วงสด', val: '$4.1B', pct: 45 },
+              { code: '160414', name: 'ปลาทูน่ากระป๋อง', val: '$3.8B', pct: 38 },
+            ].map((item, i) => (
+              <div key={i}>
+                <div className="flex justify-between text-xs mb-1.5"><span className="font-bold text-blue-600">{item.code} <span className="text-slate-500 font-normal ml-1 truncate max-w-[80px] inline-block align-bottom">{item.name}</span></span><span className="font-bold text-slate-700">{item.val}</span></div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div style={{ width: `${item.pct}%` }} className="h-full bg-emerald-500 rounded-full"></div></div>
+              </div>
+            ))}
+          </div>
+          <button className="w-full mt-8 py-2.5 text-xs font-bold text-slate-500 hover:text-blue-600 bg-slate-50 rounded-xl transition-all border border-slate-100 uppercase tracking-widest">Explore Categories</button>
+        </Card>
+      </div>
+    </div>
+  );
+
+  // New Application Form View (Realistic CO Application)
+  const ApplicationFormView = () => (
+    <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
+      <div className="flex items-center justify-between">
+         <button 
+           onClick={() => setIsCreatingApp(false)}
+           className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors"
+         >
+           <ArrowLeft size={18} /> Back to Hub
+         </button>
+         <div className="flex items-center gap-3">
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Step {formStep} of 3</span>
+            <div className="flex gap-1.5">
+               {[1, 2, 3].map(s => <div key={s} className={`h-1.5 w-8 rounded-full ${s <= formStep ? 'bg-blue-600' : 'bg-slate-200'}`}></div>)}
+            </div>
+         </div>
+      </div>
+
+      <Card className="shadow-2xl border-white/40">
+        <div className="p-8 border-b bg-slate-900 text-white flex justify-between items-center">
+           <div>
+              <h2 className="text-2xl font-black tracking-tight">New Certificate of Origin Request</h2>
+              <p className="text-blue-300 text-sm font-medium mt-1 uppercase tracking-wider">ระบบยื่นคำขอรับหนังสือรับรองถิ่นกำเนิดสินค้าอิเล็กทรอนิกส์</p>
+           </div>
+           <div className="p-3 bg-white/10 rounded-2xl border border-white/20">
+              <ClipboardCheck size={32} />
+           </div>
+        </div>
+
+        <div className="p-8">
+           {formStep === 1 && (
+             <div className="space-y-8 animate-in fade-in duration-300">
+                <section className="space-y-4">
+                   <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 underline decoration-blue-500 decoration-4 underline-offset-4">
+                      1. ข้อมูลความตกลงและประเทศปลายทาง
+                   </h3>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                      <div className="space-y-1.5">
+                         <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">กรอบความตกลง (Select FTA/GSP)</label>
+                         <div className="relative">
+                            <select className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 appearance-none focus:border-blue-500 outline-none transition-all">
+                               <option>อาเซียน-จีน (ACFTA) - Form E</option>
+                               <option>อาเซียน (ATIGA) - Form D</option>
+                               <option>RCEP - Form RCEP</option>
+                               <option>ไทย-ญี่ปุ่น (JTEPA)</option>
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                         </div>
+                      </div>
+                      <div className="space-y-1.5">
+                         <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">ประเทศปลายทาง (Destination)</label>
+                         <div className="relative">
+                            <select className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 appearance-none focus:border-blue-500 outline-none transition-all">
+                               <option>China</option>
+                               <option>Japan</option>
+                               <option>South Korea</option>
+                               <option>Australia</option>
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                         </div>
+                      </div>
+                   </div>
+                </section>
+
+                <section className="space-y-4">
+                   <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 underline decoration-blue-500 decoration-4 underline-offset-4">
+                      2. ข้อมูลผู้ส่งออก (Exporter Information)
+                   </h3>
+                   <div className="p-5 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                         <div className="p-3 bg-white rounded-xl shadow-sm text-blue-600"><Users size={24} /></div>
+                         <div>
+                            <p className="text-[10px] font-black text-blue-400 uppercase">Linked with DBD API</p>
+                            <p className="font-black text-slate-900">บริษัท ไทย อะกริ เอ็กซ์ปอร์ต จำกัด</p>
+                            <p className="text-xs text-slate-500">เลขประจำตัวผู้เสียภาษี: 0105560001234</p>
+                         </div>
+                      </div>
+                      <Badge variant="success">Verified</Badge>
+                   </div>
+                   <div className="grid grid-cols-1 gap-6">
+                      <div className="space-y-1.5">
+                         <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">ที่อยู่ภาษาอังกฤษ (Exporter's Address in English)</label>
+                         <textarea className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 focus:border-blue-500 outline-none transition-all min-h-[80px]" placeholder="123 Sukhumvit Rd, Khlong Toei, Bangkok 10110, Thailand"></textarea>
+                      </div>
+                   </div>
+                </section>
+             </div>
+           )}
+
+           {formStep === 2 && (
+             <div className="space-y-8 animate-in fade-in duration-300">
+                <section className="space-y-4">
+                   <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 underline decoration-emerald-500 decoration-4 underline-offset-4">
+                      3. รายละเอียดสินค้า (Product Details)
+                   </h3>
+                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                      <div className="md:col-span-2 space-y-1.5">
+                         <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">พิกัดศุลกากร (HS Code - 8 หรือ 11 หลัก)</label>
+                         <div className="relative group">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600" size={18} />
+                            <input type="text" className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold text-slate-800 focus:border-blue-500 outline-none transition-all" placeholder="พิมพ์เพื่อค้นหาพิกัด... เช่น 0804.50.20" />
+                         </div>
+                      </div>
+                      <div className="space-y-1.5">
+                         <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">เกณฑ์ถิ่นกำเนิด (Origin Criteria)</label>
+                         <select className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-500 transition-all">
+                            <option>WO (Wholly Obtained)</option>
+                            <option>RVC 40% (Regional Value Content)</option>
+                            <option>CTC (Change in Tariff Classification)</option>
+                         </select>
+                      </div>
+                   </div>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-1.5">
+                         <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">น้ำหนักสุทธิ (Net Weight in KGs)</label>
+                         <input type="number" className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-500" placeholder="0.00" />
+                      </div>
+                      <div className="space-y-1.5">
+                         <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">มูลค่า FOB (FOB Value in USD)</label>
+                         <input type="number" className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-500" placeholder="0.00" />
+                      </div>
+                   </div>
+                </section>
+
+                <div className="p-6 bg-emerald-50 border-2 border-dashed border-emerald-200 rounded-3xl flex flex-col items-center justify-center text-center">
+                   <div className="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mb-3 shadow-lg shadow-emerald-200">
+                      <BrainCircuit size={24} />
+                   </div>
+                   <p className="text-sm font-black text-emerald-800 uppercase tracking-tight">AI Assessment: High Probability</p>
+                   <p className="text-xs text-emerald-600 mt-1">รายการนี้สอดคล้องกับพฤติกรรมการส่งออกเดิมและกฎ ROO ในกรอบ ACFTA</p>
+                </div>
+             </div>
+           )}
+
+           {formStep === 3 && (
+             <div className="space-y-8 animate-in fade-in duration-300">
+                <section className="space-y-4">
+                   <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 underline decoration-indigo-500 decoration-4 underline-offset-4">
+                      4. แนบเอกสารประกอบ (Supporting Documents)
+                   </h3>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                      {[
+                        { title: 'Commercial Invoice', status: 'Mandatory' },
+                        { title: 'Packing List', status: 'Mandatory' },
+                        { title: 'Bill of Lading (B/L)', status: 'Optional' },
+                        { title: 'Origin Declaration (Self)', status: 'Optional' },
+                      ].map((doc, i) => (
+                        <div key={i} className="p-4 border-2 border-slate-50 rounded-2xl flex items-center justify-between hover:border-blue-100 hover:bg-blue-50/20 transition-all group cursor-pointer">
+                           <div className="flex items-center gap-3">
+                              <div className="p-2 bg-slate-100 rounded-lg text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all"><FileText size={18} /></div>
+                              <div>
+                                 <p className="text-xs font-bold text-slate-700">{doc.title}</p>
+                                 <p className="text-[9px] font-bold text-slate-400 uppercase">{doc.status}</p>
+                              </div>
+                           </div>
+                           <UploadCloud size={18} className="text-slate-300 group-hover:text-blue-500" />
+                        </div>
+                      ))}
+                   </div>
+                </section>
+
+                <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                   <div className="flex gap-3">
+                      <input type="checkbox" className="mt-1 w-5 h-5 rounded-md border-2 border-blue-500" />
+                      <p className="text-[11px] text-slate-500 leading-relaxed font-medium">ข้าพเจ้าขอรับรองว่าข้อมูลข้างต้นเป็นความจริงทุกประการ และสินค้ามีคุณสมบัติถูกต้องตามกฎว่าด้วยถิ่นกำเนิดสินค้าภายใต้ความตกลงที่ระบุไว้ หากตรวจพบว่าข้อมูลเป็นเท็จ ข้าพเจ้ายินยอมรับโทษตามกฎหมายที่เกี่ยวข้อง</p>
+                   </div>
+                </div>
+             </div>
+           )}
+        </div>
+
+        <div className="p-8 bg-slate-50 border-t flex justify-between items-center">
+           <button 
+             onClick={() => setFormStep(prev => Math.max(1, prev - 1))}
+             disabled={formStep === 1}
+             className="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-500 hover:bg-slate-100 transition-all disabled:opacity-0"
+           >
+             Previous Step
+           </button>
+           <div className="flex gap-3">
+              <button className="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-500 hover:bg-slate-100 transition-all">Save Draft</button>
+              {formStep < 3 ? (
+                <button 
+                  onClick={() => setFormStep(prev => prev + 1)}
+                  className="px-8 py-3 bg-blue-600 text-white rounded-2xl text-sm font-bold shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2"
+                >
+                  Next Step <ChevronRight size={18} />
+                </button>
+              ) : (
+                <button 
+                  onClick={() => {
+                    setIsLoading(true);
+                    setTimeout(() => {
+                       setIsLoading(false);
+                       setIsCreatingApp(false);
+                       setFormStep(1);
+                    }, 1000);
+                  }}
+                  className="px-8 py-3 bg-slate-900 text-white rounded-2xl text-sm font-bold shadow-xl shadow-slate-300 hover:bg-slate-800 transition-all flex items-center gap-2"
+                >
+                  Submit Application <Zap size={18} className="text-amber-400" />
+                </button>
+              )}
+           </div>
+        </div>
+      </Card>
+
+      <div className="flex items-center justify-center gap-8 opacity-50">
+         <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest"><Lock size={12} /> SSL Encrypted</div>
+         <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest"><ShieldCheck size={12} /> Smart Verification Enabled</div>
+      </div>
+    </div>
+  );
+
+  const ServicesView = () => (
+    <div className="space-y-6">
+      {isCreatingApp ? (
+        <ApplicationFormView />
+      ) : (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+                <ClipboardCheck className="text-blue-600" size={32} /> Service Hub: End-to-End Workflow
+              </h1>
+              <p className="text-slate-500 text-sm">การให้บริการครบวงจร: ยื่นคำขอ {'→'} ตรวจสอบ {'→'} อนุมัติ {'→'} ออกเอกสาร e-CO</p>
+            </div>
+            <button 
+              onClick={() => setIsCreatingApp(true)}
+              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl text-sm font-bold shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all hover:scale-105"
+            >
+              <FilePlus size={20} /> Create New Application
+            </button>
+          </div>
+
+          <Card className="p-8 bg-slate-900 text-white border-none shadow-2xl">
+            <div className="flex justify-between items-center relative">
+              <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 z-0"></div>
+              {[
+                { step: 1, label: 'Submission', icon: FilePlus, status: 'Completed' },
+                { step: 2, label: 'Smart Verification', icon: ShieldQuestion, status: 'In-Progress' },
+                { step: 3, label: 'Official Approval', icon: CheckSquare, status: 'Pending' },
+                { step: 4, label: 'e-Issuance', icon: Printer, status: 'Pending' },
+              ].map((item, i) => (
+                <div key={i} className="relative z-10 flex flex-col items-center gap-3 group cursor-pointer">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${
+                    item.status === 'Completed' ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]' : 
+                    item.status === 'In-Progress' ? 'bg-blue-600 text-white animate-pulse shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 
+                    'bg-slate-800 text-slate-500'
+                  }`}>
+                    <item.icon size={28} />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">Step {item.step}</p>
+                    <p className="text-xs font-bold">{item.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card className="lg:col-span-2">
+              <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
+                <h3 className="flex items-center gap-2"><Activity size={18} className="text-blue-500" /> Active Applications Pipeline</h3>
+              </div>
+              <div className="p-0 divide-y">
+                {[
+                  { ref: 'REQ-2024-8842', company: 'Thai Agri Export Co.', agreement: 'ASEAN-China (ACFTA)', status: 'Verifying', time: '2 ชม. ที่แล้ว', risk: 'Low' },
+                  { ref: 'REQ-2024-8843', company: 'Pacific Motors Ltd.', agreement: 'RCEP', status: 'Pending Approval', time: '4 ชม. ที่แล้ว', risk: 'Med' },
+                  { ref: 'REQ-2024-8844', company: 'Global Food Solutions', agreement: 'GSP (USA)', status: 'Approved', time: '6 ชม. ที่แล้ว', risk: 'Low' },
+                ].map((req, i) => (
+                  <div key={i} className="p-5 hover:bg-slate-50 flex items-center justify-between group transition-all">
+                    <div className="flex items-center gap-5">
+                       <div className="p-3 rounded-2xl bg-blue-50 text-blue-600"><FileCheck size={24} /></div>
+                       <div>
+                          <div className="flex items-center gap-2"><p className="font-mono font-black text-slate-900">{req.ref}</p><Badge variant={req.status === 'Approved' ? 'info' : 'warning'}>{req.status}</Badge></div>
+                          <p className="text-sm font-bold text-slate-600 mt-0.5">{req.company}</p>
+                          <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-tighter">{req.agreement} • {req.time}</p>
+                       </div>
+                    </div>
+                    <button className="p-2 hover:bg-white hover:shadow-md border rounded-xl transition-all"><ChevronRight size={20} className="text-slate-300" /></button>
+                  </div>
+                ))}
+              </div>
+            </Card>
+            <Card className="p-6 bg-gradient-to-br from-white to-blue-50/50 border-blue-100">
+              <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2"><Printer size={18} className="text-blue-500" /> e-Issuance Center</h3>
+              <div className="p-4 bg-white border border-blue-100 rounded-2xl shadow-sm relative overflow-hidden group cursor-pointer">
+                 <div className="absolute top-0 right-0 w-16 h-16 bg-blue-600 text-white rounded-bl-3xl flex items-center justify-center translate-x-1 -translate-y-1 group-hover:scale-110 transition-transform"><Sticker size={24} /></div>
+                 <p className="text-[10px] font-bold text-blue-600 uppercase">Latest Issued e-CO</p>
+                 <p className="text-lg font-black text-slate-900 mt-1">DFT-CN-2024012</p>
+                 <div className="mt-4 flex gap-2"><button className="flex-1 py-2 bg-blue-600 text-white text-[10px] font-bold rounded-xl shadow-lg">Download PDF</button><button className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl"><Eye size={14} /></button></div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const PolicyImpactView = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+            <Target className="text-blue-600" size={32} /> Policy & Impact Analytics
+          </h1>
+          <p className="text-slate-500 text-sm">การวิเคราะห์ผลลัพธ์เชิงยุทธศาสตร์และศักยภาพสินค้า (TOR Section 15)</p>
+        </div>
+        <div className="flex gap-2">
+           <Badge variant="success">Data Freshness: 99.8%</Badge>
+           <button className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg shadow-slate-200 hover:bg-slate-800 transition-all">
+             <LineChart size={16} /> Strategy Report
+           </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2 p-6 bg-gradient-to-br from-white to-blue-50/20">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+              <Globe size={18} className="text-blue-500" /> Market Expansion Tracking (Post-FTA Growth)
+            </h3>
+          </div>
+          <div className="h-64 flex items-end justify-between gap-4 px-2 border-b border-l border-slate-100 relative">
+             <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between pointer-events-none opacity-40">
+                {[1, 2, 3, 4].map(l => <div key={l} className="border-t border-slate-100 w-full h-px"></div>)}
+             </div>
+             {[
+               { m: 'Jan', pre: 40, post: 65 },
+               { m: 'Feb', pre: 38, post: 72 },
+               { m: 'Mar', pre: 45, post: 85 },
+               { m: 'Apr', pre: 42, post: 78 },
+               { m: 'May', pre: 48, post: 92 },
+               { m: 'Jun', pre: 50, post: 110 },
+             ].map((d, i) => (
+               <div key={i} className="flex-1 flex items-end gap-1.5 z-10 group">
+                  <div className="flex-1 bg-slate-100 rounded-t-sm transition-all" style={{ height: `${d.pre}%` }}></div>
+                  <div className="flex-1 bg-blue-600 rounded-t-sm transition-all group-hover:bg-blue-700 relative" style={{ height: `${d.post}%` }}>
+                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">
+                        Growth: +{((d.post-d.pre)/d.pre*100).toFixed(0)}%
+                     </div>
+                  </div>
+                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">{d.m}</div>
+               </div>
+             ))}
+          </div>
+          <div className="mt-12 flex justify-center gap-8">
+             <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
+                <div className="w-3 h-3 bg-slate-200 rounded-full"></div> Pre-FTA Expansion
+             </div>
+             <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
+                <div className="w-3 h-3 bg-blue-600 rounded-full"></div> Post-FTA Expansion
+             </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+           <div className="flex items-center justify-between mb-6">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2"><Lightbulb size={18} className="text-amber-500" /> Opportunity Finder</h3>
+              <Badge variant="purple">AI Suggest</Badge>
+           </div>
+           <div className="space-y-5">
+              {[
+                { hs: '0810.90', name: 'Mangosteens', gap: '42%', val: '$850M' },
+                { hs: '4001.22', name: 'Rubber TSR 20', gap: '35%', val: '$1,200M' },
+                { hs: '1604.14', name: 'Canned Tuna', gap: '28%', val: '$650M' },
+                { hs: '8415.10', name: 'Air Conditioners', gap: '22%', val: '$2,100M' },
+              ].map((item, i) => (
+                <div key={i} className="p-3 border rounded-xl hover:bg-slate-50 transition-all cursor-pointer">
+                   <div className="flex justify-between items-start mb-2">
+                      <div><span className="text-[10px] font-mono font-bold text-blue-600">{item.hs}</span><h4 className="text-xs font-black text-slate-800 mt-0.5">{item.name}</h4></div>
+                      <span className="text-xs font-black text-rose-500">Gap: {item.gap}</span>
+                   </div>
+                   <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase mt-2">
+                      <span>Value: <span className="text-slate-800">{item.val}</span></span>
+                      <button className="text-blue-600 hover:underline">Analysis Plan</button>
+                   </div>
+                </div>
+              ))}
+           </div>
+        </Card>
+      </div>
+    </div>
+  );
+
+  const AIIntelligenceView = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+            <BrainCircuit className="text-purple-600" size={32} /> AI Intelligence Portal
+          </h1>
+          <p className="text-slate-500 text-sm">การประยุกต์ใช้เทคโนโลยีปัญญาประดิษฐ์เพื่อการวิเคราะห์ข้อมูลเชิงรุก (Section 12.3.3.5)</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2 p-6 bg-gradient-to-br from-white to-purple-50/30">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-bold text-slate-800 flex items-center gap-2"><TrendingUp size={20} className="text-purple-500" /> Export & Utilization Prediction</h3>
+          </div>
+          <div className="h-60 flex items-end justify-between gap-3 px-2 border-b border-l border-slate-100">
+             {[65, 72, 68, 85, 92, 98].map((h, i) => (
+               <div key={i} className="flex-1 group relative flex flex-col items-center">
+                  <div className="w-full bg-purple-500/80 group-hover:bg-purple-600 rounded-t-lg transition-all duration-500 relative shadow-lg shadow-purple-200" style={{ height: `${h}%` }}></div>
+                  <div className="absolute -bottom-6 text-[10px] font-bold text-slate-400">Month {i+1}</div>
+               </div>
+             ))}
+          </div>
+        </Card>
+
+        <Card className="p-6 border-l-4 border-l-purple-500">
+          <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2"><AlertTriangle size={20} className="text-amber-500" /> Anomaly Detection</h3>
+          <div className="space-y-4">
+             {[
+               { id: 'ANM-084', desc: 'พฤติกรรมขอ CO ผิดปกติ', risk: 'High', msg: 'มูลค่า FOB เกินค่าเฉลี่ย 300%' },
+               { id: 'ANM-082', desc: 'การใช้สิทธิซ้ำซ้อน', risk: 'Med', msg: 'เลขที่ Invoice ซ้ำในระบบ GSP' },
+             ].map((item, i) => (
+               <div key={i} className="p-3 bg-slate-50 border rounded-xl hover:bg-amber-50 transition-all cursor-pointer">
+                  <div className="flex justify-between items-start mb-1"><span className="text-[10px] font-mono font-bold text-purple-600">{item.id}</span><Badge variant={item.risk === 'High' ? 'danger' : 'warning'}>{item.risk} Risk</Badge></div>
+                  <p className="text-xs font-bold text-slate-800">{item.desc}</p>
+               </div>
+             ))}
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+
+  const AnalyticsView = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Advanced Analytics</h1>
+          <p className="text-slate-500 text-sm">วิเคราะห์และเปรียบเทียบข้อมูลรายความตกลง (Section 2.5)</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <Card className="lg:col-span-1 p-6 space-y-6">
+           <h3 className="font-bold text-slate-800 flex items-center gap-2"><Save size={18} className="text-blue-500" /> Saved Searches</h3>
+           <div className="space-y-3">
+              {['ACFTA Mango Exports', 'RCEP Quarter Growth'].map((saved) => (
+                <div key={saved} className="p-3 bg-slate-50 border rounded-xl flex justify-between items-center group cursor-pointer"><span className="text-xs font-bold text-slate-600">{saved}</span><ChevronRight size={14} className="text-slate-300" /></div>
+              ))}
+           </div>
+        </Card>
+
+        <Card className="lg:col-span-3 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="space-y-1.5"><label className="text-[11px] font-bold text-slate-500 uppercase ml-1">กรอบความตกลง</label><select className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm"><option>อาเซียน-จีน (ACFTA)</option><option>RCEP</option></select></div>
+            <div className="space-y-1.5"><label className="text-[11px] font-bold text-slate-500 uppercase ml-1">HS Code (11 หลัก)</label><input type="text" placeholder="08045020101" className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm" /></div>
+            <div className="flex items-end"><button className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 shadow-lg"><Search size={16} /> ประมวลผลข้อมูล</button></div>
+          </div>
+          <div className="border rounded-xl overflow-hidden text-sm">
+             <table className="w-full divide-y"><thead className="bg-slate-50 text-slate-500 font-bold"><tr className="text-left"><th className="p-3">ประเทศคู่ค้า</th><th className="p-3 text-right">มูลค่าส่งออก</th><th className="p-3 text-center">สัดส่วนการใช้สิทธิ</th></tr></thead><tbody className="divide-y text-slate-600"><tr><td className="p-3 font-bold">China</td><td className="p-3 text-right">$4,520M</td><td className="p-3 text-center">84.99%</td></tr></tbody></table>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+
+  const GovernanceView = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+       <div className="flex justify-between items-center font-extrabold text-slate-900 tracking-tight"><h1>Data Governance & Catalog</h1></div>
+       <Card className="p-6 divide-y">
+          {['TB_FTA_STATS', 'TB_HS_CODE_MASTER'].map(tbl => (
+            <div key={tbl} className="py-4 flex justify-between items-center group cursor-pointer"><div className="flex items-center gap-4"><div className="p-2.5 bg-slate-100 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-all"><Layers size={18} /></div><p className="text-sm font-bold font-mono">{tbl}</p></div><Badge variant="success">Public</Badge></div>
+          ))}
+       </Card>
+    </div>
+  );
+
+  const ReportsView = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
+         {[1, 2, 3].map(i => (
+           <Card key={i} className="p-6 hover:shadow-lg transition-all group cursor-pointer"><div className="flex justify-between items-start mb-4"><div className="p-3 bg-slate-50 rounded-xl group-hover:scale-110 transition-transform"><FileText size={20} className="text-blue-500" /></div><Badge variant="info">Report</Badge></div><h4 className="font-bold text-slate-800">Annual Statistical Report Q{i}</h4><p className="text-xs text-slate-400 mt-1">Updated 12/03/2024</p><div className="mt-6 flex gap-2"><button className="flex-1 py-2 bg-blue-600 text-white text-[10px] font-bold rounded-lg uppercase">Download</button></div></Card>
+         ))}
+      </div>
+    </div>
+  );
+
+  const SecurityAdminView = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+         <Card className="lg:col-span-1 p-6"><h3 className="font-bold mb-4 flex items-center gap-2"><Users size={18} /> Roles</h3><div className="space-y-3">{['Administrator', 'DFT Officer'].map(r => <div key={r} className="p-3 bg-slate-50 border-l-4 border-blue-500 rounded-r-xl font-bold text-sm text-slate-800">{r}</div>)}</div></Card>
+         <Card className="lg:col-span-2 p-4 border-b bg-slate-50 font-bold flex justify-between items-center"><h3><History size={18} /> Audit Logs</h3></Card>
+      </div>
+    </div>
+  );
+
+  const SupportHelpView = () => (
+    <div className="space-y-6 animate-in fade-in duration-500">
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+         <Card className="p-6 border-t-4 border-t-emerald-500"><h3 className="font-bold mb-6 flex items-center gap-2"><Zap size={18} /> System SLA</h3><p className="text-3xl font-black text-slate-800">99.98%</p><Badge variant="success" className="mt-2">Active</Badge></Card>
+         <Card className="lg:col-span-2 p-6"><h3 className="font-bold mb-6 flex items-center gap-2"><BookOpen size={18} /> Training Center</h3><div className="grid grid-cols-1 md:grid-cols-2 gap-4"><div className="p-4 border rounded-2xl flex items-center gap-4"><PlayCircle size={24} className="text-rose-500" /><div><p className="text-sm font-bold">User Guide (Video)</p><p className="text-[10px] text-slate-400">12:45 Mins</p></div></div></div></Card>
+      </div>
+    </div>
+  );
+
+  if (!isLoggedIn) return <SignInView />;
+
+  return (
+    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans antialiased text-slate-900">
+      <aside className={`bg-slate-900 transition-all duration-300 flex flex-col z-30 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
+        <div className="p-6 mb-4 flex items-center gap-3 shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-900/40 shrink-0">
+            <BarChart3 size={24} strokeWidth={2.5} />
+          </div>
+          {isSidebarOpen && (
+            <div>
+              <h1 className="text-white font-black text-lg leading-tight tracking-tighter">FTA-GSP</h1>
+              <p className="text-[9px] text-blue-400 font-bold uppercase tracking-widest">Intelligence Portal</p>
+            </div>
+          )}
+        </div>
+        
+        <nav className="flex-1 space-y-1 px-3 overflow-y-auto overflow-x-hidden scrollbar-hide">
+          {[
+            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { id: 'services', label: 'Service Portal', icon: ClipboardCheck },
+            { id: 'operations', label: 'Operations/CO', icon: FileCheck },
+            { id: 'data', label: 'Data Integration', icon: Database },
+            { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+            { id: 'governance', label: 'Governance', icon: ShieldCheck },
+            { id: 'reports', label: 'Reports', icon: FileText },
+            { id: 'security', label: 'Admin & Logs', icon: Lock },
+            { id: 'support', label: 'Help & Support', icon: LifeBuoy },
+          ].map((item) => (
+            <button 
+              key={item.id} 
+              onClick={() => handleTabChange(item.id)} 
+              className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group ${
+                activeTab === item.id 
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' 
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <item.icon size={20} strokeWidth={activeTab === item.id ? 2.5 : 2} />
+              {isSidebarOpen && <span className="text-sm font-bold tracking-tight">{item.label}</span>}
+              {!isSidebarOpen && (<div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl border border-white/10 whitespace-nowrap">{item.label}</div>)}
+            </button>
+          ))}
+
+          <div className="pt-6 pb-2">
+             <div className="border-t border-white/10 mx-2 mb-4"></div>
+             {isSidebarOpen && (<p className="px-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3">Innovation & Proposals</p>)}
+             {[
+               { id: 'policy', label: 'Policy & Impact', icon: Target },
+               { id: 'ai', label: 'AI Intelligence', icon: BrainCircuit },
+             ].map((item) => (
+               <button 
+                 key={item.id} 
+                 onClick={() => handleTabChange(item.id)} 
+                 className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group mb-1 ${
+                   activeTab === item.id 
+                   ? (item.id === 'ai' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30') 
+                   : 'text-slate-400 hover:text-white hover:bg-white/5'
+                 }`}
+               >
+                 <item.icon size={20} strokeWidth={activeTab === item.id ? 2.5 : 2} />
+                 {isSidebarOpen && <span className="text-sm font-bold tracking-tight">{item.label}</span>}
+                 {!isSidebarOpen && (<div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl border border-white/10 whitespace-nowrap">{item.label}</div>)}
+                 {item.id === 'ai' && <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-400 rounded-full animate-ping"></div>}
+               </button>
+             ))}
+          </div>
+        </nav>
+
+        <div className="p-4 mt-auto border-t border-white/5 shrink-0">
+          <button onClick={handleLogout} className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-all">
+            <LogOut size={20} />
+            {isSidebarOpen && <span className="text-sm font-bold">ออกจากระบบ</span>}
+          </button>
+        </div>
+      </aside>
+
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0 sticky top-0 z-20">
+          <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors">
+            <MoreVertical size={20} className={isSidebarOpen ? "" : "rotate-90"} />
+          </button>
+          <div className="flex-1 max-w-xl mx-8 relative hidden sm:block"><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} /><input type="text" placeholder="ค้นหาเลขอ้างอิง, พิกัด, หรือขอความช่วยเหลือจาก AI..." className="w-full bg-slate-100 border-none rounded-xl py-2 pl-10 pr-4 text-xs font-medium focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none" /></div>
+          <div className="flex items-center gap-3">
+            <button className="relative p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
+              <Bell size={20} /><span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 border-2 border-white rounded-full animate-pulse"></span>
+            </button>
+            <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
+            <button className="flex items-center gap-3 p-1.5 pr-3 hover:bg-slate-100 rounded-lg group transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs group-hover:bg-blue-600 group-hover:text-white transition-all shrink-0">KS</div>
+              <div className="text-left hidden lg:block"><p className="text-[11px] font-extrabold text-slate-900 leading-none">Komsan S.</p><p className="text-[9px] font-bold text-slate-400 mt-0.5 leading-none">Intelligence Officer</p></div>
+            </button>
+          </div>
+        </header>
+
+        <div className="flex-1 overflow-y-auto bg-slate-50/50 p-6 relative">
+          {isLoading && (
+            <div className="absolute inset-0 bg-slate-50/60 backdrop-blur-[2px] z-50 flex items-center justify-center">
+              <div className="flex flex-col items-center"><RefreshCw className="animate-spin text-blue-600 mb-3" size={32} /><p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Loading Portal...</p></div>
+            </div>
+          )}
+          {activeTab === 'dashboard' && <DashboardView />}
+          {activeTab === 'policy' && <PolicyImpactView />}
+          {activeTab === 'services' && <ServicesView />}
+          {activeTab === 'operations' && <OperationsView />}
+          {activeTab === 'ai' && <AIIntelligenceView />}
+          {activeTab === 'data' && <ETLView />}
+          {activeTab === 'analytics' && <AnalyticsView />}
+          {activeTab === 'governance' && <GovernanceView />}
+          {activeTab === 'reports' && <ReportsView />}
+          {activeTab === 'security' && <SecurityAdminView />}
+          {activeTab === 'support' && <SupportHelpView />}
+        </div>
+
+        <footer className="h-8 bg-white border-t border-slate-200 px-6 flex items-center justify-between shrink-0 z-20">
+           <div className="flex items-center gap-4"><div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 uppercase"><div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div> System Online</div><span className="text-[10px] text-slate-300">|</span><span className="text-[10px] font-medium text-slate-400">Digital Government Service Platform</span></div>
+           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Build Version 1.1.2-PLATINUM • {new Date().toLocaleDateString()}</div>
+        </footer>
+      </main>
+    </div>
+  );
+}

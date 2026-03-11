@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Implementation Plan - DFT FTA-GSP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ปรับพื้นหลังหลักของ body เป็นสีขาว */
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #FFFFFF;
+            color: #1E3A5F;
+        }
+
+        .navy-blue {
+            background-color: #1E3A5F;
+        }
+
+        .sky-blue {
+            background-color: #3F8EFC;
+        }
+
+        .navy-text {
+            color: #1E3A5F;
+        }
+
+        .sky-text {
+            color: #3F8EFC;
+        }
+
+        .gantt-container {
+            display: grid;
+            grid-template-columns: 320px repeat(9, 1fr);
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.1);
+            position: relative;
+            border: 1px solid #F1F5F9;
+        }
+
+        .header-cell {
+            background-color: #1E3A5F;
+            color: white;
+            padding: 18px;
+            font-size: 11px;
+            font-weight: 800;
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-cell:first-child {
+            border-top-left-radius: 16px;
+        }
+
+        .header-cell:last-child {
+            border-top-right-radius: 16px;
+            border-right: none;
+        }
+
+        .row-task {
+            display: contents;
+        }
+
+        .task-label {
+            padding: 20px 24px;
+            background: white;
+            font-weight: 700;
+            font-size: 14px;
+            border-bottom: 1px solid #F1F5F9;
+            border-right: 2px solid #F1F5F9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .task-label span {
+            font-size: 10px;
+            color: #64748B;
+            font-weight: 500;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .timeline-cell {
+            border-bottom: 1px solid #F1F5F9;
+            position: relative;
+            background-image: linear-gradient(to right, #F8FAFC 1px, transparent 1px);
+            background-size: 100% 100%;
+            min-height: 85px;
+        }
+
+        .bar-wrapper {
+            position: absolute;
+            bottom: 15px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .milestone-diamond {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #FF4757;
+            transform: rotate(45deg);
+            z-index: 30;
+            bottom: 23px;
+            box-shadow: 0 0 12px rgba(255, 71, 87, 0.5);
+            border: 2px solid white;
+        }
+
+        .milestone-tag {
+            position: absolute;
+            background: #FF4757;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 800;
+            white-space: nowrap;
+            top: 8px;
+            transform: translateX(-50%);
+            z-index: 40;
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+        }
+
+        .tag-last {
+            transform: translateX(-100%);
+            margin-left: 8px;
+        }
+
+        .deliverable-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #E2E8F0;
+            height: 100%;
+            transition: all 0.3s;
+        }
+
+        .deliverable-card:hover {
+            border-color: #3F8EFC;
+            box-shadow: 0 8px 20px rgba(30, 58, 95, 0.05);
+        }
+
+        .payment-badge {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+    </style>
+</head>
+
+<body class="p-10">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Dashboard Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+            <div class="space-y-1">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 navy-blue rounded-2xl flex items-center justify-center text-white shadow-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18" />
+                            <path d="m19 9-5 5-4-4-3 3" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-black navy-text tracking-tighter uppercase leading-none">Project
+                            Implementation Plan</h1>
+                        <p class="text-slate-500 font-bold text-xs tracking-tight mt-2 max-w-2xl">
+                            ระบบประมวลผลสถิติการส่งออกและการให้สิทธิประโยชน์ทางการค้า ภายใต้ความตกลง FTA และ GSP ของไทย
+                            <br>
+                            <span class="navy-text">กรมการค้าต่างประเทศ</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">Overall Duration</p>
+                    <p class="text-2xl font-black navy-text">270 DAYS</p>
+                </div>
+                <div class="h-10 w-px bg-slate-100 mx-2"></div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">Milestones</p>
+                    <p class="text-2xl font-black sky-text">4 PHASES</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gantt Chart View -->
+        <div class="mb-16">
+            <div class="flex items-center gap-3 mb-6">
+                <h2 class="font-black navy-text text-sm uppercase tracking-widest text-slate-400">Master Implementation
+                    Timeline</h2>
+                <div class="h-px flex-1 bg-slate-100"></div>
+            </div>
+
+            <div class="gantt-container">
+                <!-- Grid Headers -->
+                <div class="header-cell" style="text-align: left;">Phases & Sub-Activities</div>
+                <div class="header-cell">Month 1</div>
+                <div class="header-cell">Month 2</div>
+                <div class="header-cell">Month 3</div>
+                <div class="header-cell">Month 4</div>
+                <div class="header-cell">Month 5</div>
+                <div class="header-cell">Month 6</div>
+                <div class="header-cell">Month 7</div>
+                <div class="header-cell">Month 8</div>
+                <div class="header-cell">Month 9</div>
+
+                <!-- Phase 1 -->
+                <div class="row-task">
+                    <div class="task-label">
+                        1. Project Initiation
+                        <span>Kickoff, Governance Setup, Detailed Planning</span>
+                    </div>
+                    <div class="timeline-cell col-span-9">
+                        <div class="bar-wrapper navy-blue" style="width: 5.5%; left: 0;">PREPARATION</div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="row-task">
+                    <div class="task-label">
+                        2. Requirement Analysis
+                        <span>As-is/To-be, Gap Analysis, User Needs</span>
+                    </div>
+                    <div class="timeline-cell col-span-9">
+                        <div class="bar-wrapper sky-blue" style="width: 11%; left: 5.5%;">ANALYSIS</div>
+                        <div class="milestone-tag" style="left: 16.5%;">งวดที่ 1 (45 วัน)</div>
+                        <div class="milestone-diamond" style="left: 16.5%; margin-left: -8px;"></div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="row-task">
+                    <div class="task-label">
+                        3. System Design
+                        <span>UI/UX, Schema, SRS, Security blueprint</span>
+                    </div>
+                    <div class="timeline-cell col-span-9">
+                        <div class="bar-wrapper navy-blue" style="width: 17%; left: 16.5%;">SYSTEM DESIGN</div>
+                        <div class="milestone-tag" style="left: 33.3%;">งวดที่ 2 (90 วัน)</div>
+                        <div class="milestone-diamond" style="left: 33.3%; margin-left: -8px;"></div>
+                    </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="row-task">
+                    <div class="task-label">
+                        4. System Development
+                        <span>Backend, ETL, API Integration, AI Models</span>
+                    </div>
+                    <div class="timeline-cell col-span-9">
+                        <div class="bar-wrapper sky-blue" style="width: 44.5%; left: 33.3%;">CODING & INTEGRATION</div>
+                    </div>
+                </div>
+
+                <!-- Phase 5 -->
+                <div class="row-task">
+                    <div class="task-label">
+                        5. Testing & Quality Gate
+                        <span>SIT, UAT, Vulnerability & Load Test</span>
+                    </div>
+                    <div class="timeline-cell col-span-9">
+                        <div class="bar-wrapper navy-blue" style="width: 11%; left: 77.8%;">QA & TESTING</div>
+                        <div class="milestone-tag" style="left: 77.8%;">งวดที่ 3 (210 วัน)</div>
+                        <div class="milestone-diamond" style="left: 77.8%; margin-left: -8px;"></div>
+                    </div>
+                </div>
+
+                <!-- Phase 6 -->
+                <div class="row-task">
+                    <div class="task-label">
+                        6. Deployment & Support
+                        <span>Cloud Go-live, User Training, Manuals</span>
+                    </div>
+                    <div class="timeline-cell col-span-9">
+                        <div class="bar-wrapper sky-blue" style="width: 11.2%; left: 88.8%;">PRODUCTION</div>
+                        <div class="milestone-tag tag-last" style="left: 100%;">งวดที่ 4 (270 วัน)</div>
+                        <div class="milestone-diamond" style="left: 100%; margin-left: -16px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deliverables Summary -->
+        <div class="space-y-6">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-rose-50 text-rose-500 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="3" rx="2" />
+                        <path d="m9 12 2 2 4-4" />
+                    </svg>
+                </div>
+                <h2 class="font-black navy-text text-sm uppercase tracking-widest text-slate-400">Milestone Deliverables
+                    Summary</h2>
+                <div class="h-px flex-1 bg-slate-100"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- งวด 1 -->
+                <div class="deliverable-card border-t-4 border-t-[#1E3A5F]">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="payment-badge">งวดงานที่ 1 (10%)</span>
+                        <span class="text-[9px] font-bold text-slate-400">45 วัน</span>
+                    </div>
+                    <h4 class="font-black text-sm mb-3">Roadmap & Business Blueprint</h4>
+                    <ul class="text-[11px] text-slate-500 space-y-2 leading-relaxed">
+                        <li class="flex gap-2"><span>•</span> แผนการจัดทำระบบฉบับสมบูรณ์</li>
+                        <li class="flex gap-2"><span>•</span> รายชื่อทีมงานพร้อมวุฒิและประสบการณ์</li>
+                        <li class="flex gap-2"><span>•</span> ข้อตกลงรักษาข้อมูลลับ (NDA)</li>
+                        <li class="flex gap-2"><span>•</span> รายงานผลการศึกษาและออกแบบระบบ</li>
+                    </ul>
+                </div>
+
+                <!-- งวด 2 -->
+                <div class="deliverable-card border-t-4 border-t-[#3F8EFC] bg-blue-50/5">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="payment-badge">งวดงานที่ 2 (15%)</span>
+                        <span class="text-[9px] font-bold text-slate-400">90 วัน</span>
+                    </div>
+                    <h4 class="font-black text-sm mb-3">Specifications & Hardware</h4>
+                    <ul class="text-[11px] text-slate-600 space-y-2 leading-relaxed">
+                        <li class="flex gap-2 font-bold text-blue-700"><span>•</span> ติดตั้ง Hardware (Notebook,
+                            Printer, Touch)</li>
+                        <li class="flex gap-2"><span>•</span> เอกสาร SRS และ Workflow ทั้งหมด</li>
+                        <li class="flex gap-2"><span>•</span> ER-Diagram และ Data Dictionary</li>
+                        <li class="flex gap-2"><span>•</span> ต้นแบบหน้าจอและรายงาน (Prototype)</li>
+                    </ul>
+                </div>
+
+                <!-- งวด 3 -->
+                <div class="deliverable-card border-t-4 border-t-[#1E3A5F]">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="payment-badge">งวดงานที่ 3 (50%)</span>
+                        <span class="text-[9px] font-bold text-slate-400">210 วัน</span>
+                    </div>
+                    <h4 class="font-black text-sm mb-3">Development & UAT</h4>
+                    <ul class="text-[11px] text-slate-500 space-y-2 leading-relaxed">
+                        <li class="flex gap-2 font-bold"><span>•</span> ติดตั้ง Cloud Server พร้อมระบบ Backend</li>
+                        <li class="flex gap-2"><span>•</span> ระบบงาน (ข้อ 3.1 - 3.4) พัฒนาแล้วเสร็จ</li>
+                        <li class="flex gap-2"><span>•</span> รายงานผลการทดสอบระบบ (UAT Report)</li>
+                        <li class="flex gap-2"><span>•</span> ระบบ Dashboard (Beta) พร้อมใช้งาน</li>
+                    </ul>
+                </div>
+
+                <!-- งวด 4 -->
+                <div class="deliverable-card border-t-4 border-t-[#3F8EFC]">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="payment-badge">งวดงานที่ 4 (25%)</span>
+                        <span class="text-[9px] font-bold text-slate-400">270 วัน</span>
+                    </div>
+                    <h4 class="font-black text-sm mb-3">Final Delivery & Operations</h4>
+                    <ul class="text-[11px] text-slate-500 space-y-2 leading-relaxed">
+                        <li class="flex gap-2 font-bold text-emerald-600"><span>•</span> ระบบงานเสร็จสมบูรณ์ 100%</li>
+                        <li class="flex gap-2"><span>•</span> คู่มือ (e-Book) และสื่อการสอนวิดีโอ</li>
+                        <li class="flex gap-2"><span>•</span> Source Code และสิทธิ์การครอบครอง</li>
+                        <li class="flex gap-2"><span>•</span> รายงานการฝึกอบรมบุคลากร</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategy Footer -->
+        <div
+            class="mt-12 bg-[#1E3A5F] rounded-3xl p-8 text-white flex flex-col md:flex-row justify-between items-center gap-8 shadow-2xl">
+            <div class="flex gap-6 items-center">
+                <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-sky-300">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-xl font-black tracking-tight uppercase">Commitment to Success</h4>
+                    <p class="text-white/60 text-xs mt-1">ส่งมอบงานคุณภาพสูงตรงตามกรอบเวลา 270 วัน
+                        พร้อมสนับสนุนงานของกรมการค้าต่างประเทศอย่างเต็มรูปแบบ</p>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <div class="text-center bg-white/5 px-8 py-3 rounded-2xl border border-white/10">
+                    <p class="text-[10px] font-bold text-sky-300 uppercase tracking-widest mb-1">Project Status</p>
+                    <p class="text-lg font-black tracking-tighter">READY TO IMPLEMENT</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
