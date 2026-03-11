@@ -58,7 +58,13 @@ import {
     Lightbulb,
     Compass,
     Flag,
-    LineChart
+    LineChart,
+    ArrowLeft,
+    ChevronDown,
+    UploadCloud,
+    X,
+    Users,
+    Zap
 } from 'lucide-react';
 
 import dftLogo from './assets/logo-dft.png';
@@ -97,6 +103,10 @@ export default function App() {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+
+    // State for Application Form
+    const [isCreatingApp, setIsCreatingApp] = useState(false);
+    const [formStep, setFormStep] = useState(1);
 
     // --- Authentication Logic (Simulated AD) ---
     const handleLogin = (e) => {
@@ -154,6 +164,7 @@ export default function App() {
     const handleTabChange = (tabId) => {
         setIsLoading(true);
         setActiveTab(tabId);
+        setIsCreatingApp(false); // Reset form state when changing tabs
         setTimeout(() => setIsLoading(false), 400);
     };
 
@@ -538,148 +549,303 @@ export default function App() {
     );
 
     // Service Portal View (End-to-End Workflow)
-    const ServicesView = () => (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
-                        <ClipboardCheck className="text-blue-600" size={32} /> Service Hub: End-to-End Workflow
-                    </h1>
-                    <p className="text-slate-500 text-sm">การให้บริการครบวงจร: ยื่นคำขอ {'→'} ตรวจสอบ {'→'} อนุมัติ {'→'} ออกเอกสาร e-CO</p>
-                </div>
-                <button className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl text-sm font-bold shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all hover:scale-105">
-                    <FilePlus size={20} /> Create New Application
+    // New Application Form View (Realistic CO Application)
+    const ApplicationFormView = () => (
+        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
+            <div className="flex items-center justify-between">
+                <button
+                    onClick={() => setIsCreatingApp(false)}
+                    className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors"
+                >
+                    <ArrowLeft size={18} /> Back to Hub
                 </button>
+                <div className="flex items-center gap-3">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Step {formStep} of 3</span>
+                    <div className="flex gap-1.5">
+                        {[1, 2, 3].map(s => <div key={s} className={`h-1.5 w-8 rounded-full ${s <= formStep ? 'bg-blue-600' : 'bg-slate-200'}`}></div>)}
+                    </div>
+                </div>
             </div>
 
-            {/* Workflow Progress Bar */}
-            <Card className="p-8 bg-slate-900 text-white border-none shadow-2xl">
-                <div className="flex justify-between items-center relative">
-                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 z-0"></div>
-                    {[
-                        { step: 1, label: 'Submission', icon: FilePlus, status: 'Completed' },
-                        { step: 2, label: 'Smart Verification', icon: ShieldQuestion, status: 'In-Progress' },
-                        { step: 3, label: 'Official Approval', icon: CheckSquare, status: 'Pending' },
-                        { step: 4, label: 'e-Issuance', icon: Printer, status: 'Pending' },
-                    ].map((item, i) => (
-                        <div key={i} className="relative z-10 flex flex-col items-center gap-3 group cursor-pointer">
-                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${item.status === 'Completed' ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]' :
-                                    item.status === 'In-Progress' ? 'bg-blue-600 text-white animate-pulse shadow-[0_0_20px_rgba(37,99,235,0.4)]' :
-                                        'bg-slate-800 text-slate-500'
-                                }`}>
-                                <item.icon size={28} />
-                            </div>
-                            <div className="text-center">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">Step {item.step}</p>
-                                <p className="text-xs font-bold">{item.label}</p>
+            <Card className="shadow-2xl border-white/40">
+                <div className="p-8 border-b bg-slate-900 text-white flex justify-between items-center">
+                    <div>
+                        <h2 className="text-2xl font-black tracking-tight">New Certificate of Origin Request</h2>
+                        <p className="text-blue-300 text-sm font-medium mt-1 uppercase tracking-wider">ระบบยื่นคำขอรับหนังสือรับรองถิ่นกำเนิดสินค้าอิเล็กทรอนิกส์</p>
+                    </div>
+                    <div className="p-3 bg-white/10 rounded-2xl border border-white/20">
+                        <ClipboardCheck size={32} />
+                    </div>
+                </div>
+
+                <div className="p-8">
+                    {formStep === 1 && (
+                        <div className="space-y-8 animate-in fade-in duration-300">
+                            <section className="space-y-4">
+                                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 underline decoration-blue-500 decoration-4 underline-offset-4">
+                                    1. ข้อมูลความตกลงและประเทศปลายทาง
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">กรอบความตกลง (Select FTA/GSP)</label>
+                                        <div className="relative">
+                                            <select className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 appearance-none focus:border-blue-500 outline-none transition-all">
+                                                <option>อาเซียน-จีน (ACFTA) - Form E</option>
+                                                <option>อาเซียน (ATIGA) - Form D</option>
+                                                <option>RCEP - Form RCEP</option>
+                                                <option>ไทย-ญี่ปุ่น (JTEPA)</option>
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">ประเทศปลายทาง (Destination)</label>
+                                        <div className="relative">
+                                            <select className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 appearance-none focus:border-blue-500 outline-none transition-all">
+                                                <option>China</option>
+                                                <option>Japan</option>
+                                                <option>South Korea</option>
+                                                <option>Australia</option>
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="space-y-4">
+                                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 underline decoration-blue-500 decoration-4 underline-offset-4">
+                                    2. ข้อมูลผู้ส่งออก (Exporter Information)
+                                </h3>
+                                <div className="p-5 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-3 bg-white rounded-xl shadow-sm text-blue-600"><Users size={24} /></div>
+                                        <div>
+                                            <p className="text-[10px] font-black text-blue-400 uppercase">Linked with DBD API</p>
+                                            <p className="font-black text-slate-900">บริษัท ไทย อะกริ เอ็กซ์ปอร์ต จำกัด</p>
+                                            <p className="text-xs text-slate-500">เลขประจำตัวผู้เสียภาษี: 0105560001234</p>
+                                        </div>
+                                    </div>
+                                    <Badge variant="success">Verified</Badge>
+                                </div>
+                                <div className="grid grid-cols-1 gap-6">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">ที่อยู่ภาษาอังกฤษ (Exporter's Address in English)</label>
+                                        <textarea className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 focus:border-blue-500 outline-none transition-all min-h-[80px]" placeholder="123 Sukhumvit Rd, Khlong Toei, Bangkok 10110, Thailand"></textarea>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    )}
+
+                    {formStep === 2 && (
+                        <div className="space-y-8 animate-in fade-in duration-300">
+                            <section className="space-y-4">
+                                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 underline decoration-emerald-500 decoration-4 underline-offset-4">
+                                    3. รายละเอียดสินค้า (Product Details)
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                                    <div className="md:col-span-2 space-y-1.5">
+                                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">พิกัดศุลกากร (HS Code - 8 หรือ 11 หลัก)</label>
+                                        <div className="relative group">
+                                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600" size={18} />
+                                            <input type="text" className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold text-slate-800 focus:border-blue-500 outline-none transition-all" placeholder="พิมพ์เพื่อค้นหาพิกัด... เช่น 0804.50.20" />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">เกณฑ์ถิ่นกำเนิด (Origin Criteria)</label>
+                                        <select className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-500 transition-all">
+                                            <option>WO (Wholly Obtained)</option>
+                                            <option>RVC 40% (Regional Value Content)</option>
+                                            <option>CTC (Change in Tariff Classification)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">น้ำหนักสุทธิ (Net Weight in KGs)</label>
+                                        <input type="number" className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-500" placeholder="0.00" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-tighter ml-1">มูลค่า FOB (FOB Value in USD)</label>
+                                        <input type="number" className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-3 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-500" placeholder="0.00" />
+                                    </div>
+                                </div>
+                            </section>
+
+                            <div className="p-6 bg-emerald-50 border-2 border-dashed border-emerald-200 rounded-3xl flex flex-col items-center justify-center text-center">
+                                <div className="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mb-3 shadow-lg shadow-emerald-200">
+                                    <BrainCircuit size={24} />
+                                </div>
+                                <p className="text-sm font-black text-emerald-800 uppercase tracking-tight">AI Assessment: High Probability</p>
+                                <p className="text-xs text-emerald-600 mt-1">รายการนี้สอดคล้องกับพฤติกรรมการส่งออกเดิมและกฎ ROO ในกรอบ ACFTA</p>
                             </div>
                         </div>
-                    ))}
+                    )}
+
+                    {formStep === 3 && (
+                        <div className="space-y-8 animate-in fade-in duration-300">
+                            <section className="space-y-4">
+                                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 underline decoration-indigo-500 decoration-4 underline-offset-4">
+                                    4. แนบเอกสารประกอบ (Supporting Documents)
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                                    {[
+                                        { title: 'Commercial Invoice', status: 'Mandatory' },
+                                        { title: 'Packing List', status: 'Mandatory' },
+                                        { title: 'Bill of Lading (B/L)', status: 'Optional' },
+                                        { title: 'Origin Declaration (Self)', status: 'Optional' },
+                                    ].map((doc, i) => (
+                                        <div key={i} className="p-4 border-2 border-slate-50 rounded-2xl flex items-center justify-between hover:border-blue-100 hover:bg-blue-50/20 transition-all group cursor-pointer">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 bg-slate-100 rounded-lg text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all"><FileText size={18} /></div>
+                                                <div>
+                                                    <p className="text-xs font-bold text-slate-700">{doc.title}</p>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase">{doc.status}</p>
+                                                </div>
+                                            </div>
+                                            <UploadCloud size={18} className="text-slate-300 group-hover:text-blue-500" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+
+                            <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                                <div className="flex gap-3">
+                                    <input type="checkbox" className="mt-1 w-5 h-5 rounded-md border-2 border-blue-500" />
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium">ข้าพเจ้าขอรับรองว่าข้อมูลข้างต้นเป็นความจริงทุกประการ และสินค้ามีคุณสมบัติถูกต้องตามกฎว่าด้วยถิ่นกำเนิดสินค้าภายใต้ความตกลงที่ระบุไว้ หากตรวจพบว่าข้อมูลเป็นเท็จ ข้าพเจ้ายินยอมรับโทษตามกฎหมายที่เกี่ยวข้อง</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className="p-8 bg-slate-50 border-t flex justify-between items-center">
+                    <button
+                        onClick={() => setFormStep(prev => Math.max(1, prev - 1))}
+                        disabled={formStep === 1}
+                        className="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-500 hover:bg-slate-100 transition-all disabled:opacity-0"
+                    >
+                        Previous Step
+                    </button>
+                    <div className="flex gap-3">
+                        <button className="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-500 hover:bg-slate-100 transition-all">Save Draft</button>
+                        {formStep < 3 ? (
+                            <button
+                                onClick={() => setFormStep(prev => prev + 1)}
+                                className="px-8 py-3 bg-blue-600 text-white rounded-2xl text-sm font-bold shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2"
+                            >
+                                Next Step <ChevronRight size={18} />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    setTimeout(() => {
+                                        setIsLoading(false);
+                                        setIsCreatingApp(false);
+                                        setFormStep(1);
+                                    }, 1000);
+                                }}
+                                className="px-8 py-3 bg-slate-900 text-white rounded-2xl text-sm font-bold shadow-xl shadow-slate-300 hover:bg-slate-800 transition-all flex items-center gap-2"
+                            >
+                                Submit Application <Zap size={18} className="text-amber-400" />
+                            </button>
+                        )}
+                    </div>
                 </div>
             </Card>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Active Applications List */}
-                <Card className="lg:col-span-2">
-                    <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
-                        <h3 className="flex items-center gap-2"><Activity size={18} className="text-blue-500" /> Active Applications Pipeline</h3>
-                        <div className="flex gap-2">
-                            <Badge variant="info">Total: 128</Badge>
-                            <Badge variant="warning">Urgent: 5</Badge>
-                        </div>
-                    </div>
-                    <div className="p-0">
-                        <div className="grid grid-cols-1 divide-y divide-slate-100">
-                            {[
-                                { ref: 'REQ-2024-8842', company: 'Thai Agri Export Co.', agreement: 'ASEAN-China (ACFTA)', status: 'Verifying', time: '2 ชม. ที่แล้ว', risk: 'Low' },
-                                { ref: 'REQ-2024-8843', company: 'Pacific Motors Ltd.', agreement: 'RCEP', status: 'Pending Approval', time: '4 ชม. ที่แล้ว', risk: 'Med' },
-                                { ref: 'REQ-2024-8844', company: 'Global Food Solutions', agreement: 'GSP (USA)', status: 'Approved', time: '6 ชม. ที่แล้ว', risk: 'Low' },
-                                { ref: 'REQ-2024-8845', company: 'Siam Electronics', agreement: 'ASEAN-Korea (AKFTA)', status: 'Issued', time: '1 วันที่แล้ว', risk: 'Low' },
-                            ].map((req, i) => (
-                                <div key={i} className="p-5 hover:bg-slate-50 flex items-center justify-between group transition-all">
-                                    <div className="flex items-center gap-5">
-                                        <div className={`p-3 rounded-2xl ${req.status === 'Issued' ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
-                                            <FileCheck size={24} />
-                                        </div>
-                                        <div>
-                                            <div className="flex items-center gap-2">
-                                                <p className="font-mono font-black text-slate-900">{req.ref}</p>
-                                                <Badge variant={req.status === 'Issued' ? 'success' : req.status === 'Approved' ? 'info' : 'warning'}>{req.status}</Badge>
-                                            </div>
-                                            <p className="text-sm font-bold text-slate-600 mt-0.5">{req.company}</p>
-                                            <div className="flex gap-4 mt-2">
-                                                <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-tighter"><Globe size={10} /> {req.agreement}</span>
-                                                <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-tighter"><Clock size={10} /> {req.time}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="text-right">
-                                            <p className="text-[9px] font-bold text-slate-400 uppercase">Risk Score</p>
-                                            <span className={`text-xs font-black ${req.risk === 'Med' ? 'text-amber-500' : 'text-emerald-500'}`}>{req.risk}</span>
-                                        </div>
-                                        <button className="p-2 hover:bg-white hover:shadow-md border border-transparent hover:border-slate-200 rounded-xl transition-all">
-                                            <ChevronRight size={20} className="text-slate-300" />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="p-4 border-t bg-slate-50/50 text-center">
-                        <button className="text-xs font-bold text-blue-600 hover:underline uppercase tracking-widest">View All Workflows</button>
-                    </div>
-                </Card>
-
-                {/* Issuance & e-Signature Section */}
-                <div className="space-y-6">
-                    <Card className="p-6 bg-gradient-to-br from-white to-blue-50/50 border-blue-100">
-                        <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2"><Printer size={18} className="text-blue-500" /> e-Issuance Center</h3>
-                        <div className="p-4 bg-white border border-blue-100 rounded-2xl shadow-sm relative overflow-hidden group cursor-pointer">
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-blue-600 text-white rounded-bl-3xl flex items-center justify-center translate-x-1 -translate-y-1 group-hover:scale-110 transition-transform">
-                                <Sticker size={24} />
-                            </div>
-                            <p className="text-[10px] font-bold text-blue-600 uppercase">Latest Issued e-CO</p>
-                            <p className="text-lg font-black text-slate-900 mt-1">DFT-CN-2024012</p>
-                            <p className="text-xs text-slate-500 font-medium mt-1">Status: Secured by Digital Signature</p>
-                            <div className="mt-4 flex gap-2">
-                                <button className="flex-1 py-2 bg-blue-600 text-white text-[10px] font-bold rounded-xl shadow-lg">Download PDF</button>
-                                <button className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl"><Eye size={14} /></button>
-                            </div>
-                        </div>
-                        <div className="mt-6 space-y-3">
-                            <div className="flex justify-between items-center text-[11px] font-bold">
-                                <span className="text-slate-500 uppercase">Daily Issuance Limit</span>
-                                <span className="text-slate-900">452 / 1000</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-blue-500 rounded-full" style={{ width: '45%' }}></div>
-                            </div>
-                        </div>
-                    </Card>
-
-                    <Card className="p-6 border-l-4 border-l-emerald-500">
-                        <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><CheckSquare size={18} className="text-emerald-500" /> Smart Approval Check</h3>
-                        <p className="text-[11px] text-slate-500 leading-relaxed mb-6 font-medium italic underline">ระบบประมวลผลกฎถิ่นกำเนิดสินค้าเบื้องต้นเพื่อช่วยเหลือเจ้าหน้าที่ (ROVERS PLUS Integration)</p>
-                        <div className="space-y-4">
-                            {[
-                                { label: 'Origin Criteria (RVC 40%)', status: 'Passed', color: 'bg-emerald-500' },
-                                { label: 'HS Code Consistency', status: 'Passed', color: 'bg-emerald-500' },
-                                { label: 'Exporter History Audit', status: 'Passed', color: 'bg-emerald-500' },
-                                { label: 'Supporting Documents', status: 'Warning', color: 'bg-amber-500' },
-                            ].map((check, i) => (
-                                <div key={i} className="flex items-center justify-between">
-                                    <span className="text-xs font-bold text-slate-700">{check.label}</span>
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-2 h-2 rounded-full ${check.color}`}></div>
-                                        <span className="text-[10px] font-black uppercase text-slate-400">{check.status}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </Card>
-                </div>
+            <div className="flex items-center justify-center gap-8 opacity-50">
+                <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest"><Lock size={12} /> SSL Encrypted</div>
+                <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest"><ShieldCheck size={12} /> Smart Verification Enabled</div>
             </div>
+        </div>
+    );
+
+    const ServicesView = () => (
+        <div className="space-y-6">
+            {isCreatingApp ? (
+                <ApplicationFormView />
+            ) : (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+                                <ClipboardCheck className="text-blue-600" size={32} /> Service Hub: End-to-End Workflow
+                            </h1>
+                            <p className="text-slate-500 text-sm">การให้บริการครบวงจร: ยื่นคำขอ {'→'} ตรวจสอบ {'→'} อนุมัติ {'→'} ออกเอกสาร e-CO</p>
+                        </div>
+                        <button
+                            onClick={() => setIsCreatingApp(true)}
+                            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl text-sm font-bold shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all hover:scale-105"
+                        >
+                            <FilePlus size={20} /> Create New Application
+                        </button>
+                    </div>
+
+                    <Card className="p-8 bg-slate-900 text-white border-none shadow-2xl">
+                        <div className="flex justify-between items-center relative">
+                            <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 z-0"></div>
+                            {[
+                                { step: 1, label: 'Submission', icon: FilePlus, status: 'Completed' },
+                                { step: 2, label: 'Smart Verification', icon: ShieldQuestion, status: 'In-Progress' },
+                                { step: 3, label: 'Official Approval', icon: CheckSquare, status: 'Pending' },
+                                { step: 4, label: 'e-Issuance', icon: Printer, status: 'Pending' },
+                            ].map((item, i) => (
+                                <div key={i} className="relative z-10 flex flex-col items-center gap-3 group cursor-pointer">
+                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${item.status === 'Completed' ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]' :
+                                            item.status === 'In-Progress' ? 'bg-blue-600 text-white animate-pulse shadow-[0_0_20px_rgba(37,99,235,0.4)]' :
+                                                'bg-slate-800 text-slate-500'
+                                        }`}>
+                                        <item.icon size={28} />
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">Step {item.step}</p>
+                                        <p className="text-xs font-bold">{item.label}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <Card className="lg:col-span-2">
+                            <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
+                                <h3 className="flex items-center gap-2"><Activity size={18} className="text-blue-500" /> Active Applications Pipeline</h3>
+                            </div>
+                            <div className="p-0 divide-y">
+                                {[
+                                    { ref: 'REQ-2024-8842', company: 'Thai Agri Export Co.', agreement: 'ASEAN-China (ACFTA)', status: 'Verifying', time: '2 ชม. ที่แล้ว', risk: 'Low' },
+                                    { ref: 'REQ-2024-8843', company: 'Pacific Motors Ltd.', agreement: 'RCEP', status: 'Pending Approval', time: '4 ชม. ที่แล้ว', risk: 'Med' },
+                                    { ref: 'REQ-2024-8844', company: 'Global Food Solutions', agreement: 'GSP (USA)', status: 'Approved', time: '6 ชม. ที่แล้ว', risk: 'Low' },
+                                ].map((req, i) => (
+                                    <div key={i} className="p-5 hover:bg-slate-50 flex items-center justify-between group transition-all">
+                                        <div className="flex items-center gap-5">
+                                            <div className="p-3 rounded-2xl bg-blue-50 text-blue-600"><FileCheck size={24} /></div>
+                                            <div>
+                                                <div className="flex items-center gap-2"><p className="font-mono font-black text-slate-900">{req.ref}</p><Badge variant={req.status === 'Approved' ? 'info' : 'warning'}>{req.status}</Badge></div>
+                                                <p className="text-sm font-bold text-slate-600 mt-0.5">{req.company}</p>
+                                                <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-tighter">{req.agreement} • {req.time}</p>
+                                            </div>
+                                        </div>
+                                        <button className="p-2 hover:bg-white hover:shadow-md border rounded-xl transition-all"><ChevronRight size={20} className="text-slate-300" /></button>
+                                    </div>
+                                ))}
+                            </div>
+                        </Card>
+                        <Card className="p-6 bg-gradient-to-br from-white to-blue-50/50 border-blue-100">
+                            <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2"><Printer size={18} className="text-blue-500" /> e-Issuance Center</h3>
+                            <div className="p-4 bg-white border border-blue-100 rounded-2xl shadow-sm relative overflow-hidden group cursor-pointer">
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-600 text-white rounded-bl-3xl flex items-center justify-center translate-x-1 -translate-y-1 group-hover:scale-110 transition-transform"><Sticker size={24} /></div>
+                                <p className="text-[10px] font-bold text-blue-600 uppercase">Latest Issued e-CO</p>
+                                <p className="text-lg font-black text-slate-900 mt-1">DFT-CN-2024012</p>
+                                <div className="mt-4 flex gap-2"><button className="flex-1 py-2 bg-blue-600 text-white text-[10px] font-bold rounded-xl shadow-lg">Download PDF</button><button className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl"><Eye size={14} /></button></div>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+            )}
         </div>
     );
 
