@@ -27,7 +27,12 @@ import {
     CheckCircle2,
     FileJson,
     PieChart,
-    TrendingUp
+    TrendingUp,
+    LogOut,
+    Building2,
+    Shield,
+    LogIn,
+    Fingerprint
 } from 'lucide-react';
 
 // --- UI Components ---
@@ -52,9 +57,56 @@ const Badge = ({ children, variant = "default" }) => {
 // --- Main App Component ---
 
 export default function App() {
+    // --- Authentication State ---
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
+    const [loginProcess, setLoginProcess] = useState(null); // null, 'checking', 'success'
+    const [authError, setAuthError] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+
+    // --- Authentication Logic (Simulated AD) ---
+    const handleLogin = (e) => {
+        if (e) e.preventDefault();
+        setAuthError('');
+        
+        // For standard simulation logic, we can still require username/password if needed, 
+        // but since demo-signin has an 'AD SSO' button that doesn't use the form fields directly, 
+        // we'll simulate a 1-click SSO login just like demo-signin does.
+        
+        setLoginProcess('checking');
+
+        // Simulate network request to AD Server
+        setTimeout(() => {
+            setLoginProcess('success');
+            setTimeout(() => {
+                // Success
+                setUser({
+                    name: 'Komsan S.',
+                    role: 'Administrator',
+                    department: 'Department of Foreign Trade',
+                    id: 'DFT-' + Math.floor(Math.random() * 10000)
+                });
+                setIsLoggedIn(true);
+                setLoginProcess(null);
+            }, 800);
+        }, 1500);
+    };
+
+    const handleLogout = () => {
+        setIsLoading(true);
+        setTimeout(() => {
+            setIsLoggedIn(false);
+            setUser(null);
+            setUsername('');
+            setPassword('');
+            setIsLoading(false);
+        }, 800);
+    };
 
     // ข้อมูลสถิติย้อนหลัง 10 ปี (Section 3.2.1)
     const stats10Years = [
@@ -561,6 +613,116 @@ export default function App() {
         </div>
     );
 
+    // --- 7. Sign-In View (Simulated AD SSO from demo) ---
+    const SignInView = () => (
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 relative overflow-hidden font-sans">
+            {/* Background Decorative Elements */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100 rounded-full blur-[100px] opacity-30 -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-100 rounded-full blur-[100px] opacity-30 translate-y-1/2 -translate-x-1/2"></div>
+
+            <div className="w-full max-w-[440px] relative z-10 animate-in fade-in zoom-in-95 duration-700">
+                <div className="text-center mb-10">
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 text-white rounded-[28px] shadow-2xl shadow-blue-200 mb-6 group cursor-default">
+                        <BarChart3 size={40} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
+                    </div>
+                    <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-tight">FTA-GSP</h1>
+                    <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[11px] mt-1">Intelligence Portal</p>
+                    <div className="h-1 w-12 bg-blue-600 mx-auto mt-6 rounded-full"></div>
+                </div>
+
+                <Card className="p-8 shadow-2xl shadow-slate-200 border-white/50 backdrop-blur-sm bg-white/90">
+                    <div className="space-y-6">
+                        <div className="text-center">
+                            <h2 className="text-xl font-bold text-slate-800">เข้าสู่ระบบเจ้าหน้าที่</h2>
+                            <p className="text-sm text-slate-400 mt-1">กรมการค้าต่างประเทศ (DFT)</p>
+                        </div>
+
+                        {/* SSO Button Section */}
+                        <button
+                            onClick={handleLogin}
+                            disabled={loginProcess !== null}
+                            className={`w-full group relative overflow-hidden flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-sm transition-all shadow-lg border-2 ${loginProcess === 'success'
+                                    ? 'bg-emerald-500 border-emerald-500 text-white'
+                                    : 'bg-slate-900 border-slate-900 text-white hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98]'
+                                }`}
+                        >
+                            {loginProcess === 'checking' ? (
+                                <RefreshCw className="animate-spin" size={20} />
+                            ) : loginProcess === 'success' ? (
+                                <CheckCircle2 className="animate-bounce" size={20} />
+                            ) : (
+                                <LogIn size={20} className="group-hover:translate-x-1 transition-transform" />
+                            )}
+
+                            <span>
+                                {loginProcess === 'checking' ? 'กำลังตรวจสอบสิทธิ์ AD...' :
+                                    loginProcess === 'success' ? 'สำเร็จ! กำลังนำเข้าสู่ระบบ' :
+                                        'Sign in with Active Directory'}
+                            </span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                        </button>
+
+                        <div className="flex items-center gap-4 py-2">
+                            <div className="h-[1px] flex-1 bg-slate-100"></div>
+                            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">OR</span>
+                            <div className="h-[1px] flex-1 bg-slate-100"></div>
+                        </div>
+
+                        {/* Standard Login Option */}
+                        <div className="space-y-4">
+                            <div className="space-y-1.5">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Username / Email</label>
+                                <input
+                                    type="text"
+                                    disabled={loginProcess !== null}
+                                    placeholder="dft_official@dft.go.th"
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-blue-500/20 focus:bg-white outline-none transition-all disabled:opacity-50"
+                                />
+                            </div>
+                            <div className="space-y-1.5">
+                                <div className="flex justify-between items-center px-1">
+                                    <label className="text-[11px] font-bold text-slate-500 uppercase">Password</label>
+                                    <button className="text-[10px] font-bold text-blue-600 hover:underline">Forgot?</button>
+                                </div>
+                                <input
+                                    type="password"
+                                    disabled={loginProcess !== null}
+                                    placeholder="••••••••"
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-blue-500/20 focus:bg-white outline-none transition-all disabled:opacity-50"
+                                />
+                            </div>
+                            <button
+                                disabled={loginProcess !== null}
+                                className="w-full py-3.5 text-slate-400 hover:text-slate-600 font-bold text-xs transition-colors disabled:opacity-0"
+                            >
+                                Sign in with Standard Account
+                            </button>
+                        </div>
+                    </div>
+                </Card>
+
+                <div className="mt-8 flex flex-col items-center gap-4">
+                    <div className="flex items-center gap-6 opacity-40">
+                        <img src="https://www.dft.go.th/Portals/0/logo-dft.png" alt="DFT" className="h-8 grayscale hover:grayscale-0 transition-all cursor-help" />
+                        <div className="h-6 w-[1px] bg-slate-300"></div>
+                        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
+                            <ShieldCheck size={14} /> SECURED BY MOI SSO
+                        </div>
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-medium text-center leading-relaxed">
+                        การเข้าสู่ระบบต้องเป็นไปตามนโยบายความมั่นคงปลอดภัยไซเบอร์<br />
+                        ของกรมการค้าต่างประเทศ (Section 3.6)
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+
+    // If not logged in, render only the Sign-in view
+    if (!isLoggedIn) {
+        return <SignInView />;
+    }
+
     return (
         <div className="flex h-screen bg-slate-50 overflow-hidden font-sans antialiased text-slate-900">
 
@@ -604,15 +766,24 @@ export default function App() {
                     ))}
                 </nav>
 
-                <div className="p-6 mt-auto border-t border-white/5 shrink-0">
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-white font-bold ring-2 ring-blue-500/20 shrink-0">
-                            DFT
+                <div className="p-4 mt-auto border-t border-white/5 shrink-0 flex flex-col gap-2">
+                    <button 
+                        onClick={handleLogout}
+                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 group ${!isSidebarOpen && 'justify-center px-0'}`}
+                        title="Logout"
+                    >
+                        <LogOut size={18} className="group-hover:text-rose-400" />
+                        {isSidebarOpen && <span className="text-sm font-bold tracking-tight">Sign Out</span>}
+                    </button>
+
+                    <div className="flex items-center gap-4 mt-2 px-2">
+                        <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-bold ring-2 ring-blue-500/20 shrink-0 text-xs">
+                            {user?.name?.substring(0, 2).toUpperCase() || 'DFT'}
                         </div>
                         {isSidebarOpen && (
                             <div className="overflow-hidden">
-                                <p className="text-white text-sm font-bold truncate">Department of Foreign Trade</p>
-                                <p className="text-[10px] text-slate-500 font-medium">Digital Government v2.5</p>
+                                <p className="text-white text-sm font-bold truncate">{user?.name || 'Department of Foreign Trade'}</p>
+                                <p className="text-[10px] text-slate-500 font-medium truncate">{user?.role || 'Digital Government v2.5'}</p>
                             </div>
                         )}
                     </div>
@@ -648,11 +819,11 @@ export default function App() {
                         <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
                         <button className="flex items-center gap-3 p-1.5 pr-3 hover:bg-slate-100 rounded-lg transition-colors group">
                             <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs group-hover:bg-blue-600 group-hover:text-white transition-all shrink-0">
-                                JD
+                                {user?.name?.charAt(0).toUpperCase() || 'J'}
                             </div>
                             <div className="text-left hidden lg:block">
-                                <p className="text-[11px] font-extrabold text-slate-900 leading-none">Jane Doe</p>
-                                <p className="text-[9px] font-bold text-slate-400 mt-0.5 leading-none">Intelligence Officer</p>
+                                <p className="text-[11px] font-extrabold text-slate-900 leading-none truncate max-w-[100px]">{user?.name || 'Jane Doe'}</p>
+                                <p className="text-[9px] font-bold text-slate-400 mt-0.5 leading-none truncate max-w-[100px]">{user?.role || 'Intelligence Officer'}</p>
                             </div>
                         </button>
                     </div>
