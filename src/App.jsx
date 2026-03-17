@@ -1581,7 +1581,7 @@ export default function App() {
 
                 <div className="mt-8 flex flex-col items-center gap-4">
                     <div className="flex items-center gap-6 opacity-40">
-                        <img src="https://www.dft.go.th/Portals/0/logo-dft.png" alt="DFT" className="h-8 grayscale hover:grayscale-0 transition-all cursor-help" />
+                        <img src={dftLogo} alt="DFT" className="h-8 grayscale hover:grayscale-0 transition-all cursor-help" />
                         <div className="h-6 w-[1px] bg-slate-300"></div>
                         <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
                             <ShieldCheck size={14} /> SECURED BY MOI SSO
