@@ -69,6 +69,30 @@ import dftLogo from './assets/logo-dft.png';
 
 // --- UI Components ---
 
+const Tooltip = ({ children, text, position = "top" }) => {
+    const positionClasses = {
+        top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
+        bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
+        left: "right-full top-1/2 -translate-y-1/2 mr-2",
+        right: "left-full top-1/2 -translate-y-1/2 ml-2",
+    };
+    const arrowClasses = {
+        top: "top-full left-1/2 -translate-x-1/2 border-t-slate-800 border-x-transparent border-b-transparent border-4",
+        bottom: "bottom-full left-1/2 -translate-x-1/2 border-b-slate-800 border-x-transparent border-t-transparent border-4",
+        left: "left-full top-1/2 -translate-y-1/2 border-l-slate-800 border-y-transparent border-r-transparent border-4",
+        right: "right-full top-1/2 -translate-y-1/2 border-r-slate-800 border-y-transparent border-l-transparent border-4",
+    };
+    return (
+        <div className="relative group/tooltip inline-flex">
+            {children}
+            <div className={`absolute ${positionClasses[position]} px-3 py-2 bg-slate-800 text-white text-xs rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 z-50 shadow-xl whitespace-nowrap pointer-events-none max-w-xs`}>
+                {text}
+                <div className={`absolute ${arrowClasses[position]} w-0 h-0`}></div>
+            </div>
+        </div>
+    );
+};
+
 const Card = ({ children, className = "" }) => (
     <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden ${className}`}>
         {children}
@@ -177,32 +201,40 @@ export default function App() {
                     <p className="text-slate-500 text-sm">ข้อมูลสรุปภาพรวมการใช้สิทธิประโยชน์ทางการค้า (FTA & GSP)</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <div className="bg-white p-1 rounded-lg border flex shadow-sm">
-                        <button className="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white">รายปี</button>
-                        <button className="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-600 hover:bg-slate-50">รายไตรมาส</button>
-                    </div>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition-all shadow-md shadow-blue-200">
-                        <Download size={16} /> Export Report
-                    </button>
+                    <Tooltip text="สลับมุมมองระหว่างรายปีและรายไตรมาส" position="bottom">
+                        <div className="bg-white p-1 rounded-lg border flex shadow-sm">
+                            <button className="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white">รายปี</button>
+                            <button className="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-600 hover:bg-slate-50">รายไตรมาส</button>
+                        </div>
+                    </Tooltip>
+                    <Tooltip text="ดาวน์โหลดรายงานสรุปในรูปแบบ Excel / PDF" position="bottom">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition-all shadow-md shadow-blue-200">
+                            <Download size={16} /> Export Report
+                        </button>
+                    </Tooltip>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
-                    { title: 'มูลค่าการส่งออก (Eligible)', val: '$84,250M', trend: '+12.5%', isUp: true, icon: Globe, color: 'text-blue-600' },
-                    { title: 'มูลค่าการใช้สิทธิฯ (Actual)', val: '$52,140M', trend: '+8.2%', isUp: true, icon: Activity, color: 'text-emerald-600' },
-                    { title: 'สัดส่วนการใช้สิทธิ (%)', val: '61.89%', trend: '-2.1%', isUp: false, icon: BarChart3, color: 'text-amber-600' },
-                    { title: 'จำนวนหนังสือรับรอง (ฉบับ)', val: '142,508', trend: '+15.4%', isUp: true, icon: FileText, color: 'text-indigo-600' },
+                    { title: 'มูลค่าการส่งออก (Eligible)', val: '$84,250M', trend: '+12.5%', isUp: true, icon: Globe, color: 'text-blue-600', tip: 'มูลค่าสินค้าส่งออกที่สามารถใช้สิทธิประโยชน์ FTA/GSP ได้' },
+                    { title: 'มูลค่าการใช้สิทธิฯ (Actual)', val: '$52,140M', trend: '+8.2%', isUp: true, icon: Activity, color: 'text-emerald-600', tip: 'มูลค่าที่ผู้ส่งออกใช้สิทธิประโยชน์จริง เทียบกับมูลค่าที่มีสิทธิ' },
+                    { title: 'สัดส่วนการใช้สิทธิ (%)', val: '61.89%', trend: '-2.1%', isUp: false, icon: BarChart3, color: 'text-amber-600', tip: 'อัตราส่วนการใช้สิทธิ = Actual ÷ Eligible × 100' },
+                    { title: 'จำนวนหนังสือรับรอง (ฉบับ)', val: '142,508', trend: '+15.4%', isUp: true, icon: FileText, color: 'text-indigo-600', tip: 'จำนวนหนังสือรับรองถิ่นกำเนิดสินค้า (CO) ที่ออกในช่วงเวลานี้' },
                 ].map((kpi, i) => (
                     <Card key={i} className="p-5 hover:border-blue-300 transition-all cursor-default group">
                         <div className="flex justify-between items-start mb-3">
-                            <div className={`p-2.5 rounded-xl bg-slate-50 ${kpi.color} group-hover:scale-110 transition-transform`}>
-                                <kpi.icon size={20} />
-                            </div>
-                            <div className={`flex items-center gap-1 text-xs font-bold ${kpi.isUp ? 'text-emerald-600' : 'text-rose-600'}`}>
-                                {kpi.isUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                                {kpi.trend}
-                            </div>
+                            <Tooltip text={kpi.tip} position="right">
+                                <div className={`p-2.5 rounded-xl bg-slate-50 ${kpi.color} group-hover:scale-110 transition-transform`}>
+                                    <kpi.icon size={20} />
+                                </div>
+                            </Tooltip>
+                            <Tooltip text={`เปลี่ยนแปลง ${kpi.trend} จากช่วงเดียวกันปีก่อน`} position="left">
+                                <div className={`flex items-center gap-1 text-xs font-bold ${kpi.isUp ? 'text-emerald-600' : 'text-rose-600'}`}>
+                                    {kpi.isUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                                    {kpi.trend}
+                                </div>
+                            </Tooltip>
                         </div>
                         <h3 className="text-2xl font-bold text-slate-900">{kpi.val}</h3>
                         <p className="text-slate-500 text-xs font-medium mt-1 uppercase tracking-tight">{kpi.title}</p>
@@ -218,14 +250,18 @@ export default function App() {
                             <TrendingUp size={18} className="text-blue-500" /> สถิติการใช้สิทธิประโยชน์ย้อนหลัง 10 ปี (2015 - 2024)
                         </h3>
                         <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
-                                <span className="text-[10px] font-bold text-slate-500">Utilization</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-3 h-3 bg-slate-100 rounded-sm border"></div>
-                                <span className="text-[10px] font-bold text-slate-500">Eligible Export</span>
-                            </div>
+                            <Tooltip text="มูลค่าที่ใช้สิทธิจริง — แท่งสีน้ำเงิน" position="bottom">
+                                <div className="flex items-center gap-1.5 cursor-help">
+                                    <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
+                                    <span className="text-[10px] font-bold text-slate-500">Utilization</span>
+                                </div>
+                            </Tooltip>
+                            <Tooltip text="มูลค่าส่งออกที่มีสิทธิ — แท่งสีเทา" position="bottom">
+                                <div className="flex items-center gap-1.5 cursor-help">
+                                    <div className="w-3 h-3 bg-slate-100 rounded-sm border"></div>
+                                    <span className="text-[10px] font-bold text-slate-500">Eligible Export</span>
+                                </div>
+                            </Tooltip>
                         </div>
                     </div>
 
@@ -321,9 +357,11 @@ export default function App() {
                             </div>
                         ))}
                     </div>
-                    <button className="w-full mt-8 py-2.5 text-xs font-bold text-slate-500 hover:text-blue-600 bg-slate-50 hover:bg-blue-50 rounded-xl transition-all border border-slate-100 uppercase tracking-widest">
-                        View All Categories
-                    </button>
+                    <Tooltip text="ดูรายการพิกัดสินค้าทั้งหมดพร้อมสถิติการใช้สิทธิ" position="top">
+                        <button className="w-full mt-8 py-2.5 text-xs font-bold text-slate-500 hover:text-blue-600 bg-slate-50 hover:bg-blue-50 rounded-xl transition-all border border-slate-100 uppercase tracking-widest">
+                            View All Categories
+                        </button>
+                    </Tooltip>
                 </Card>
             </div>
         </div>
@@ -1670,27 +1708,33 @@ export default function App() {
 
                 {/* Top Header */}
                 <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0 sticky top-0 z-20">
-                    <button
-                        onClick={() => setSidebarOpen(!isSidebarOpen)}
-                        className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
-                    >
-                        <MoreVertical size={20} className={isSidebarOpen ? "" : "rotate-90"} />
-                    </button>
+                    <Tooltip text={isSidebarOpen ? "ย่อเมนูด้านข้าง" : "ขยายเมนูด้านข้าง"} position="right">
+                        <button
+                            onClick={() => setSidebarOpen(!isSidebarOpen)}
+                            className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
+                        >
+                            <MoreVertical size={20} className={isSidebarOpen ? "" : "rotate-90"} />
+                        </button>
+                    </Tooltip>
 
                     <div className="flex-1 max-w-xl mx-8 relative hidden sm:block">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                        <input
-                            type="text"
-                            placeholder="ค้นหาเลขอ้างอิง, พิกัด, หรือขอความช่วยเหลือจาก AI..."
-                            className="w-full bg-slate-100 border-none rounded-xl py-2 pl-10 pr-4 text-xs font-medium focus:ring-2 focus:ring-purple-500/20 focus:bg-white transition-all outline-none"
-                        />
+                        <Tooltip text="พิมพ์เลขอ้างอิง, พิกัดศุลกากร หรือคำถามเพื่อให้ AI ช่วยค้นหา" position="bottom">
+                            <input
+                                type="text"
+                                placeholder="ค้นหาเลขอ้างอิง, พิกัด, หรือขอความช่วยเหลือจาก AI..."
+                                className="w-full bg-slate-100 border-none rounded-xl py-2 pl-10 pr-4 text-xs font-medium focus:ring-2 focus:ring-purple-500/20 focus:bg-white transition-all outline-none"
+                            />
+                        </Tooltip>
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <button className="relative p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
-                            <Bell size={20} />
-                            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 border-2 border-white rounded-full animate-pulse"></span>
-                        </button>
+                        <Tooltip text="การแจ้งเตือน — มีรายการใหม่ที่ยังไม่ได้อ่าน" position="bottom">
+                            <button className="relative p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
+                                <Bell size={20} />
+                                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 border-2 border-white rounded-full animate-pulse"></span>
+                            </button>
+                        </Tooltip>
                         <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
                         <button className="flex items-center gap-3 p-1.5 pr-3 hover:bg-slate-100 rounded-lg transition-colors group">
                             <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs group-hover:bg-blue-600 group-hover:text-white transition-all shrink-0">
