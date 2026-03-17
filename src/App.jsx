@@ -70,24 +70,24 @@ import dftLogo from './assets/logo-dft.png';
 // --- UI Components ---
 
 const Tooltip = ({ children, text, position = "top" }) => {
-    const positionClasses = {
-        top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-        bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-        left: "right-full top-1/2 -translate-y-1/2 mr-2",
-        right: "left-full top-1/2 -translate-y-1/2 ml-2",
+    const positionStyles = {
+        top: { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: 8 },
+        bottom: { top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 8 },
+        left: { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: 8 },
+        right: { left: '100%', top: '50%', transform: 'translateY(-50%)', marginLeft: 8 },
     };
-    const arrowClasses = {
-        top: "top-full left-1/2 -translate-x-1/2 border-t-slate-800 border-x-transparent border-b-transparent border-4",
-        bottom: "bottom-full left-1/2 -translate-x-1/2 border-b-slate-800 border-x-transparent border-t-transparent border-4",
-        left: "left-full top-1/2 -translate-y-1/2 border-l-slate-800 border-y-transparent border-r-transparent border-4",
-        right: "right-full top-1/2 -translate-y-1/2 border-r-slate-800 border-y-transparent border-l-transparent border-4",
+    const arrowStyles = {
+        top: { top: '100%', left: '50%', transform: 'translateX(-50%)', borderWidth: 5, borderColor: '#1e293b transparent transparent transparent' },
+        bottom: { bottom: '100%', left: '50%', transform: 'translateX(-50%)', borderWidth: 5, borderColor: 'transparent transparent #1e293b transparent' },
+        left: { left: '100%', top: '50%', transform: 'translateY(-50%)', borderWidth: 5, borderColor: 'transparent transparent transparent #1e293b' },
+        right: { right: '100%', top: '50%', transform: 'translateY(-50%)', borderWidth: 5, borderColor: 'transparent #1e293b transparent transparent' },
     };
     return (
-        <div className="relative group/tooltip inline-flex">
+        <div className="tooltip-wrap" style={{ position: 'relative', display: 'inline-flex' }}>
             {children}
-            <div className={`absolute ${positionClasses[position]} px-3 py-2 bg-slate-800 text-white text-xs rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 z-50 shadow-xl whitespace-nowrap pointer-events-none max-w-xs`}>
+            <div className="tooltip-box" style={{ position: 'absolute', ...positionStyles[position], padding: '6px 12px', backgroundColor: '#1e293b', color: '#fff', fontSize: 12, borderRadius: 8, zIndex: 50, whiteSpace: 'nowrap', pointerEvents: 'none', boxShadow: '0 10px 25px rgba(0,0,0,0.2)', maxWidth: 280 }}>
                 {text}
-                <div className={`absolute ${arrowClasses[position]} w-0 h-0`}></div>
+                <div style={{ position: 'absolute', ...arrowStyles[position], width: 0, height: 0, borderStyle: 'solid' }}></div>
             </div>
         </div>
     );
