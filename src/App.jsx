@@ -130,6 +130,58 @@ export default function App() {
     const [isCreatingApp, setIsCreatingApp] = useState(false);
     const [formStep, setFormStep] = useState(1);
 
+    // --- Dashboard Multi-Criteria Search State ---
+    const [dashSearch, setDashSearch] = useState({
+        agreement: '',
+        yearFrom: '',
+        yearTo: '',
+        country: '',
+        hsCode: '',
+        minValue: '',
+    });
+    const [isDashSearchOpen, setIsDashSearchOpen] = useState(false);
+    const [dashSearchApplied, setDashSearchApplied] = useState(false);
+
+    const agreementOptions = [
+        { value: '', label: 'ทั้งหมด' },
+        { value: 'AFTA', label: 'AFTA (ASEAN)' },
+        { value: 'ACFTA', label: 'ACFTA (จีน)' },
+        { value: 'AJCEP', label: 'AJCEP (ญี่ปุ่น-อาเซียน)' },
+        { value: 'JTEPA', label: 'JTEPA (ญี่ปุ่น)' },
+        { value: 'TAFTA', label: 'TAFTA (ออสเตรเลีย)' },
+        { value: 'TNZFTA', label: 'TNZFTA (นิวซีแลนด์)' },
+        { value: 'AKFTA', label: 'AKFTA (เกาหลี)' },
+        { value: 'AIFTA', label: 'AIFTA (อินเดีย)' },
+        { value: 'RCEP', label: 'RCEP' },
+        { value: 'GSP', label: 'GSP (สิทธิพิเศษ)' },
+    ];
+
+    const countryOptions = [
+        { value: '', label: 'ทั้งหมด' },
+        { value: 'CN', label: 'จีน' },
+        { value: 'JP', label: 'ญี่ปุ่น' },
+        { value: 'US', label: 'สหรัฐอเมริกา' },
+        { value: 'AU', label: 'ออสเตรเลีย' },
+        { value: 'KR', label: 'เกาหลีใต้' },
+        { value: 'IN', label: 'อินเดีย' },
+        { value: 'VN', label: 'เวียดนาม' },
+        { value: 'MY', label: 'มาเลเซีย' },
+        { value: 'ID', label: 'อินโดนีเซีย' },
+        { value: 'EU', label: 'สหภาพยุโรป' },
+    ];
+
+    const activeFilterCount = Object.values(dashSearch).filter(v => v !== '').length;
+
+    const handleDashSearchApply = () => {
+        setDashSearchApplied(true);
+        setIsDashSearchOpen(false);
+    };
+
+    const handleDashSearchReset = () => {
+        setDashSearch({ agreement: '', yearFrom: '', yearTo: '', country: '', hsCode: '', minValue: '' });
+        setDashSearchApplied(false);
+    };
+
     // --- Authentication Logic (Simulated AD) ---
     const handleLogin = (e) => {
         if (e) e.preventDefault();
@@ -201,6 +253,25 @@ export default function App() {
                     <p className="text-slate-500 text-sm">ข้อมูลสรุปภาพรวมการใช้สิทธิประโยชน์ทางการค้า (FTA & GSP)</p>
                 </div>
                 <div className="flex items-center gap-3">
+                    <Tooltip text="ค้นหาและกรองข้อมูลหลายเงื่อนไข" position="bottom">
+                        <button
+                            onClick={() => setIsDashSearchOpen(!isDashSearchOpen)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all border shadow-sm ${isDashSearchOpen
+                                ? 'bg-purple-600 text-white border-purple-600 shadow-purple-200'
+                                : activeFilterCount > 0
+                                    ? 'bg-purple-50 text-purple-700 border-purple-200 shadow-purple-100'
+                                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                                }`}
+                        >
+                            <Search size={16} />
+                            Multi-Search
+                            {activeFilterCount > 0 && (
+                                <span className="bg-purple-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
+                                    {activeFilterCount}
+                                </span>
+                            )}
+                        </button>
+                    </Tooltip>
                     <Tooltip text="สลับมุมมองระหว่างรายปีและรายไตรมาส" position="bottom">
                         <div className="bg-white p-1 rounded-lg border flex shadow-sm">
                             <button className="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white">รายปี</button>
@@ -214,6 +285,172 @@ export default function App() {
                     </Tooltip>
                 </div>
             </div>
+
+            {/* Multi-Criteria Search Panel */}
+            {isDashSearchOpen && (
+                <Card className="p-0 border-purple-200 shadow-lg shadow-purple-100/50 animate-in">
+                    <div className="bg-purple-50/50 px-6 py-4 border-b border-purple-100 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-purple-100 rounded-lg text-purple-600">
+                                <Filter size={18} />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-slate-800 text-sm">ค้นหาหลายเงื่อนไข (Multi-Criteria Search)</h3>
+                                <p className="text-[11px] text-slate-500">กรองข้อมูลตามความตกลง, ช่วงเวลา, ประเทศ, พิกัดสินค้า และมูลค่า</p>
+                            </div>
+                        </div>
+                        <button onClick={() => setIsDashSearchOpen(false)} className="p-1.5 hover:bg-purple-100 rounded-lg text-slate-400 hover:text-slate-600 transition-colors">
+                            <X size={18} />
+                        </button>
+                    </div>
+
+                    <div className="p-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {/* ความตกลง */}
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">ความตกลง FTA / GSP</label>
+                                <select
+                                    value={dashSearch.agreement}
+                                    onChange={(e) => setDashSearch({ ...dashSearch, agreement: e.target.value })}
+                                    className="w-full bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all outline-none"
+                                >
+                                    {agreementOptions.map(opt => (
+                                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* ช่วงปี */}
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">ช่วงปี (จาก - ถึง)</label>
+                                <div className="flex gap-2">
+                                    <select
+                                        value={dashSearch.yearFrom}
+                                        onChange={(e) => setDashSearch({ ...dashSearch, yearFrom: e.target.value })}
+                                        className="flex-1 bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all outline-none"
+                                    >
+                                        <option value="">ปีเริ่มต้น</option>
+                                        {[2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024].map(y => (
+                                            <option key={y} value={y}>{y}</option>
+                                        ))}
+                                    </select>
+                                    <span className="self-center text-slate-400 font-bold">–</span>
+                                    <select
+                                        value={dashSearch.yearTo}
+                                        onChange={(e) => setDashSearch({ ...dashSearch, yearTo: e.target.value })}
+                                        className="flex-1 bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all outline-none"
+                                    >
+                                        <option value="">ปีสิ้นสุด</option>
+                                        {[2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024].map(y => (
+                                            <option key={y} value={y}>{y}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* ประเทศคู่ค้า */}
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">ประเทศคู่ค้า</label>
+                                <select
+                                    value={dashSearch.country}
+                                    onChange={(e) => setDashSearch({ ...dashSearch, country: e.target.value })}
+                                    className="w-full bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all outline-none"
+                                >
+                                    {countryOptions.map(opt => (
+                                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* พิกัดสินค้า */}
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">พิกัดสินค้า (HS Code)</label>
+                                <div className="relative">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                                    <input
+                                        type="text"
+                                        placeholder="เช่น 870323, 8415, 40"
+                                        value={dashSearch.hsCode}
+                                        onChange={(e) => setDashSearch({ ...dashSearch, hsCode: e.target.value })}
+                                        className="w-full bg-white border border-slate-200 rounded-xl py-2.5 pl-9 pr-3 text-sm font-medium focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all outline-none"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* มูลค่าขั้นต่ำ */}
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">มูลค่าขั้นต่ำ (USD)</label>
+                                <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">$</span>
+                                    <input
+                                        type="text"
+                                        placeholder="เช่น 1,000,000"
+                                        value={dashSearch.minValue}
+                                        onChange={(e) => setDashSearch({ ...dashSearch, minValue: e.target.value })}
+                                        className="w-full bg-white border border-slate-200 rounded-xl py-2.5 pl-8 pr-3 text-sm font-medium focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all outline-none"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex items-end gap-2">
+                                <button
+                                    onClick={handleDashSearchApply}
+                                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-bold transition-all shadow-md shadow-purple-200"
+                                >
+                                    <Search size={16} /> ค้นหา
+                                </button>
+                                <button
+                                    onClick={handleDashSearchReset}
+                                    className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-sm font-bold transition-all"
+                                >
+                                    ล้าง
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+            )}
+
+            {/* Applied Filters Tags */}
+            {dashSearchApplied && activeFilterCount > 0 && !isDashSearchOpen && (
+                <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ตัวกรอง:</span>
+                    {dashSearch.agreement && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold">
+                            {agreementOptions.find(o => o.value === dashSearch.agreement)?.label}
+                            <button onClick={() => setDashSearch({ ...dashSearch, agreement: '' })} className="hover:text-purple-900"><X size={12} /></button>
+                        </span>
+                    )}
+                    {(dashSearch.yearFrom || dashSearch.yearTo) && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">
+                            <Calendar size={12} /> {dashSearch.yearFrom || '...'} – {dashSearch.yearTo || '...'}
+                            <button onClick={() => setDashSearch({ ...dashSearch, yearFrom: '', yearTo: '' })} className="hover:text-blue-900"><X size={12} /></button>
+                        </span>
+                    )}
+                    {dashSearch.country && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">
+                            <Globe size={12} /> {countryOptions.find(o => o.value === dashSearch.country)?.label}
+                            <button onClick={() => setDashSearch({ ...dashSearch, country: '' })} className="hover:text-emerald-900"><X size={12} /></button>
+                        </span>
+                    )}
+                    {dashSearch.hsCode && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold">
+                            HS: {dashSearch.hsCode}
+                            <button onClick={() => setDashSearch({ ...dashSearch, hsCode: '' })} className="hover:text-amber-900"><X size={12} /></button>
+                        </span>
+                    )}
+                    {dashSearch.minValue && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 text-rose-700 rounded-full text-xs font-bold">
+                            ≥ ${dashSearch.minValue}
+                            <button onClick={() => setDashSearch({ ...dashSearch, minValue: '' })} className="hover:text-rose-900"><X size={12} /></button>
+                        </span>
+                    )}
+                    <button onClick={handleDashSearchReset} className="text-[11px] text-slate-400 hover:text-rose-500 font-bold ml-2 transition-colors">
+                        ล้างทั้งหมด
+                    </button>
+                </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
