@@ -253,25 +253,6 @@ export default function App() {
                     <p className="text-slate-500 text-sm">ข้อมูลสรุปภาพรวมการใช้สิทธิประโยชน์ทางการค้า (FTA & GSP)</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Tooltip text="ค้นหาและกรองข้อมูลหลายเงื่อนไข" position="bottom">
-                        <button
-                            onClick={() => setIsDashSearchOpen(!isDashSearchOpen)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all border shadow-sm ${isDashSearchOpen
-                                ? 'bg-purple-600 text-white border-purple-600 shadow-purple-200'
-                                : activeFilterCount > 0
-                                    ? 'bg-purple-50 text-purple-700 border-purple-200 shadow-purple-100'
-                                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                                }`}
-                        >
-                            <Search size={16} />
-                            Multi-Search
-                            {activeFilterCount > 0 && (
-                                <span className="bg-purple-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
-                                    {activeFilterCount}
-                                </span>
-                            )}
-                        </button>
-                    </Tooltip>
                     <Tooltip text="สลับมุมมองระหว่างรายปีและรายไตรมาส" position="bottom">
                         <div className="bg-white p-1 rounded-lg border flex shadow-sm">
                             <button className="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white">รายปี</button>
@@ -284,6 +265,31 @@ export default function App() {
                         </button>
                     </Tooltip>
                 </div>
+            </div>
+
+            {/* Multi-Criteria Search Toggle Bar */}
+            <div className="flex items-center gap-3">
+                <button
+                    onClick={() => setIsDashSearchOpen(!isDashSearchOpen)}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all border shadow-sm ${isDashSearchOpen
+                        ? 'bg-purple-600 text-white border-purple-600 shadow-lg shadow-purple-200'
+                        : activeFilterCount > 0
+                            ? 'bg-purple-50 text-purple-700 border-purple-200 shadow-purple-100'
+                            : 'bg-white text-slate-600 border-slate-200 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300'
+                        }`}
+                >
+                    <Filter size={16} />
+                    ค้นหาหลายเงื่อนไข (Multi-Criteria Search)
+                    {activeFilterCount > 0 && (
+                        <span className="bg-purple-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center ml-1">
+                            {activeFilterCount}
+                        </span>
+                    )}
+                    <ChevronDown size={16} className={`transition-transform ${isDashSearchOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {dashSearchApplied && activeFilterCount > 0 && !isDashSearchOpen && (
+                    <span className="text-xs text-purple-600 font-bold">กำลังกรอง {activeFilterCount} เงื่อนไข</span>
+                )}
             </div>
 
             {/* Multi-Criteria Search Panel */}
