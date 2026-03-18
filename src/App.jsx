@@ -3979,31 +3979,36 @@ export default function App() {
             <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
 
                 {/* Top Header */}
-                <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0 sticky top-0 z-20">
+                <header className="h-[72px] bg-white/80 backdrop-blur-xl border-b border-slate-100 px-6 flex items-center justify-between shrink-0 sticky top-0 z-20">
                     <Tooltip text={isSidebarOpen ? "ย่อเมนูด้านข้าง" : "ขยายเมนูด้านข้าง"} position="right">
                         <button
                             onClick={() => setSidebarOpen(!isSidebarOpen)}
-                            className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
+                            className="p-2.5 hover:bg-slate-100 rounded-xl text-slate-400 hover:text-slate-600 transition-all"
                         >
-                            <MoreVertical size={20} className={isSidebarOpen ? "" : "rotate-90"} />
+                            <MoreVertical size={20} className={`transition-transform ${isSidebarOpen ? "" : "rotate-90"}`} />
                         </button>
                     </Tooltip>
 
-                    <div className="flex-1 max-w-2xl mx-6 relative hidden sm:block group/search">
-                        <div className="relative flex items-center">
-                            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
-                                <Search size={16} className="text-slate-400 group-focus-within/search:text-blue-500 transition-colors" />
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="ค้นหาเลขอ้างอิง, พิกัด HS Code, ชื่อบริษัท หรือถาม AI..."
-                                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2.5 pl-11 pr-28 text-sm font-medium text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 focus:bg-white focus:shadow-lg focus:shadow-blue-100/50 transition-all outline-none"
-                            />
-                            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-                                <span className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white text-[9px] font-black rounded-lg shadow-sm">
-                                    <Sparkles size={10} /> AI
-                                </span>
-                                <span className="px-1.5 py-1 bg-slate-100 text-slate-400 text-[10px] font-bold rounded-md border border-slate-200">⌘K</span>
+                    <div className="flex-1 max-w-2xl mx-6 relative hidden sm:block">
+                        <div className="relative flex items-center group">
+                            {/* Glow effect on focus */}
+                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/0 via-purple-500/0 to-blue-500/0 rounded-3xl blur-lg opacity-0 group-focus-within:from-blue-500/10 group-focus-within:via-purple-500/10 group-focus-within:to-blue-500/10 group-focus-within:opacity-100 transition-all duration-500"></div>
+
+                            <div className="relative w-full flex items-center">
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                    <Search size={18} className="text-slate-300 group-focus-within:text-blue-500 transition-colors duration-300" />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="ค้นหาเลขอ้างอิง, พิกัด HS Code, ชื่อบริษัท หรือถาม AI..."
+                                    className="w-full bg-slate-50/80 border border-slate-200/80 rounded-2xl py-3 pl-12 pr-36 text-sm font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:border-blue-300 focus:shadow-[0_0_0_4px_rgba(59,130,246,0.08)] transition-all duration-300 outline-none"
+                                />
+                                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                    <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-violet-600 to-blue-500 text-white text-[10px] font-black rounded-xl shadow-md shadow-violet-200/50 hover:shadow-lg hover:shadow-violet-200/80 hover:scale-105 transition-all cursor-pointer">
+                                        <Sparkles size={12} /> AI Search
+                                    </span>
+                                    <span className="hidden lg:flex items-center gap-1 px-2 py-1.5 bg-slate-100/80 text-slate-400 text-[10px] font-mono font-bold rounded-lg border border-slate-200/80">⌘K</span>
+                                </div>
                             </div>
                         </div>
                     </div>
