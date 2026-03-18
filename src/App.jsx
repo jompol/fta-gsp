@@ -1655,20 +1655,39 @@ export default function App() {
                     <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
                         <LifeBuoy className="text-blue-600" size={32} /> Help & Support Center
                     </h1>
-                    <p className="text-slate-500 text-sm">ศูนย์ช่วยเหลือ คู่มือการใช้งาน และการติดตาม SLA <TorRef section="2.11, 11.5" /></p>
+                    <p className="text-slate-500 text-sm">ศูนย์ช่วยเหลือ คู่มือการใช้งาน และการติดตาม SLA <TorRef section="2.11, 7.3, 7.4, 11.5" /></p>
                 </div>
                 <button className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-rose-200">
                     <HelpCircle size={18} /> แจ้งปัญหาการใช้งาน (Helpdesk)
                 </button>
             </div>
 
+            {/* Support KPIs */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                    { title: 'Tickets เดือนนี้', val: '24', sub: '18 แก้ไขแล้ว, 6 รอดำเนินการ', icon: FileText, color: 'text-blue-600', bg: 'bg-blue-50' },
+                    { title: 'เวลาตอบสนองเฉลี่ย', val: '12 นาที', sub: 'เป้าหมาย SLA ≤ 60 นาที', icon: Clock, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                    { title: 'ความพึงพอใจผู้ใช้', val: '4.6/5.0', sub: 'จากแบบสอบถาม 120 ราย', icon: CheckCircle2, color: 'text-amber-600', bg: 'bg-amber-50' },
+                    { title: 'คู่มือ / สื่อการสอน', val: '12 รายการ', sub: '6 e-Book, 4 Video, 2 FAQ', icon: BookOpen, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+                ].map((kpi, i) => (
+                    <Card key={i} className="p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className={`p-2 rounded-xl ${kpi.bg} ${kpi.color}`}><kpi.icon size={16} /></div>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase">{kpi.title}</p>
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-900">{kpi.val}</h3>
+                        <p className="text-[10px] text-slate-500 mt-1">{kpi.sub}</p>
+                    </Card>
+                ))}
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* System Health & SLA Tracking (Section 11.5) */}
+                {/* System Health & SLA */}
                 <Card className="p-6 border-t-4 border-t-emerald-500">
-                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
                         <Zap size={18} className="text-emerald-500" /> <Tooltip text="สถานะระบบและข้อตกลงระดับบริการ" position="right"><span className="cursor-help">System Health & SLA <TorRef section="11.5" /></span></Tooltip>
                     </h3>
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                         <div className="flex justify-between items-end">
                             <div>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase">Uptime Score</p>
@@ -1685,51 +1704,184 @@ export default function App() {
                                 <div className="h-full bg-emerald-500 rounded-full" style={{ width: '95%' }}></div>
                             </div>
                         </div>
-                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                            <div className="flex items-center gap-3 mb-2">
-                                <Clock size={16} className="text-blue-500" />
-                                <span className="text-xs font-bold text-slate-700">Maintenance Window</span>
+                        <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                            <div className="flex items-center gap-2 mb-1">
+                                <Clock size={14} className="text-blue-500" />
+                                <span className="text-[11px] font-bold text-slate-700">Maintenance Window</span>
                             </div>
-                            <p className="text-[10px] text-slate-500 leading-relaxed">รอบการปรับปรุงถัดไป: 15 เม.ย. 2567 (02:00 - 04:00 น.)<br />ระบบจะไม่สามารถใช้งานได้ชั่วคราวในช่วงเวลาดังกล่าว</p>
+                            <p className="text-[10px] text-slate-500 leading-relaxed">รอบถัดไป: 15 เม.ย. 2567 (02:00 - 04:00 น.)</p>
                         </div>
                     </div>
                 </Card>
 
-                {/* Training Materials (Section 2.11) */}
+                {/* SLA Severity Table (TOR 11.5) */}
                 <Card className="lg:col-span-2 p-6">
-                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <BookOpen size={18} className="text-blue-500" /> Training Materials & Manuals
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <AlertTriangle size={18} className="text-amber-500" />
+                        <Tooltip text="ข้อตกลงระดับบริการจำแนกตามระดับความรุนแรง (SLA)" position="right"><span className="cursor-help">SLA Severity Levels <TorRef section="11.5" /></span></Tooltip>
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-[11px]">
+                            <thead>
+                                <tr className="bg-slate-50 text-slate-500 font-bold uppercase border-b">
+                                    <th className="p-3 text-left">ระดับความรุนแรง</th>
+                                    <th className="p-3 text-left">สถานการณ์</th>
+                                    <th className="p-3 text-left">ช่องทางบริการ</th>
+                                    <th className="p-3 text-center">ตอบสนอง</th>
+                                    <th className="p-3 text-center">แก้ไข</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                <tr className="hover:bg-slate-50">
+                                    <td className="p-3"><Badge variant="danger">ระดับ 1: สูง</Badge></td>
+                                    <td className="p-3 text-slate-600">ระบบฐานข้อมูลหรือแอปพลิเคชันไม่สามารถใช้งานได้ตามปกติ</td>
+                                    <td className="p-3 text-slate-600">On-site / Remote Access</td>
+                                    <td className="p-3 text-center font-bold text-rose-600">≤ 1 ชม.</td>
+                                    <td className="p-3 text-center font-bold text-rose-600">≤ 3 ชม.</td>
+                                </tr>
+                                <tr className="hover:bg-slate-50">
+                                    <td className="p-3"><Badge variant="warning">ระดับ 2: ต่ำ</Badge></td>
+                                    <td className="p-3 text-slate-600">คำแนะนำการใช้งาน ตรวจสอบประสิทธิภาพ โดยระบบยังใช้งานได้ปกติ</td>
+                                    <td className="p-3 text-slate-600">ประสานงานกรมฯ / นอกสถานที่</td>
+                                    <td className="p-3 text-center font-bold text-amber-600">ตอบสนอง</td>
+                                    <td className="p-3 text-center font-bold text-amber-600">≤ 24 ชม.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-3 italic">* ผู้รับจ้างต้องจัดบุคลากรมาประจำสัปดาห์ละ 1 วัน เป็นเวลา 3 ปี (TOR 11.6)</p>
+                </Card>
+            </div>
+
+            {/* Training + FAQ + Helpdesk */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Training Workshop (TOR 7.4) */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Users size={18} className="text-purple-500" />
+                        <Tooltip text="หลักสูตรฝึกอบรมเชิงปฏิบัติการ 5 หลักสูตร ตามที่กำหนดใน TOR" position="right"><span className="cursor-help">Training Workshop <TorRef section="7.4" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
                         {[
-                            { title: 'คู่มือสำหรับผู้ใช้งานทั่วไป (Front Office)', type: 'PDF / E-Book', icon: <FileText className="text-blue-500" />, size: '4.5 MB' },
-                            { title: 'การใช้งาน Dashboard เบื้องต้น', type: 'Video Tutorial', icon: <PlayCircle className="text-rose-500" />, duration: '12:45' },
-                            { title: 'คู่มือสำหรับผู้ใช้งาน (Admin)', type: 'PDF / E-Book', icon: <Settings className="text-slate-500" />, size: '8.2 MB' },
-                            { title: 'การบริหารจัดการ Data Catalog', type: 'Video Tutorial', icon: <PlayCircle className="text-rose-500" />, duration: '08:20' },
+                            { course: 'หลักสูตรผู้บริหารและเจ้าหน้าที่กรมฯ', sessions: '2 ครั้ง × 6 ชม.', participants: '≥ 15 คน/ครั้ง' },
+                            { course: 'หลักสูตรผู้ดูแลระบบ ศูนย์ IT', sessions: '1 ครั้ง × 6 ชม.', participants: '≥ 5 คน' },
+                            { course: 'หลักสูตรกองสิทธิประโยชน์ทางการค้า', sessions: '1 ครั้ง × 6 ชม.', participants: '≥ 5 คน' },
+                            { course: 'หลักสูตรธรรมาภิบาลข้อมูล', sessions: '2 ครั้ง × 6 ชม.', participants: '≥ 15 คน/ครั้ง' },
+                            { course: 'หลักสูตรพัฒนาทักษะดิจิทัล', sessions: '1 ครั้ง × 6 ชม.', participants: '≥ 15 คน' },
                         ].map((item, i) => (
-                            <div key={i} className="p-4 border border-slate-100 rounded-2xl hover:bg-slate-50 transition-all cursor-pointer flex items-center gap-4 group">
-                                <div className="p-3 bg-slate-100 rounded-xl group-hover:scale-110 transition-transform">
-                                    {item.icon}
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold text-slate-800 leading-tight">{item.title}</p>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        <span className="text-[10px] font-bold text-blue-600 uppercase">{item.type}</span>
-                                        <span className="text-[10px] text-slate-400 font-medium">• {item.size || item.duration}</span>
-                                    </div>
+                            <div key={i} className="p-3 border border-slate-100 rounded-xl hover:bg-slate-50">
+                                <p className="text-xs font-bold text-slate-700">{item.course}</p>
+                                <div className="flex gap-3 mt-1 text-[10px] text-slate-400">
+                                    <span>{item.sessions}</span>
+                                    <span>{item.participants}</span>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <div className="mt-8 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="p-2 bg-white rounded-lg shadow-sm"><HelpCircle size={20} className="text-blue-600" /></div>
-                            <p className="text-xs font-bold text-blue-900">ต้องการความช่วยเหลือเพิ่มเติม? ติดต่อศูนย์ไอที โทร. 1234 หรือ Line: @DFT_Support</p>
-                        </div>
-                        <button className="px-4 py-2 bg-blue-600 text-white font-bold text-[10px] rounded-xl shadow-lg">Chat Live</button>
+                </Card>
+
+                {/* Training Materials & Manuals (TOR 7.3, 2.11) */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <BookOpen size={18} className="text-blue-500" />
+                        <Tooltip text="คู่มือการใช้งานและสื่อการเรียนรู้ในรูปแบบ e-Book และ Video" position="right"><span className="cursor-help">Training Materials <TorRef section="7.3, 2.11" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { title: 'คู่มือผู้ใช้งาน (Front Office)', type: 'e-Book', icon: <FileText size={16} className="text-blue-500" />, size: '4.5 MB' },
+                            { title: 'คู่มือผู้ดูแลระบบ (Back Office)', type: 'e-Book', icon: <Settings size={16} className="text-slate-500" />, size: '8.2 MB' },
+                            { title: 'การใช้งาน Dashboard เบื้องต้น', type: 'Video', icon: <PlayCircle size={16} className="text-rose-500" />, size: '12:45' },
+                            { title: 'การบริหาร Data Catalog', type: 'Video', icon: <PlayCircle size={16} className="text-rose-500" />, size: '08:20' },
+                            { title: 'การยื่นคำขอ CO ออนไลน์', type: 'Video', icon: <PlayCircle size={16} className="text-rose-500" />, size: '15:30' },
+                            { title: 'การใช้งาน Multi-Criteria Search', type: 'Video', icon: <PlayCircle size={16} className="text-rose-500" />, size: '06:10' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                {item.icon}
+                                <div className="flex-1">
+                                    <p className="text-[11px] font-bold text-slate-700">{item.title}</p>
+                                    <p className="text-[10px] text-slate-400">{item.type} • {item.size}</p>
+                                </div>
+                                <Download size={14} className="text-slate-300" />
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* FAQ (TOR 2.11) */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <HelpCircle size={18} className="text-amber-500" />
+                        <Tooltip text="คำถามที่พบบ่อยเกี่ยวกับการใช้งานระบบ FTA-GSP" position="right"><span className="cursor-help">FAQ / คำถามที่พบบ่อย <TorRef section="2.11" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { q: 'วิธียื่นคำขอหนังสือรับรอง CO ออนไลน์?', category: 'Service Portal' },
+                            { q: 'ขั้นตอนการค้นหาข้อมูล Multi-Criteria Search?', category: 'Dashboard' },
+                            { q: 'วิธีดาวน์โหลดรายงาน Excel / PDF?', category: 'Reports' },
+                            { q: 'วิธีตรวจสอบสถานะคำขอ CO?', category: 'Operations' },
+                            { q: 'การใช้งาน AI HS Classifier?', category: 'AI Intelligence' },
+                            { q: 'วิธีเปลี่ยนรหัสผ่านและตั้งค่าบัญชี?', category: 'Admin' },
+                            { q: 'ต้องการเชื่อมต่อ Open Data API?', category: 'Governance' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer group">
+                                <ChevronRight size={14} className="text-slate-300 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
+                                <div>
+                                    <p className="text-[11px] font-bold text-slate-700 group-hover:text-blue-600 transition-colors">{item.q}</p>
+                                    <p className="text-[10px] text-slate-400">{item.category}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </Card>
             </div>
+
+            {/* Helpdesk Queue + Contact */}
+            <Card className="p-6">
+                <div className="flex justify-between items-center mb-5">
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                        <MessageSquare size={18} className="text-blue-500" />
+                        <Tooltip text="รายการ Ticket ที่แจ้งปัญหาและสถานะการดำเนินการ" position="right"><span className="cursor-help">Helpdesk Ticket Queue <TorRef section="11.5" /></span></Tooltip>
+                    </h3>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-[11px]">
+                        <thead>
+                            <tr className="bg-slate-50 text-slate-500 font-bold uppercase border-b">
+                                <th className="p-3 text-left">Ticket #</th>
+                                <th className="p-3 text-left">ปัญหา</th>
+                                <th className="p-3 text-left">ผู้แจ้ง</th>
+                                <th className="p-3 text-center">ระดับ</th>
+                                <th className="p-3 text-center">สถานะ</th>
+                                <th className="p-3 text-center">เวลาที่ใช้</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {[
+                                { id: 'TK-2567-042', issue: 'ไม่สามารถ Export รายงาน PDF ได้', user: 'กองสิทธิฯ', level: 'สูง', status: 'กำลังแก้ไข', time: '45 นาที' },
+                                { id: 'TK-2567-041', issue: 'Dashboard แสดงข้อมูลช้า', user: 'ผู้บริหาร', level: 'ต่ำ', status: 'แก้ไขแล้ว', time: '2 ชม.' },
+                                { id: 'TK-2567-040', issue: 'ลืมรหัสผ่าน ล็อกอินไม่ได้', user: 'เจ้าหน้าที่', level: 'ต่ำ', status: 'แก้ไขแล้ว', time: '15 นาที' },
+                                { id: 'TK-2567-039', issue: 'ข้อมูล HS Code ไม่อัปเดต', user: 'ศูนย์ IT', level: 'ต่ำ', status: 'รอดำเนินการ', time: '-' },
+                            ].map((row, i) => (
+                                <tr key={i} className="hover:bg-slate-50">
+                                    <td className="p-3 font-mono font-bold text-blue-600">{row.id}</td>
+                                    <td className="p-3 font-medium text-slate-700">{row.issue}</td>
+                                    <td className="p-3 text-slate-500">{row.user}</td>
+                                    <td className="p-3 text-center"><Badge variant={row.level === 'สูง' ? 'danger' : 'warning'}>{row.level}</Badge></td>
+                                    <td className="p-3 text-center"><Badge variant={row.status === 'แก้ไขแล้ว' ? 'success' : row.status === 'กำลังแก้ไข' ? 'info' : 'default'}>{row.status}</Badge></td>
+                                    <td className="p-3 text-center font-bold text-slate-500">{row.time}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="p-2 bg-white rounded-lg shadow-sm"><HelpCircle size={20} className="text-blue-600" /></div>
+                        <p className="text-xs font-bold text-blue-900">ต้องการความช่วยเหลือเพิ่มเติม? ติดต่อศูนย์ไอที โทร. 1234 หรือ Line: @DFT_Support</p>
+                    </div>
+                    <button className="px-4 py-2 bg-blue-600 text-white font-bold text-[10px] rounded-xl shadow-lg">Chat Live</button>
+                </div>
+            </Card>
         </div>
     );
 
@@ -2973,43 +3125,171 @@ export default function App() {
                 </div>
             </div>
 
+            {/* Security KPIs */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                    { title: 'ผู้ใช้งานทั้งหมด', val: '60', sub: '3 กลุ่มสิทธิ์', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
+                    { title: 'Active Sessions', val: '18', sub: 'ออนไลน์ขณะนี้', icon: Activity, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                    { title: 'Security Events (7d)', val: '3', sub: '1 Critical, 2 Warning', icon: Shield, color: 'text-amber-600', bg: 'bg-amber-50' },
+                    { title: 'OWASP Compliance', val: '92%', sub: 'ผ่านเกณฑ์ Top 10', icon: ShieldCheck, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+                ].map((kpi, i) => (
+                    <Card key={i} className="p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className={`p-2 rounded-xl ${kpi.bg} ${kpi.color}`}><kpi.icon size={16} /></div>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase">{kpi.title}</p>
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-900">{kpi.val}</h3>
+                        <p className="text-[10px] text-slate-500 mt-1">{kpi.sub}</p>
+                    </Card>
+                ))}
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <Card className="lg:col-span-1 p-6">
+                {/* User Roles & Group (Enhanced) */}
+                <Card className="p-6">
                     <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Users size={18} className="text-blue-600" /> <Tooltip text="บทบาทและกลุ่มผู้ใช้งาน — จัดการสิทธิ์การเข้าถึงระบบ" position="right"><span className="cursor-help">User Roles & Group <TorRef section="2.12" /></span></Tooltip></h3>
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         {[
-                            { role: 'Administrator', users: 3, color: 'border-blue-500' },
-                            { role: 'DFT Officer', users: 45, color: 'border-emerald-500' },
-                            { role: 'Executive', users: 12, color: 'border-amber-500' },
+                            { role: 'ผู้บริหารกรมฯ', desc: 'ดูข้อมูลทุกระดับ อนุมัติรายงาน', users: 3, color: 'border-rose-500' },
+                            { role: 'เจ้าหน้าที่กรมฯ', desc: 'ออก CO, แก้ไขข้อมูล, จัดทำรายงาน', users: 45, color: 'border-blue-500' },
+                            { role: 'ผู้ดูแลระบบ', desc: 'บริหารสิทธิ์, ตั้งค่า, Audit', users: 5, color: 'border-emerald-500' },
+                            { role: 'ผู้ประกอบการ', desc: 'ยื่นคำขอ CO, ตรวจสถานะ', users: 4200, color: 'border-amber-500' },
+                            { role: 'บุคคลทั่วไป', desc: 'ดูข้อมูลสาธารณะ, Open Data', users: '∞', color: 'border-slate-400' },
                         ].map((r, i) => (
-                            <div key={i} className={`p-4 bg-slate-50 border-l-4 ${r.color} rounded-r-xl flex justify-between items-center`}><span className="font-bold text-sm text-slate-800">{r.role}</span><span className="text-xs font-bold text-slate-500">{r.users} Users</span></div>
+                            <div key={i} className={`p-3 bg-slate-50 border-l-4 ${r.color} rounded-r-xl`}>
+                                <div className="flex justify-between items-center">
+                                    <span className="font-bold text-xs text-slate-800">{r.role}</span>
+                                    <span className="text-[10px] font-bold text-slate-500">{r.users} Users</span>
+                                </div>
+                                <p className="text-[10px] text-slate-400 mt-0.5">{r.desc}</p>
+                            </div>
                         ))}
                     </div>
-                    <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100 flex items-center gap-3"><Fingerprint className="text-blue-600" size={24} /><div><p className="text-[11px] font-bold text-blue-900 uppercase">AD Status</p><p className="text-[10px] text-blue-600">Connected to Microsoft AD</p></div></div>
+                    <div className="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-100 flex items-center gap-3">
+                        <Fingerprint className="text-blue-600 shrink-0" size={20} />
+                        <div>
+                            <p className="text-[10px] font-bold text-blue-900 uppercase">AD Authentication <TorRef section="2.13" /></p>
+                            <p className="text-[10px] text-blue-600">Connected to Microsoft AD + Access Log enabled</p>
+                        </div>
+                    </div>
                 </Card>
 
+                {/* Audit Trail (Enhanced) */}
                 <Card className="lg:col-span-2">
                     <div className="p-4 border-b bg-slate-50 font-bold text-slate-800 flex justify-between items-center">
                         <h3 className="flex items-center gap-2"><History size={18} className="text-rose-500" /> <Tooltip text="ประวัติการแก้ไขข้อมูลและบันทึกการตรวจสอบ" position="bottom"><span className="cursor-help">Audit Trail & Data Correction <TorRef section="3.2.2" /></span></Tooltip></h3>
-                        <button className="text-[10px] text-blue-600 font-black uppercase">View Full Logs</button>
+                        <div className="flex items-center gap-2">
+                            <div className="relative">
+                                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                                <input type="text" placeholder="ค้นหา log..." className="bg-white border border-slate-100 rounded-lg py-1.5 pl-8 pr-3 text-xs outline-none focus:ring-1 focus:ring-blue-500 w-40" />
+                            </div>
+                            <button className="text-[10px] text-blue-600 font-black uppercase">View Full Logs</button>
+                        </div>
                     </div>
                     <div className="p-0">
                         <div className="grid grid-cols-1 divide-y divide-slate-100">
                             {[
-                                { user: 'Chalermpol.C (Admin)', action: 'Data Correction: Ref. DFT2024-00142', target: 'Utilization Value', time: '10:45:12' },
-                                { user: 'Manager.01', action: 'Update TRS Schedule', target: 'ASEAN-China TRS', time: '09:30:10' },
-                                { user: 'System (Auto)', action: 'System Hardening Check', target: 'Security Baseline', time: '03:00:00' },
-                                { user: 'Unknown IP', action: 'Unauthorized Access Blocked', target: 'Firewall Alert', time: 'เมื่อคืนนี้ 22:15' },
+                                { user: 'Chalermpol.C (Admin)', action: 'Data Correction: Ref. DFT2024-00142', target: 'Utilization Value', time: '10:45:12', type: 'warning' },
+                                { user: 'Manager.01', action: 'Update TRS Schedule', target: 'ASEAN-China TRS', time: '09:30:10', type: 'info' },
+                                { user: 'System (Auto)', action: 'System Hardening Check — Passed', target: 'Security Baseline', time: '03:00:00', type: 'success' },
+                                { user: 'Unknown IP (203.154.xx)', action: 'Unauthorized Access Blocked', target: 'Firewall Alert', time: 'เมื่อคืนนี้ 22:15', type: 'danger' },
+                                { user: 'System (Auto)', action: 'Backup Completed — 24.5 GB', target: 'Daily Backup', time: '02:00:00', type: 'success' },
+                                { user: 'Officer.12', action: 'Login via AD SSO', target: 'Access Log', time: '08:45:30', type: 'info' },
                             ].map((log, i) => (
-                                <div key={i} className="p-4 hover:bg-slate-50 flex items-center justify-between text-sm">
+                                <div key={i} className="p-3.5 hover:bg-slate-50 flex items-center justify-between text-sm">
                                     <div className="flex items-center gap-3">
-                                        <div className={`p-2 rounded-lg ${log.action.includes('Blocked') ? 'bg-rose-100 text-rose-600' : 'bg-slate-100 text-slate-600'}`}><Activity size={16} /></div>
-                                        <div><p className="font-bold text-slate-800">{log.user}</p><p className="text-[11px] text-slate-500 font-medium">{log.action}</p></div>
+                                        <div className={`p-2 rounded-lg ${log.type === 'danger' ? 'bg-rose-100 text-rose-600' : log.type === 'warning' ? 'bg-amber-100 text-amber-600' : log.type === 'success' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-600'}`}><Activity size={14} /></div>
+                                        <div><p className="font-bold text-slate-800 text-xs">{log.user}</p><p className="text-[10px] text-slate-500">{log.action}</p></div>
                                     </div>
-                                    <div className="text-right"><p className="text-[11px] font-bold text-slate-400">{log.time}</p><span className="text-[9px] font-bold uppercase text-blue-600">{log.target}</span></div>
+                                    <div className="text-right"><p className="text-[10px] font-bold text-slate-400">{log.time}</p><span className="text-[9px] font-bold uppercase text-blue-600">{log.target}</span></div>
                                 </div>
                             ))}
                         </div>
+                    </div>
+                </Card>
+            </div>
+
+            {/* Security Baseline + PDPA + Cybersecurity (TOR 2.14, 2.15, 3.6) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* OWASP / Security Baseline (TOR 2.15, 3.6.3.2) */}
+                <Card className="p-6 border-t-4 border-t-indigo-500">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <Shield size={18} className="text-indigo-500" />
+                        <Tooltip text="มาตรฐานความปลอดภัย OWASP Top 10 และ Security Baseline Configuration" position="right"><span className="cursor-help">Security Baseline <TorRef section="2.15, 3.6.3.2" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-2.5">
+                        {[
+                            { item: 'SQL Injection Protection', pass: true },
+                            { item: 'Cross-Site Scripting (XSS)', pass: true },
+                            { item: 'Broken Authentication', pass: true },
+                            { item: 'Security Misconfiguration', pass: true },
+                            { item: 'Sensitive Data Exposure', pass: true },
+                            { item: 'Insecure Deserialization', pass: false },
+                            { item: 'Insufficient Logging', pass: true },
+                            { item: 'HTTPS / TLS Enforcement', pass: true },
+                        ].map((check, i) => (
+                            <div key={i} className="flex items-center gap-2 text-[11px]">
+                                <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${check.pass ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>
+                                    {check.pass ? <CheckCircle2 size={10} /> : <AlertTriangle size={10} />}
+                                </div>
+                                <span className={`font-medium ${check.pass ? 'text-slate-600' : 'text-amber-700 font-bold'}`}>{check.item}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-3 italic">Penetration Test ครั้งล่าสุด: 15 ก.พ. 2567</p>
+                </Card>
+
+                {/* PDPA Compliance (TOR 2.14) */}
+                <Card className="p-6 border-t-4 border-t-rose-500">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <Lock size={18} className="text-rose-500" />
+                        <Tooltip text="การปฏิบัติตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA)" position="right"><span className="cursor-help">PDPA Compliance <TorRef section="2.14" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { item: 'Consent Management', desc: 'ระบบจัดเก็บความยินยอมก่อนประมวลผล', pass: true },
+                            { item: 'Data Masking', desc: 'ปกปิดข้อมูลส่วนบุคคลในรายงาน', pass: true },
+                            { item: 'Right to Access', desc: 'ผู้ใช้สามารถขอดูข้อมูลตนเองได้', pass: true },
+                            { item: 'Data Retention Policy', desc: 'กำหนดระยะเวลาเก็บรักษาข้อมูล', pass: true },
+                            { item: 'Breach Notification', desc: 'แจ้งเตือนกรณีข้อมูลรั่วไหลภายใน 72 ชม.', pass: true },
+                            { item: 'NDA (Section 1.9)', desc: 'ข้อตกลงรักษาความลับกับผู้รับจ้าง', pass: true },
+                        ].map((check, i) => (
+                            <div key={i} className="flex items-start gap-2.5">
+                                <div className={`mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${check.pass ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>
+                                    <CheckCircle2 size={10} />
+                                </div>
+                                <div>
+                                    <p className="text-[11px] font-bold text-slate-700">{check.item}</p>
+                                    <p className="text-[10px] text-slate-400">{check.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* Cybersecurity Risk Profile (TOR 3.6.3.1.2, 3.6.3) */}
+                <Card className="p-6 border-t-4 border-t-amber-500">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <AlertTriangle size={18} className="text-amber-500" />
+                        <Tooltip text="โปรไฟล์ความเสี่ยงไซเบอร์ และมาตรการควบคุมการเข้าถึง" position="right"><span className="cursor-help">Cybersecurity Risk Profile <TorRef section="3.6.3" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { risk: 'Access Control (Least Privilege)', level: 'ต่ำ', color: 'bg-emerald-100 text-emerald-700' },
+                            { risk: 'Separation of Duties', level: 'ต่ำ', color: 'bg-emerald-100 text-emerald-700' },
+                            { risk: 'Remote Connection Security', level: 'ปานกลาง', color: 'bg-amber-100 text-amber-700' },
+                            { risk: 'Malware Protection', level: 'ต่ำ', color: 'bg-emerald-100 text-emerald-700' },
+                            { risk: 'Information Sharing (Encryption)', level: 'ต่ำ', color: 'bg-emerald-100 text-emerald-700' },
+                            { risk: 'Unused Port Closure', level: 'ต่ำ', color: 'bg-emerald-100 text-emerald-700' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50">
+                                <span className="text-[11px] font-medium text-slate-700">{item.risk}</span>
+                                <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${item.color}`}>{item.level}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <p className="text-[10px] text-slate-500"><span className="font-bold text-slate-700">Password Policy <TorRef section="3.6.3.2.1" /></span><br />ความยาวขั้นต่ำ 12 ตัวอักษร, ตัวพิมพ์ใหญ่+เล็ก+ตัวเลข+อักขระพิเศษ, เปลี่ยนทุก 90 วัน</p>
                     </div>
                 </Card>
             </div>
