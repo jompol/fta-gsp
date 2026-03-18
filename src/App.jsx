@@ -663,6 +663,179 @@ export default function App() {
                     </Tooltip>
                 </Card>
             </div>
+
+            {/* Row 3: FTA Agreement Breakdown + Top Trading Partners (TOR 3.2.1-5) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* สถิติจำแนกตามความตกลง */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Layers size={18} className="text-indigo-500" />
+                        <Tooltip text="มูลค่าการใช้สิทธิจำแนกตามกรอบความตกลง FTA และ GSP" position="right"><span className="cursor-help">สถิติจำแนกตามความตกลง (FTA/GSP)</span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { name: 'AFTA (ASEAN)', actual: 18200, pct: 63.9, color: 'bg-blue-500' },
+                            { name: 'ACFTA (จีน)', actual: 14800, pct: 78.3, color: 'bg-rose-500' },
+                            { name: 'JTEPA (ญี่ปุ่น)', actual: 8900, pct: 71.8, color: 'bg-amber-500' },
+                            { name: 'RCEP', actual: 5800, pct: 69.1, color: 'bg-purple-500' },
+                            { name: 'TAFTA (ออสเตรเลีย)', actual: 4200, pct: 61.8, color: 'bg-emerald-500' },
+                            { name: 'GSP (สิทธิพิเศษ)', actual: 1940, pct: 47.9, color: 'bg-slate-400' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-3">
+                                <span className="text-[11px] font-bold text-slate-600 w-36 truncate">{item.name}</span>
+                                <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                    <div className={`h-full rounded-full ${item.color}`} style={{ width: `${item.pct}%` }}></div>
+                                </div>
+                                <span className="text-[11px] font-bold text-slate-700 w-12 text-right">{item.pct}%</span>
+                                <span className="text-[10px] text-slate-400 w-16 text-right">${(item.actual).toLocaleString()}M</span>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* ประเทศคู่ค้าสำคัญ */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Globe size={18} className="text-blue-500" />
+                        <Tooltip text="ประเทศที่มีมูลค่าการใช้สิทธิประโยชน์ FTA/GSP สูงสุด" position="right"><span className="cursor-help">ประเทศคู่ค้าสำคัญ Top 5</span></Tooltip>
+                    </h3>
+                    <div className="space-y-4">
+                        {[
+                            { country: 'จีน', flag: '🇨🇳', val: '$14,800M', share: '28.4%', trend: '+12.4%', isUp: true },
+                            { country: 'ญี่ปุ่น', flag: '🇯🇵', val: '$8,900M', share: '17.1%', trend: '+5.1%', isUp: true },
+                            { country: 'สหรัฐอเมริกา', flag: '🇺🇸', val: '$5,200M', share: '10.0%', trend: '-3.2%', isUp: false },
+                            { country: 'ออสเตรเลีย', flag: '🇦🇺', val: '$4,200M', share: '8.1%', trend: '+8.7%', isUp: true },
+                            { country: 'เกาหลีใต้', flag: '🇰🇷', val: '$3,100M', share: '5.9%', trend: '+15.2%', isUp: true },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-all">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-xl">{item.flag}</span>
+                                    <div>
+                                        <p className="text-sm font-bold text-slate-800">{item.country}</p>
+                                        <p className="text-[10px] text-slate-400">ส่วนแบ่ง {item.share}</p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-sm font-black text-slate-900">{item.val}</p>
+                                    <p className={`text-[11px] font-bold flex items-center justify-end gap-0.5 ${item.isUp ? 'text-emerald-600' : 'text-rose-500'}`}>
+                                        {item.isUp ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}{item.trend}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
+            {/* Row 4: CO by Form Type + Product Group + Region (TOR 3.2.1-6, 3.2.1-5) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* สถิติการออก CO จำแนกตามประเภทฟอร์ม */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <FileCheck size={18} className="text-emerald-500" />
+                        <Tooltip text="จำนวนหนังสือรับรองถิ่นกำเนิดสินค้าจำแนกตามประเภทฟอร์ม" position="right"><span className="cursor-help">CO จำแนกตามประเภทฟอร์ม</span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { form: 'Form D (ASEAN)', count: 52400, pct: 36.8, color: 'bg-blue-500' },
+                            { form: 'Form E (ACFTA)', count: 35200, pct: 24.7, color: 'bg-rose-500' },
+                            { form: 'Form JTEPA', count: 18500, pct: 13.0, color: 'bg-amber-500' },
+                            { form: 'Form RCEP', count: 11200, pct: 7.9, color: 'bg-purple-500' },
+                            { form: 'Form AK (เกาหลี)', count: 8900, pct: 6.2, color: 'bg-emerald-500' },
+                            { form: 'Form AI (อินเดีย)', count: 6100, pct: 4.3, color: 'bg-cyan-500' },
+                            { form: 'อื่นๆ (FTA/GSP)', count: 10208, pct: 7.1, color: 'bg-slate-300' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-3">
+                                <div className={`w-2.5 h-2.5 rounded-full ${item.color} shrink-0`}></div>
+                                <span className="text-[11px] font-medium text-slate-600 flex-1 truncate">{item.form}</span>
+                                <span className="text-[11px] font-bold text-slate-800">{item.count.toLocaleString()}</span>
+                                <span className="text-[10px] text-slate-400 w-10 text-right">{item.pct}%</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-slate-100 flex justify-between text-xs font-bold">
+                        <span className="text-slate-500">รวมทั้งหมด</span>
+                        <span className="text-slate-900">142,508 ฉบับ</span>
+                    </div>
+                </Card>
+
+                {/* กลุ่มสินค้าเกษตร vs อุตสาหกรรม */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <PieChart size={18} className="text-amber-500" />
+                        <Tooltip text="สัดส่วนการใช้สิทธิระหว่างกลุ่มสินค้าเกษตร (พิกัด 01-24) และอุตสาหกรรม (พิกัด 25-97)" position="right"><span className="cursor-help">กลุ่มสินค้า: เกษตร vs อุตสาหกรรม</span></Tooltip>
+                    </h3>
+                    <div className="flex items-center justify-center gap-6 mb-6">
+                        {/* Simple Donut visual */}
+                        <div className="relative w-32 h-32">
+                            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                                <circle cx="18" cy="18" r="14" fill="none" stroke="#e2e8f0" strokeWidth="4"></circle>
+                                <circle cx="18" cy="18" r="14" fill="none" stroke="#3b82f6" strokeWidth="4" strokeDasharray="62 38" strokeLinecap="round"></circle>
+                            </svg>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <span className="text-lg font-black text-slate-900">62%</span>
+                                <span className="text-[9px] text-slate-400 font-bold">อุตสาหกรรม</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                            <div className="flex justify-between items-center mb-1">
+                                <span className="text-xs font-bold text-blue-800">อุตสาหกรรม (พิกัด 25-97)</span>
+                                <span className="text-xs font-black text-blue-900">$32,327M</span>
+                            </div>
+                            <div className="flex justify-between text-[10px] text-blue-600">
+                                <span>62% ของมูลค่าใช้สิทธิ</span>
+                                <span className="font-bold">88,552 ฉบับ CO</span>
+                            </div>
+                        </div>
+                        <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <div className="flex justify-between items-center mb-1">
+                                <span className="text-xs font-bold text-emerald-800">เกษตรและเกษตรแปรรูป (พิกัด 01-24)</span>
+                                <span className="text-xs font-black text-emerald-900">$19,813M</span>
+                            </div>
+                            <div className="flex justify-between text-[10px] text-emerald-600">
+                                <span>38% ของมูลค่าใช้สิทธิ</span>
+                                <span className="font-bold">53,956 ฉบับ CO</span>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+
+                {/* สถิติจำแนกตามภูมิภาค */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Compass size={18} className="text-purple-500" />
+                        <Tooltip text="มูลค่าการใช้สิทธิจำแนกตามภูมิภาค/กลุ่มประเทศ" position="left"><span className="cursor-help">จำแนกตามภูมิภาค</span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { region: 'อาเซียน (ASEAN)', val: '$18,200M', pct: 34.9, color: 'bg-blue-500', trend: '+8.5%' },
+                            { region: 'เอเชียตะวันออก', val: '$16,900M', pct: 32.4, color: 'bg-rose-500', trend: '+10.2%' },
+                            { region: 'โอเชียเนีย', val: '$5,100M', pct: 9.8, color: 'bg-emerald-500', trend: '+6.1%' },
+                            { region: 'เอเชียใต้', val: '$4,800M', pct: 9.2, color: 'bg-amber-500', trend: '+18.4%' },
+                            { region: 'อเมริกา', val: '$3,940M', pct: 7.6, color: 'bg-indigo-500', trend: '-5.1%' },
+                            { region: 'ยุโรป', val: '$3,200M', pct: 6.1, color: 'bg-purple-500', trend: '+3.8%' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-2.5">
+                                <div className={`w-2 h-8 rounded-full ${item.color} shrink-0`}></div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[11px] font-bold text-slate-700 truncate">{item.region}</span>
+                                        <span className="text-[11px] font-black text-slate-900">{item.val}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center mt-0.5">
+                                        <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                            <div className={`h-full rounded-full ${item.color}`} style={{ width: `${item.pct}%` }}></div>
+                                        </div>
+                                        <span className="text-[10px] text-slate-400 font-bold">{item.trend}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
         </div>
     );
 
