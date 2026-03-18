@@ -184,6 +184,7 @@ export default function App() {
     // State for Application Form
     const [isCreatingApp, setIsCreatingApp] = useState(false);
     const [formStep, setFormStep] = useState(1);
+    const [reportPreview, setReportPreview] = useState(null);
 
     // --- Dashboard Multi-Criteria Search State ---
     const [dashSearch, setDashSearch] = useState({
@@ -1697,7 +1698,328 @@ export default function App() {
     );
 
     // 5. Reports View
-    const ReportsView = () => (
+    // Annual FTA & GSP Report Preview
+    const AnnualReportPreview = () => {
+        const agreementData = [
+            { name: 'AFTA (ASEAN)', eligible: 28500, actual: 18200, rate: 63.86, co: 52400, trend: '+8.5%', isUp: true },
+            { name: 'ACFTA (จีน)', eligible: 18900, actual: 14800, rate: 78.31, co: 35200, trend: '+12.4%', isUp: true },
+            { name: 'JTEPA (ญี่ปุ่น)', eligible: 12400, actual: 8900, rate: 71.77, co: 18500, trend: '+5.1%', isUp: true },
+            { name: 'TAFTA (ออสเตรเลีย)', eligible: 6800, actual: 4200, rate: 61.76, co: 12300, trend: '-2.3%', isUp: false },
+            { name: 'AKFTA (เกาหลี)', eligible: 5200, actual: 3100, rate: 59.62, co: 8900, trend: '+15.2%', isUp: true },
+            { name: 'RCEP', eligible: 8400, actual: 5800, rate: 69.05, co: 11200, trend: '+22.8%', isUp: true },
+            { name: 'GSP (สิทธิพิเศษ)', eligible: 4050, actual: 1940, rate: 47.90, co: 4008, trend: '-5.1%', isUp: false },
+        ];
+        const topHsData = [
+            { rank: 1, code: '8703.23', name: 'รถยนต์นั่ง เครื่องยนต์สูบ 1,500-3,000 cc', eligible: 12500, actual: 10600, rate: 84.80 },
+            { rank: 2, code: '8415.10', name: 'เครื่องปรับอากาศ ชนิดติดผนัง/หน้าต่าง', eligible: 8200, actual: 6500, rate: 79.27 },
+            { rank: 3, code: '4001.22', name: 'ยางธรรมชาติ (TSR 20)', eligible: 6700, actual: 4800, rate: 71.64 },
+            { rank: 4, code: '0804.50', name: 'มะม่วง มังคุด ฝรั่ง สด', eligible: 4100, actual: 2900, rate: 70.73 },
+            { rank: 5, code: '1604.14', name: 'ปลาทูน่ากระป๋อง', eligible: 3800, actual: 3200, rate: 84.21 },
+            { rank: 6, code: '8471.30', name: 'เครื่องคอมพิวเตอร์พกพา', eligible: 3500, actual: 2200, rate: 62.86 },
+            { rank: 7, code: '3903.19', name: 'โพลิสไตรีน (Polystyrene)', eligible: 2900, actual: 2100, rate: 72.41 },
+            { rank: 8, code: '2710.12', name: 'น้ำมันปิโตรเลียม', eligible: 2600, actual: 1500, rate: 57.69 },
+            { rank: 9, code: '7108.13', name: 'ทองคำ กึ่งสำเร็จรูป', eligible: 2400, actual: 1800, rate: 75.00 },
+            { rank: 10, code: '0306.17', name: 'กุ้งแช่แข็ง', eligible: 2200, actual: 1700, rate: 77.27 },
+        ];
+        const quarterlyData = [
+            { q: 'Q1/2567', eligible: 19800, actual: 12400, rate: 62.63, co: 34200 },
+            { q: 'Q2/2567', eligible: 21500, actual: 14100, rate: 65.58, co: 36800 },
+            { q: 'Q3/2567', eligible: 22100, actual: 14800, rate: 66.97, co: 38100 },
+            { q: 'Q4/2567', eligible: 20850, actual: 13640, rate: 65.42, co: 33408 },
+        ];
+        const totalEligible = agreementData.reduce((s, d) => s + d.eligible, 0);
+        const totalActual = agreementData.reduce((s, d) => s + d.actual, 0);
+        const totalCO = agreementData.reduce((s, d) => s + d.co, 0);
+        const totalRate = ((totalActual / totalEligible) * 100).toFixed(2);
+
+        return (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                    <button onClick={() => setReportPreview(null)} className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">
+                        <ArrowLeft size={18} /> กลับไปหน้ารายงาน
+                    </button>
+                    <div className="flex gap-2">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-50 transition-all">
+                            <Printer size={16} /> พิมพ์
+                        </button>
+                        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold shadow-md shadow-blue-200 hover:bg-blue-700 transition-all">
+                            <Download size={16} /> ดาวน์โหลด PDF
+                        </button>
+                    </div>
+                </div>
+
+                {/* Report Cover */}
+                <Card className="overflow-visible">
+                    <div className="bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white p-10 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl"></div>
+                        <div className="relative z-10">
+                            <Badge variant="info">Annual Report</Badge>
+                            <h1 className="text-3xl font-black tracking-tight mt-4 leading-tight">รายงานสรุปภาพรวม<br />การใช้สิทธิประโยชน์ทางการค้า</h1>
+                            <h2 className="text-xl font-bold text-blue-300 mt-2">FTA & GSP ปีงบประมาณ 2567</h2>
+                            <div className="flex gap-6 mt-8 text-sm">
+                                <div><p className="text-blue-300 text-[10px] uppercase font-bold">หน่วยงาน</p><p className="font-bold">กรมการค้าต่างประเทศ</p></div>
+                                <div><p className="text-blue-300 text-[10px] uppercase font-bold">จัดทำโดย</p><p className="font-bold">กองสิทธิประโยชน์ทางการค้า</p></div>
+                                <div><p className="text-blue-300 text-[10px] uppercase font-bold">วันที่จัดทำ</p><p className="font-bold">มีนาคม 2567</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+
+                {/* Executive Summary KPIs */}
+                <div>
+                    <h3 className="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                        <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div> สรุปผลภาพรวม (Executive Summary)
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {[
+                            { title: 'มูลค่าส่งออกที่มีสิทธิ (Eligible)', val: `$${(totalEligible).toLocaleString()}M`, sub: 'เพิ่มขึ้น 9.8% จากปีก่อน', color: 'border-blue-500', icon: Globe },
+                            { title: 'มูลค่าที่ใช้สิทธิจริง (Actual)', val: `$${(totalActual).toLocaleString()}M`, sub: 'เพิ่มขึ้น 11.2% จากปีก่อน', color: 'border-emerald-500', icon: Activity },
+                            { title: 'อัตราการใช้สิทธิ (Utilization Rate)', val: `${totalRate}%`, sub: 'เป้าหมาย 65% — บรรลุเป้า', color: 'border-amber-500', icon: BarChart3 },
+                            { title: 'จำนวนหนังสือรับรอง (CO)', val: `${totalCO.toLocaleString()} ฉบับ`, sub: 'เพิ่มขึ้น 15.4% จากปีก่อน', color: 'border-indigo-500', icon: FileText },
+                        ].map((kpi, i) => (
+                            <Card key={i} className={`p-5 border-l-4 ${kpi.color}`}>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <kpi.icon size={16} className="text-slate-400" />
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">{kpi.title}</p>
+                                </div>
+                                <h3 className="text-2xl font-black text-slate-900">{kpi.val}</h3>
+                                <p className="text-[11px] text-emerald-600 font-bold mt-1">{kpi.sub}</p>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Quarterly Trend */}
+                <div>
+                    <h3 className="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                        <div className="w-1.5 h-6 bg-emerald-500 rounded-full"></div> สถิติรายไตรมาส
+                    </h3>
+                    <Card>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead className="bg-slate-50 border-b">
+                                    <tr className="text-slate-500 font-bold text-[11px] uppercase">
+                                        <th className="p-4 text-left">ไตรมาส</th>
+                                        <th className="p-4 text-right">มูลค่าส่งออก Eligible ($M)</th>
+                                        <th className="p-4 text-right">มูลค่าใช้สิทธิ Actual ($M)</th>
+                                        <th className="p-4 text-center">อัตราการใช้สิทธิ (%)</th>
+                                        <th className="p-4 text-right">จำนวน CO (ฉบับ)</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {quarterlyData.map((row, i) => (
+                                        <tr key={i} className="hover:bg-slate-50 transition-colors">
+                                            <td className="p-4 font-bold text-slate-800">{row.q}</td>
+                                            <td className="p-4 text-right font-mono">{row.eligible.toLocaleString()}</td>
+                                            <td className="p-4 text-right font-mono">{row.actual.toLocaleString()}</td>
+                                            <td className="p-4 text-center">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <div className="w-20 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-blue-500 rounded-full" style={{ width: `${row.rate}%` }}></div>
+                                                    </div>
+                                                    <span className="text-xs font-bold text-slate-700">{row.rate}%</span>
+                                                </div>
+                                            </td>
+                                            <td className="p-4 text-right font-mono">{row.co.toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                    <tr className="bg-blue-50 font-bold text-blue-900">
+                                        <td className="p-4">รวมทั้งปี</td>
+                                        <td className="p-4 text-right font-mono">{totalEligible.toLocaleString()}</td>
+                                        <td className="p-4 text-right font-mono">{totalActual.toLocaleString()}</td>
+                                        <td className="p-4 text-center text-lg font-black">{totalRate}%</td>
+                                        <td className="p-4 text-right font-mono">{totalCO.toLocaleString()}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Quarterly Bar Chart */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <BarChart3 size={18} className="text-blue-500" /> กราฟเปรียบเทียบรายไตรมาส (Eligible vs Actual)
+                    </h3>
+                    <div className="h-56 flex items-end justify-around gap-8 px-4 border-b border-l border-slate-100 relative">
+                        <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30">
+                            {[1,2,3,4].map(l => <div key={l} className="border-t border-slate-200 w-full"></div>)}
+                        </div>
+                        {quarterlyData.map((d, i) => {
+                            const maxVal = 22500;
+                            return (
+                                <div key={i} className="flex-1 h-full flex items-end gap-2 z-10 group">
+                                    <div className="flex-1 flex flex-col items-center justify-end h-full">
+                                        <div className="w-full bg-slate-200 rounded-t-lg transition-all group-hover:bg-slate-300" style={{ height: `${(d.eligible / maxVal) * 100}%` }}>
+                                            <div className="text-[9px] font-bold text-slate-500 text-center pt-1">{(d.eligible / 1000).toFixed(1)}B</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 flex flex-col items-center justify-end h-full">
+                                        <div className="w-full bg-blue-500 rounded-t-lg transition-all group-hover:bg-blue-600" style={{ height: `${(d.actual / maxVal) * 100}%` }}>
+                                            <div className="text-[9px] font-bold text-white text-center pt-1">{(d.actual / 1000).toFixed(1)}B</div>
+                                        </div>
+                                    </div>
+                                    <div className="absolute -bottom-7 left-0 right-0 flex justify-around">
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className="flex justify-around mt-3">
+                        {quarterlyData.map((d, i) => (
+                            <span key={i} className="text-[11px] font-bold text-slate-500">{d.q}</span>
+                        ))}
+                    </div>
+                    <div className="mt-4 flex justify-center gap-8">
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
+                            <div className="w-3 h-3 bg-slate-200 rounded-sm"></div> Eligible Export
+                        </div>
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
+                            <div className="w-3 h-3 bg-blue-500 rounded-sm"></div> Actual Utilization
+                        </div>
+                    </div>
+                </Card>
+
+                {/* By Agreement */}
+                <div>
+                    <h3 className="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                        <div className="w-1.5 h-6 bg-indigo-500 rounded-full"></div> สถิติจำแนกตามกรอบความตกลง
+                    </h3>
+                    <Card>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead className="bg-slate-50 border-b">
+                                    <tr className="text-slate-500 font-bold text-[11px] uppercase">
+                                        <th className="p-4 text-left">ความตกลง</th>
+                                        <th className="p-4 text-right">Eligible ($M)</th>
+                                        <th className="p-4 text-right">Actual ($M)</th>
+                                        <th className="p-4 text-center">อัตราใช้สิทธิ</th>
+                                        <th className="p-4 text-right">จำนวน CO</th>
+                                        <th className="p-4 text-center">แนวโน้ม YoY</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {agreementData.map((row, i) => (
+                                        <tr key={i} className="hover:bg-slate-50 transition-colors">
+                                            <td className="p-4 font-bold text-slate-800">{row.name}</td>
+                                            <td className="p-4 text-right font-mono">{row.eligible.toLocaleString()}</td>
+                                            <td className="p-4 text-right font-mono">{row.actual.toLocaleString()}</td>
+                                            <td className="p-4 text-center">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <div className="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                        <div className={`h-full rounded-full ${row.rate >= 70 ? 'bg-emerald-500' : row.rate >= 60 ? 'bg-blue-500' : 'bg-amber-500'}`} style={{ width: `${row.rate}%` }}></div>
+                                                    </div>
+                                                    <span className="text-xs font-bold">{row.rate}%</span>
+                                                </div>
+                                            </td>
+                                            <td className="p-4 text-right font-mono">{row.co.toLocaleString()}</td>
+                                            <td className="p-4 text-center">
+                                                <span className={`inline-flex items-center gap-1 font-bold text-xs ${row.isUp ? 'text-emerald-600' : 'text-rose-500'}`}>
+                                                    {row.isUp ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                                                    {row.trend}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Top 10 HS Codes */}
+                <div>
+                    <h3 className="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                        <div className="w-1.5 h-6 bg-amber-500 rounded-full"></div> 10 อันดับพิกัดสินค้าส่งออกสูงสุด
+                    </h3>
+                    <Card>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead className="bg-slate-50 border-b">
+                                    <tr className="text-slate-500 font-bold text-[11px] uppercase">
+                                        <th className="p-4 text-center w-12">#</th>
+                                        <th className="p-4 text-left">พิกัด HS</th>
+                                        <th className="p-4 text-left">รายการสินค้า</th>
+                                        <th className="p-4 text-right">Eligible ($M)</th>
+                                        <th className="p-4 text-right">Actual ($M)</th>
+                                        <th className="p-4 text-center">อัตราใช้สิทธิ</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {topHsData.map((row) => (
+                                        <tr key={row.rank} className="hover:bg-slate-50 transition-colors">
+                                            <td className="p-4 text-center">
+                                                <span className={`w-7 h-7 rounded-full inline-flex items-center justify-center text-xs font-black ${row.rank <= 3 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'}`}>{row.rank}</span>
+                                            </td>
+                                            <td className="p-4 font-mono font-bold text-blue-600">{row.code}</td>
+                                            <td className="p-4 text-slate-700">{row.name}</td>
+                                            <td className="p-4 text-right font-mono">{row.eligible.toLocaleString()}</td>
+                                            <td className="p-4 text-right font-mono">{row.actual.toLocaleString()}</td>
+                                            <td className="p-4 text-center">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <div className="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                        <div className={`h-full rounded-full ${row.rate >= 80 ? 'bg-emerald-500' : row.rate >= 65 ? 'bg-blue-500' : 'bg-amber-500'}`} style={{ width: `${row.rate}%` }}></div>
+                                                    </div>
+                                                    <span className="text-xs font-bold">{row.rate}%</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Key Findings */}
+                <div>
+                    <h3 className="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                        <div className="w-1.5 h-6 bg-purple-500 rounded-full"></div> ข้อค้นพบสำคัญและข้อเสนอแนะ
+                    </h3>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <Card className="p-6 border-l-4 border-l-emerald-500">
+                            <h4 className="font-bold text-emerald-800 mb-3 flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-500" /> จุดเด่น</h4>
+                            <ul className="space-y-3 text-sm text-slate-600">
+                                <li className="flex gap-2"><span className="text-emerald-500 font-bold shrink-0">•</span> RCEP มีอัตราเติบโตสูงสุดที่ +22.8% สะท้อนการตอบรับที่ดีจากผู้ประกอบการ</li>
+                                <li className="flex gap-2"><span className="text-emerald-500 font-bold shrink-0">•</span> ACFTA ยังคงมีอัตราการใช้สิทธิสูงสุดที่ 78.31% แสดงศักยภาพตลาดจีน</li>
+                                <li className="flex gap-2"><span className="text-emerald-500 font-bold shrink-0">•</span> สินค้ารถยนต์และเครื่องปรับอากาศมีอัตราใช้สิทธิเกิน 79% เกือบเต็มศักยภาพ</li>
+                                <li className="flex gap-2"><span className="text-emerald-500 font-bold shrink-0">•</span> จำนวน CO ที่ออกเพิ่มขึ้น 15.4% สอดคล้องกับนโยบาย e-CO</li>
+                            </ul>
+                        </Card>
+                        <Card className="p-6 border-l-4 border-l-amber-500">
+                            <h4 className="font-bold text-amber-800 mb-3 flex items-center gap-2"><AlertTriangle size={18} className="text-amber-500" /> จุดที่ต้องปรับปรุง</h4>
+                            <ul className="space-y-3 text-sm text-slate-600">
+                                <li className="flex gap-2"><span className="text-amber-500 font-bold shrink-0">•</span> GSP มีอัตราใช้สิทธิต่ำสุดที่ 47.90% เนื่องจากสหรัฐฯ ตัดสิทธิบางรายการ</li>
+                                <li className="flex gap-2"><span className="text-amber-500 font-bold shrink-0">•</span> TAFTA มีแนวโน้มลดลง -2.3% ต้องเร่งสร้างการรับรู้แก่ผู้ประกอบการ</li>
+                                <li className="flex gap-2"><span className="text-amber-500 font-bold shrink-0">•</span> สินค้ากลุ่มปิโตรเลียม (HS 2710) มีอัตราใช้สิทธิเพียง 57.69%</li>
+                                <li className="flex gap-2"><span className="text-amber-500 font-bold shrink-0">•</span> ควรเพิ่มช่องทางอบรมออนไลน์สำหรับ SME เพื่อลดช่องว่างการใช้สิทธิ</li>
+                            </ul>
+                        </Card>
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <Card className="p-6 bg-slate-50">
+                    <div className="flex justify-between items-center text-xs text-slate-400">
+                        <div>
+                            <p className="font-bold text-slate-500">กรมการค้าต่างประเทศ — กองสิทธิประโยชน์ทางการค้า</p>
+                            <p className="mt-1">รายงานนี้จัดทำโดยระบบ FTA-GSP Intelligence Portal (Section 3.3.2)</p>
+                        </div>
+                        <div className="text-right">
+                            <p className="font-bold text-slate-500">ข้อมูล ณ วันที่ 31 มีนาคม 2567</p>
+                            <p className="mt-1">แหล่งข้อมูล: DFT Data Warehouse, SMART-I, ROVERS PLUS</p>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+        );
+    };
+
+    const ReportsView = () => {
+        if (reportPreview === 'annual') return <AnnualReportPreview />;
+        return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex justify-between items-center">
                 <div>
@@ -1708,11 +2030,11 @@ export default function App() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                    { title: 'สรุปภาพรวม FTA & GSP รายปี', period: 'ปีงบประมาณ 2567', type: 'Annual Report', icon: <PieChart size={20} className="text-indigo-500" /> },
-                    { title: 'กลุ่มสินค้าศักยภาพ Top 20', period: 'ไตรมาส 1/2567', type: 'Analysis Report', icon: <BarChart3 size={20} className="text-emerald-500" /> },
-                    { title: 'รายงานสถานการณ์รายความตกลง', period: 'อัปเดตล่าสุด: เม.ย. 67', type: 'Agreement Focus', icon: <Globe size={20} className="text-blue-500" /> },
-                    { title: 'สถิติการออกหนังสือรับรองถิ่นกำเนิด', period: 'สะสมตั้งแต่ต้นปี (YTD)', type: 'Operations Log', icon: <FileText size={20} className="text-amber-500" /> },
-                    { title: 'รายงานการส่งออกรายประเทศสมาชิก', period: 'เปรียบเทียบ 3 ปี ย้อนหลัง', type: 'Comparative', icon: <Activity size={20} className="text-rose-500" /> },
+                    { id: 'annual', title: 'สรุปภาพรวม FTA & GSP รายปี', period: 'ปีงบประมาณ 2567', type: 'Annual Report', icon: <PieChart size={20} className="text-indigo-500" /> },
+                    { id: null, title: 'กลุ่มสินค้าศักยภาพ Top 20', period: 'ไตรมาส 1/2567', type: 'Analysis Report', icon: <BarChart3 size={20} className="text-emerald-500" /> },
+                    { id: null, title: 'รายงานสถานการณ์รายความตกลง', period: 'อัปเดตล่าสุด: เม.ย. 67', type: 'Agreement Focus', icon: <Globe size={20} className="text-blue-500" /> },
+                    { id: null, title: 'สถิติการออกหนังสือรับรองถิ่นกำเนิด', period: 'สะสมตั้งแต่ต้นปี (YTD)', type: 'Operations Log', icon: <FileText size={20} className="text-amber-500" /> },
+                    { id: null, title: 'รายงานการส่งออกรายประเทศสมาชิก', period: 'เปรียบเทียบ 3 ปี ย้อนหลัง', type: 'Comparative', icon: <Activity size={20} className="text-rose-500" /> },
                 ].map((rep, i) => (
                     <Card key={i} className="hover:shadow-lg transition-all cursor-pointer group">
                         <div className="p-6">
@@ -1723,7 +2045,10 @@ export default function App() {
                             <h4 className="font-bold text-slate-800 mb-1 leading-tight">{rep.title}</h4>
                             <p className="text-xs text-slate-400 font-medium">{rep.period}</p>
                             <div className="mt-6 flex gap-2">
-                                <button className="flex-1 py-2 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 text-[10px] font-bold rounded-lg border border-slate-100 transition-colors flex items-center justify-center gap-1.5 uppercase">
+                                <button
+                                    onClick={() => rep.id && setReportPreview(rep.id)}
+                                    className={`flex-1 py-2 text-[10px] font-bold rounded-lg border transition-colors flex items-center justify-center gap-1.5 uppercase ${rep.id ? 'bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border-slate-100' : 'bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed'}`}
+                                >
                                     <Eye size={12} /> Preview
                                 </button>
                                 <button className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 uppercase shadow-md shadow-blue-100">
@@ -1735,7 +2060,8 @@ export default function App() {
                 ))}
             </div>
         </div>
-    );
+        );
+    };
 
     const SecurityAdminView = () => (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
