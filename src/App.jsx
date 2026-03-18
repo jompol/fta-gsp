@@ -159,7 +159,7 @@ const TorRef = ({ section }) => (
 );
 
 const Card = ({ children, className = "" }) => (
-    <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden ${className}`}>
+    <div className={`card-surface rounded-2xl border shadow-sm overflow-hidden ${className}`}>
         {children}
     </div>
 );
