@@ -3927,7 +3927,7 @@ export default function App() {
                     )}
                 </div>
 
-                <nav className="flex-1 space-y-1 px-3 overflow-y-auto">
+                <nav className="flex-1 space-y-1 px-3 overflow-y-auto sidebar-scroll">
                     {[
                         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, tipTh: 'แดชบอร์ด — ภาพรวมสถิติการใช้สิทธิประโยชน์ FTA/GSP' },
                         { id: 'services', label: 'Service Portal', icon: FileCheck, tipTh: 'บริการออนไลน์ — ยื่นคำขอหนังสือรับรองถิ่นกำเนิดสินค้า (CO)' },
@@ -4160,7 +4160,7 @@ export default function App() {
                 </header>
 
                 {/* Dynamic Content View */}
-                <div className={`flex-1 overflow-y-auto p-6 relative transition-colors duration-300 ${isDark ? 'bg-slate-950' : 'bg-slate-50/50'}`}>
+                <div className={`flex-1 overflow-y-auto p-6 relative transition-colors duration-300 content-scroll ${isDark ? 'bg-slate-950' : 'bg-slate-50/50'}`}>
                     {isLoading && (
                         <div className="absolute inset-0 bg-slate-50/60 backdrop-blur-[2px] z-50 flex items-center justify-center">
                             <div className="flex flex-col items-center">
