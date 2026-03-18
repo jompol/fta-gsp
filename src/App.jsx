@@ -3989,15 +3989,23 @@ export default function App() {
                         </button>
                     </Tooltip>
 
-                    <div className="flex-1 max-w-xl mx-8 relative hidden sm:block">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                        <Tooltip text="พิมพ์เลขอ้างอิง, พิกัดศุลกากร หรือคำถามเพื่อให้ AI ช่วยค้นหา" position="bottom">
+                    <div className="flex-1 max-w-2xl mx-6 relative hidden sm:block group/search">
+                        <div className="relative flex items-center">
+                            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+                                <Search size={16} className="text-slate-400 group-focus-within/search:text-blue-500 transition-colors" />
+                            </div>
                             <input
                                 type="text"
-                                placeholder="ค้นหาเลขอ้างอิง, พิกัด, หรือขอความช่วยเหลือจาก AI..."
-                                className="w-full bg-slate-100 border-none rounded-xl py-2 pl-10 pr-4 text-xs font-medium focus:ring-2 focus:ring-purple-500/20 focus:bg-white transition-all outline-none"
+                                placeholder="ค้นหาเลขอ้างอิง, พิกัด HS Code, ชื่อบริษัท หรือถาม AI..."
+                                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2.5 pl-11 pr-28 text-sm font-medium text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 focus:bg-white focus:shadow-lg focus:shadow-blue-100/50 transition-all outline-none"
                             />
-                        </Tooltip>
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                                <span className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white text-[9px] font-black rounded-lg shadow-sm">
+                                    <Sparkles size={10} /> AI
+                                </span>
+                                <span className="px-1.5 py-1 bg-slate-100 text-slate-400 text-[10px] font-bold rounded-md border border-slate-200">⌘K</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="flex items-center gap-3">
