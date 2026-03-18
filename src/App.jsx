@@ -1918,32 +1918,28 @@ export default function App() {
 
                 <nav className="flex-1 space-y-1 px-3 overflow-y-auto">
                     {[
-                        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-                        { id: 'services', label: 'Service Portal', icon: FileCheck },
-                        { id: 'operations', label: 'Operations/CO', icon: ClipboardCheck },
-                        { id: 'data', label: 'Data Integration', icon: Database },
-                        { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-                        { id: 'governance', label: 'Governance', icon: ShieldCheck },
-                        { id: 'reports', label: 'Reports', icon: FileText },
-                        { id: 'security', label: 'Admin & Logs', icon: Lock },
-                        { id: 'support', label: 'Help & Support', icon: LifeBuoy },
+                        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, tipTh: 'แดชบอร์ด — ภาพรวมสถิติการใช้สิทธิประโยชน์ FTA/GSP' },
+                        { id: 'services', label: 'Service Portal', icon: FileCheck, tipTh: 'บริการออนไลน์ — ยื่นคำขอหนังสือรับรองถิ่นกำเนิดสินค้า (CO)' },
+                        { id: 'operations', label: 'Operations/CO', icon: ClipboardCheck, tipTh: 'ติดตามงาน — สถานะการออกหนังสือรับรองและสถิติรายวัน' },
+                        { id: 'data', label: 'Data Integration', icon: Database, tipTh: 'บูรณาการข้อมูล — จัดการแหล่งข้อมูลและ ETL Pipeline' },
+                        { id: 'analytics', label: 'Analytics', icon: BarChart3, tipTh: 'วิเคราะห์ข้อมูล — รายงานเชิงลึกและแนวโน้มการค้า' },
+                        { id: 'governance', label: 'Governance', icon: ShieldCheck, tipTh: 'ธรรมาภิบาลข้อมูล — มาตรฐาน คุณภาพ และการกำกับดูแล' },
+                        { id: 'reports', label: 'Reports', icon: FileText, tipTh: 'รายงาน — รายงานสำเร็จรูปและเอกสารสรุปสถานการณ์' },
+                        { id: 'security', label: 'Admin & Logs', icon: Lock, tipTh: 'ผู้ดูแลระบบ — จัดการผู้ใช้ สิทธิ์ และบันทึกการใช้งาน' },
+                        { id: 'support', label: 'Help & Support', icon: LifeBuoy, tipTh: 'ช่วยเหลือ — คู่มือการใช้งาน คำถามที่พบบ่อย และแจ้งปัญหา' },
                     ].map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => handleTabChange(item.id)}
-                            className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group ${activeTab === item.id
-                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                }`}
-                        >
-                            <item.icon size={20} strokeWidth={activeTab === item.id ? 2.5 : 2} />
-                            {isSidebarOpen && <span className="text-sm font-bold tracking-tight">{item.label}</span>}
-                            {!isSidebarOpen && (
-                                <div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl border border-white/10 whitespace-nowrap">
-                                    {item.label}
-                                </div>
-                            )}
-                        </button>
+                        <Tooltip key={item.id} text={item.tipTh} position="right">
+                            <button
+                                onClick={() => handleTabChange(item.id)}
+                                className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative ${activeTab === item.id
+                                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                <item.icon size={20} strokeWidth={activeTab === item.id ? 2.5 : 2} />
+                                {isSidebarOpen && <span className="text-sm font-bold tracking-tight">{item.label}</span>}
+                            </button>
+                        </Tooltip>
                     ))}
 
                     <div className="my-6">
@@ -1954,26 +1950,22 @@ export default function App() {
                     </div>
 
                     {[
-                        { id: 'policy', label: 'Policy & Impact', icon: Target },
-                        { id: 'ai', label: 'AI Intelligence', icon: BrainCircuit },
+                        { id: 'policy', label: 'Policy & Impact', icon: Target, tipTh: 'นโยบาย — วิเคราะห์ผลกระทบและข้อเสนอเชิงนโยบาย FTA' },
+                        { id: 'ai', label: 'AI Intelligence', icon: BrainCircuit, tipTh: 'ปัญญาประดิษฐ์ — ตรวจจับความผิดปกติ ทำนายแนวโน้ม และจำแนกพิกัด' },
                     ].map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => handleTabChange(item.id)}
-                            className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative group ${activeTab === item.id
-                                    ? (item.id === 'ai' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30')
-                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                }`}
-                        >
-                            <item.icon size={20} strokeWidth={activeTab === item.id ? 2.5 : 2} />
-                            {isSidebarOpen && <span className="text-sm font-bold tracking-tight">{item.label}</span>}
-                            {!isSidebarOpen && (
-                                <div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl border border-white/10 whitespace-nowrap">
-                                    {item.label}
-                                </div>
-                            )}
-                            {item.id === 'ai' && <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-400 rounded-full animate-ping"></div>}
-                        </button>
+                        <Tooltip key={item.id} text={item.tipTh} position="right">
+                            <button
+                                onClick={() => handleTabChange(item.id)}
+                                className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all relative ${activeTab === item.id
+                                        ? (item.id === 'ai' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30')
+                                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                <item.icon size={20} strokeWidth={activeTab === item.id ? 2.5 : 2} />
+                                {isSidebarOpen && <span className="text-sm font-bold tracking-tight">{item.label}</span>}
+                                {item.id === 'ai' && <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-400 rounded-full animate-ping"></div>}
+                            </button>
+                        </Tooltip>
                     ))}
                 </nav>
 
