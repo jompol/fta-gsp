@@ -1882,6 +1882,81 @@ export default function App() {
                     <button className="px-4 py-2 bg-blue-600 text-white font-bold text-[10px] rounded-xl shadow-lg">Chat Live</button>
                 </div>
             </Card>
+
+            {/* System Specifications & Business Continuity (TOR 2.1-2.7, 7.5) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Server size={18} className="text-blue-500" />
+                        <Tooltip text="ข้อกำหนดคุณลักษณะทั่วไปของระบบตาม TOR ข้อ 2" position="right"><span className="cursor-help">คุณลักษณะทั่วไประบบ <TorRef section="2.1-2.7" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-2.5">
+                        {[
+                            { spec: 'Cloud Deployment — ใช้งานต่อเนื่อง 3 ปี', ref: '2.1', pass: true },
+                            { spec: 'Responsive Web — Chrome, Firefox, Edge, Mobile, Tablet', ref: '2.2', pass: true },
+                            { spec: 'Export ข้อมูล — PDF, XLSX, DOCX, CSV', ref: '2.3', pass: true },
+                            { spec: 'Multimedia — กราฟ, แผนภูมิ, อินโฟกราฟิก, Animation', ref: '2.4', pass: true },
+                            { spec: 'Multi-Criteria Search — ค้นหาหลายเงื่อนไข', ref: '2.5', pass: true },
+                            { spec: 'Modern UI — สวยงาม ใช้งานง่าย ทันสมัย', ref: '2.6', pass: true },
+                            { spec: 'Data Retention — เก็บข้อมูลย้อนหลัง ≥ 10 ปี', ref: '2.7', pass: true },
+                            { spec: 'Data Correction — แก้ไข/ปรับปรุงข้อมูลได้', ref: '2.8', pass: true },
+                            { spec: 'User Statistics — นับจำนวนผู้เข้าใช้งาน', ref: '2.9', pass: true },
+                            { spec: 'API/SSL — เชื่อมโยงข้อมูลผ่าน Secure Protocol', ref: '2.10', pass: true },
+                            { spec: 'Tool Tips — แสดงคำอธิบายช่วยเหลือ', ref: '2.11', pass: true },
+                            { spec: 'RBAC — กำหนดสิทธิ์ 3+ กลุ่มผู้ใช้', ref: '2.12', pass: true },
+                            { spec: 'AD Login — เชื่อมต่อ Active Directory', ref: '2.13', pass: true },
+                            { spec: 'PDPA — รักษาข้อมูลส่วนบุคคล', ref: '2.14', pass: true },
+                            { spec: 'OWASP Top 10 — ความปลอดภัยมาตรฐาน', ref: '2.15', pass: true },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-2 text-[11px]">
+                                <div className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><CheckCircle2 size={10} /></div>
+                                <span className="font-medium text-slate-600 flex-1">{item.spec}</span>
+                                <TorRef section={item.ref} />
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <HardDrive size={18} className="text-amber-500" />
+                        <Tooltip text="แผนความต่อเนื่องของระบบและแผนการย้ายระบบ Cloud" position="right"><span className="cursor-help">Business Continuity & Cloud Exit Plan <TorRef section="7.5" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-4">
+                        <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl">
+                            <h4 className="text-xs font-bold text-amber-800 mb-2">แผนความต่อเนื่องของระบบ</h4>
+                            <div className="space-y-2 text-[11px] text-amber-700">
+                                <p>• กรณีสัญญา Cloud สิ้นสุด — สามารถต่ออายุหรือย้ายไปยังผู้ให้บริการรายอื่น</p>
+                                <p>• กรณีย้ายไปยัง Server/โครงสร้างพื้นฐาน กรมฯ กำหนด</p>
+                                <p>• กรณีเหตุฉุกเฉิน — ไฟไหม้ แผ่นดินไหว น้ำท่วม ภัยพิบัติอื่นๆ</p>
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            {[
+                                { item: 'Disaster Recovery Plan', desc: 'แผนกู้คืนระบบกรณีเหตุฉุกเฉิน — RPO ≤ 24 ชม., RTO ≤ 4 ชม.', pass: true },
+                                { item: 'Cloud Exit Strategy', desc: 'ขั้นตอนการย้ายข้อมูลและระบบออกจาก Cloud', pass: true },
+                                { item: 'Data Migration Plan', desc: 'แผนการโอนย้ายข้อมูลทั้งหมดไปยังระบบใหม่', pass: true },
+                                { item: 'Source Code Handover', desc: 'ส่งมอบ Source Code ฉบับสมบูรณ์ให้กรมฯ', pass: true },
+                                { item: 'Warranty 3 Years', desc: 'รับประกันการบำรุงรักษา On-site 3 ปี', pass: true },
+                            ].map((check, i) => (
+                                <div key={i} className="flex items-start gap-2.5">
+                                    <div className="mt-0.5 w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><CheckCircle2 size={10} /></div>
+                                    <div>
+                                        <p className="text-[11px] font-bold text-slate-700">{check.item}</p>
+                                        <p className="text-[10px] text-slate-400">{check.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                            <p className="text-[10px] text-slate-500">
+                                <span className="font-bold text-slate-700">ระยะเวลาโครงการ <TorRef section="8" /></span><br />
+                                ปีงบประมาณ พ.ศ. 2569 (270 วัน นับถัดจากวันลงนามในสัญญา) แบ่งส่งมอบ 4 งวด
+                            </p>
+                        </div>
+                    </div>
+                </Card>
+            </div>
         </div>
     );
 
@@ -1894,7 +1969,7 @@ export default function App() {
                     <p className="text-slate-500 text-sm">จัดการการนำเข้าข้อมูลและการเชื่อมโยง API <TorRef section="3.1" /></p>
                 </div>
                 <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-lg shadow-slate-200">
-                    <RefreshCw size={18} /> Sync All Data Source
+                    <RefreshCw size={18} /> Sync All Data Source <TorRef section="3.1.3.1, 3.1.4" />
                 </button>
             </div>
 
@@ -2064,7 +2139,7 @@ export default function App() {
                 {/* Anomaly Detection Section */}
                 <Card className="p-6 border-l-4 border-l-purple-500">
                     <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <AlertTriangle size={20} className="text-amber-500" /> Smart Anomaly Detection
+                        <AlertTriangle size={20} className="text-amber-500" /> Smart Anomaly Detection <TorRef section="12.3.3" />
                     </h3>
                     <div className="space-y-4">
                         {[
@@ -2092,7 +2167,7 @@ export default function App() {
                 {/* Smart HS Classifier */}
                 <Card className="p-6">
                     <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <Target size={20} className="text-indigo-500" /> Smart HS Classifier (Auto Suggestion)
+                        <Target size={20} className="text-indigo-500" /> Smart HS Classifier (Auto Suggestion) <TorRef section="12.3.3" />
                     </h3>
                     <p className="text-xs text-slate-500 mb-6 font-medium">ช่วยเจ้าหน้าที่จำแนกพิกัดสินค้าจากชื่อสินค้าด้วย AI Natural Language Processing</p>
                     <div className="space-y-4">
@@ -2121,7 +2196,7 @@ export default function App() {
                 <Card className="p-6 bg-slate-900 text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 blur-3xl pointer-events-none"></div>
                     <h3 className="font-bold mb-4 flex items-center gap-2 text-purple-300">
-                        <MessageSquare size={20} /> AI Trade Policy Assistant
+                        <MessageSquare size={20} /> AI Trade Policy Assistant <TorRef section="12.3.3.5" />
                     </h3>
                     <div className="space-y-4 h-48 overflow-y-auto mb-4 scrollbar-hide pr-2">
                         <div className="flex justify-start">
@@ -3083,11 +3158,11 @@ export default function App() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                    { id: 'annual', title: 'สรุปภาพรวม FTA & GSP รายปี', period: 'ปีงบประมาณ 2567', type: 'Annual Report', icon: <PieChart size={20} className="text-indigo-500" /> },
-                    { id: null, title: 'กลุ่มสินค้าศักยภาพ Top 20', period: 'ไตรมาส 1/2567', type: 'Analysis Report', icon: <BarChart3 size={20} className="text-emerald-500" /> },
-                    { id: null, title: 'รายงานสถานการณ์รายความตกลง', period: 'อัปเดตล่าสุด: เม.ย. 67', type: 'Agreement Focus', icon: <Globe size={20} className="text-blue-500" /> },
-                    { id: null, title: 'สถิติการออกหนังสือรับรองถิ่นกำเนิด', period: 'สะสมตั้งแต่ต้นปี (YTD)', type: 'Operations Log', icon: <FileText size={20} className="text-amber-500" /> },
-                    { id: null, title: 'รายงานการส่งออกรายประเทศสมาชิก', period: 'เปรียบเทียบ 3 ปี ย้อนหลัง', type: 'Comparative', icon: <Activity size={20} className="text-rose-500" /> },
+                    { id: 'annual', title: 'สรุปภาพรวม FTA & GSP รายปี', period: 'ปีงบประมาณ 2567', type: 'Annual Report', tor: '3.3.2(1)', icon: <PieChart size={20} className="text-indigo-500" /> },
+                    { id: null, title: 'กลุ่มสินค้าศักยภาพ Top 20', period: 'ไตรมาส 1/2567', type: 'Analysis Report', tor: '3.3.2(2)', icon: <BarChart3 size={20} className="text-emerald-500" /> },
+                    { id: null, title: 'รายงานสถานการณ์รายความตกลง', period: 'อัปเดตล่าสุด: เม.ย. 67', type: 'Agreement Focus', tor: '3.3.2(1)', icon: <Globe size={20} className="text-blue-500" /> },
+                    { id: null, title: 'สถิติการออกหนังสือรับรองถิ่นกำเนิด', period: 'สะสมตั้งแต่ต้นปี (YTD)', type: 'Operations Log', tor: '3.3.1.5', icon: <FileText size={20} className="text-amber-500" /> },
+                    { id: null, title: 'รายงานการส่งออกรายประเทศสมาชิก', period: 'เปรียบเทียบ 3 ปี ย้อนหลัง', type: 'Comparative', tor: '3.2.1', icon: <Activity size={20} className="text-rose-500" /> },
                 ].map((rep, i) => (
                     <Card key={i} className="hover:shadow-lg transition-all cursor-pointer group">
                         <div className="p-6">
@@ -3096,7 +3171,7 @@ export default function App() {
                                 <Badge variant="info">{rep.type}</Badge>
                             </div>
                             <h4 className="font-bold text-slate-800 mb-1 leading-tight">{rep.title}</h4>
-                            <p className="text-xs text-slate-400 font-medium">{rep.period}</p>
+                            <p className="text-xs text-slate-400 font-medium">{rep.period} {rep.tor && <TorRef section={rep.tor} />}</p>
                             <div className="mt-6 flex gap-2">
                                 <button
                                     onClick={() => rep.id && setReportPreview(rep.id)}
@@ -3485,7 +3560,7 @@ export default function App() {
                 <Card className="p-8 shadow-2xl shadow-slate-200 border-white/50 backdrop-blur-sm bg-white/90">
                     <div className="space-y-6">
                         <div className="text-center">
-                            <h2 className="text-xl font-bold text-slate-800">เข้าสู่ระบบเจ้าหน้าที่</h2>
+                            <h2 className="text-xl font-bold text-slate-800">เข้าสู่ระบบเจ้าหน้าที่ <TorRef section="2.13" /></h2>
                             <p className="text-sm text-slate-400 mt-1">กรมการค้าต่างประเทศ (DFT)</p>
                         </div>
 
