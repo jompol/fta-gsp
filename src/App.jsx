@@ -189,6 +189,7 @@ export default function App() {
     const [isCreatingApp, setIsCreatingApp] = useState(false);
     const [formStep, setFormStep] = useState(1);
     const [reportPreview, setReportPreview] = useState(null);
+    const [selectedApp, setSelectedApp] = useState(null);
 
     // --- Dashboard Multi-Criteria Search State ---
     const [dashSearch, setDashSearch] = useState({
@@ -1462,9 +1463,239 @@ export default function App() {
         </div>
     );
 
+    // Application Detail View
+    const ApplicationDetailView = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center justify-between">
+                <button onClick={() => setSelectedApp(null)} className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-sm transition-colors">
+                    <ArrowLeft size={18} /> กลับไป Active Pipeline
+                </button>
+                <div className="flex gap-2">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-50">
+                        <Printer size={16} /> พิมพ์
+                    </button>
+                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold shadow-md shadow-blue-200">
+                        <Download size={16} /> ดาวน์โหลด PDF
+                    </button>
+                </div>
+            </div>
+
+            {/* Header Card */}
+            <Card className="overflow-visible">
+                <div className="bg-gradient-to-r from-blue-900 to-slate-900 text-white p-8 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+                    <div className="relative z-10 flex justify-between items-start">
+                        <div>
+                            <div className="flex items-center gap-3 mb-3">
+                                <h1 className="text-2xl font-black tracking-tight font-mono">REQ-2024-8842</h1>
+                                <Badge variant="info">Verifying</Badge>
+                                <Badge variant="success">Low Risk</Badge>
+                            </div>
+                            <p className="text-blue-300 text-sm font-bold">Thai Agri Export Co., Ltd.</p>
+                            <p className="text-blue-400 text-xs mt-1">ความตกลง ASEAN-China (ACFTA) — Form E • ประเทศปลายทาง: จีน</p>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-[10px] text-blue-300 uppercase font-bold">ยื่นคำขอเมื่อ</p>
+                            <p className="text-sm font-bold">19 มี.ค. 2567 — 07:30 น.</p>
+                            <p className="text-[10px] text-blue-400 mt-1">2 ชม. ที่แล้ว • SLA เหลือ 1.5 ชม.</p>
+                        </div>
+                    </div>
+                </div>
+            </Card>
+
+            {/* Workflow Progress (TOR 3.3.1) */}
+            <Card className="p-6">
+                <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <Activity size={18} className="text-blue-500" /> สถานะ Workflow <TorRef section="3.3.1" />
+                </h3>
+                <div className="flex items-center justify-between relative">
+                    <div className="absolute top-6 left-0 w-full h-1 bg-slate-100 z-0"></div>
+                    <div className="absolute top-6 left-0 w-[37%] h-1 bg-blue-500 z-0 rounded-full"></div>
+                    {[
+                        { step: 1, label: 'ยื่นคำขอ', sub: '19 มี.ค. 07:30', status: 'done', by: 'ผู้ประกอบการ' },
+                        { step: 2, label: 'ตรวจสอบเอกสาร', sub: '19 มี.ค. 07:35', status: 'active', by: 'ระบบ AI + เจ้าหน้าที่' },
+                        { step: 3, label: 'อนุมัติ', sub: 'รอดำเนินการ', status: 'pending', by: 'ผอ.กองสิทธิฯ' },
+                        { step: 4, label: 'ออก e-CO', sub: 'รอดำเนินการ', status: 'pending', by: 'ระบบอัตโนมัติ' },
+                    ].map((item, i) => (
+                        <div key={i} className="relative z-10 flex flex-col items-center gap-2 flex-1">
+                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-black border-4 ${item.status === 'done' ? 'bg-emerald-500 text-white border-emerald-200' : item.status === 'active' ? 'bg-blue-600 text-white border-blue-200 animate-pulse' : 'bg-white text-slate-400 border-slate-200'}`}>
+                                {item.status === 'done' ? <CheckCircle2 size={20} /> : item.step}
+                            </div>
+                            <div className="text-center">
+                                <p className="text-xs font-bold text-slate-800">{item.label}</p>
+                                <p className="text-[10px] text-slate-400">{item.sub}</p>
+                                <p className="text-[9px] text-slate-400 mt-0.5">โดย: {item.by}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Card>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Exporter & Agreement Info */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <Building2 size={18} className="text-blue-500" /> ข้อมูลผู้ส่งออก <TorRef section="3.3.1" />
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { label: 'ชื่อบริษัท', val: 'บริษัท ไทย อะกริ เอ็กซ์ปอร์ต จำกัด' },
+                            { label: 'Tax ID', val: '0105560001234' },
+                            { label: 'ที่อยู่', val: '123 ถ.รัชดาภิเษก แขวงดินแดง กรุงเทพฯ 10400' },
+                            { label: 'ผู้ติดต่อ', val: 'นายสมศักดิ์ ว. (081-xxx-xxxx)' },
+                            { label: 'สถานะ DBD', val: 'ยืนยันแล้ว ✓' },
+                        ].map((item, i) => (
+                            <div key={i}>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase">{item.label}</p>
+                                <p className="text-xs font-medium text-slate-700">{item.val}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* Product Details */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <Layers size={18} className="text-emerald-500" /> รายละเอียดสินค้า <TorRef section="3.3.1" />
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { label: 'พิกัดศุลกากร (HS Code)', val: '0804.50.20' },
+                            { label: 'รายการสินค้า', val: 'มะม่วงสด (Fresh Mangoes)' },
+                            { label: 'เกณฑ์ถิ่นกำเนิด (ROO)', val: 'WO (Wholly Obtained)' },
+                            { label: 'น้ำหนักสุทธิ', val: '12,500 KG' },
+                            { label: 'มูลค่า FOB', val: '$45,200.00 USD' },
+                            { label: 'ประเทศปลายทาง', val: 'จีน (China)' },
+                            { label: 'ท่าเรือปลายทาง', val: 'Shanghai Port' },
+                        ].map((item, i) => (
+                            <div key={i}>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase">{item.label}</p>
+                                <p className="text-xs font-medium text-slate-700">{item.val}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* Smart Verification Status */}
+                <Card className="p-6 border-t-4 border-t-blue-500">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <ShieldQuestion size={18} className="text-blue-500" /> ผลการตรวจสอบ <TorRef section="3.3.1.4" />
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { label: 'ทะเบียนนิติบุคคล (DBD)', status: 'pass', time: '07:31' },
+                            { label: 'กฎถิ่นกำเนิด (ROO)', status: 'pass', time: '07:32' },
+                            { label: 'HS Code vs Eligible List', status: 'pass', time: '07:32' },
+                            { label: 'Blacklist / Watchlist', status: 'pass', time: '07:33' },
+                            { label: 'AI Fraud Detection', status: 'pass', time: '07:33' },
+                            { label: 'เอกสารแนบ', status: 'warning', time: '07:35' },
+                        ].map((check, i) => (
+                            <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50">
+                                <div className="flex items-center gap-2">
+                                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${check.status === 'pass' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>
+                                        {check.status === 'pass' ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
+                                    </div>
+                                    <span className="text-[11px] font-bold text-slate-700">{check.label}</span>
+                                </div>
+                                <span className="text-[10px] font-mono text-slate-400">{check.time}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-4 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                        <div className="flex items-center gap-2 mb-1">
+                            <BrainCircuit size={16} className="text-emerald-600" />
+                            <span className="text-xs font-bold text-emerald-800">AI Confidence: 96.4%</span>
+                        </div>
+                        <p className="text-[10px] text-emerald-600">ไม่พบความผิดปกติ — สอดคล้องกับพฤติกรรมการส่งออกเดิมของบริษัท</p>
+                    </div>
+                </Card>
+            </div>
+
+            {/* Documents + Timeline */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Attached Documents */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <FileText size={18} className="text-indigo-500" /> เอกสารแนบ <TorRef section="3.3.1" />
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { name: 'Commercial Invoice #INV-2024-0842.pdf', size: '245 KB', status: 'ตรวจสอบแล้ว', pass: true },
+                            { name: 'Packing List #PL-2024-0842.pdf', size: '128 KB', status: 'ตรวจสอบแล้ว', pass: true },
+                            { name: 'Bill of Lading (B/L)', size: '-', status: 'ยังไม่ได้แนบ (ไม่บังคับ)', pass: false },
+                            { name: 'Origin Declaration.pdf', size: '89 KB', status: 'ตรวจสอบแล้ว', pass: true },
+                        ].map((doc, i) => (
+                            <div key={i} className="flex items-center justify-between p-3 border border-slate-100 rounded-xl hover:bg-slate-50">
+                                <div className="flex items-center gap-3">
+                                    <div className={`p-2 rounded-lg ${doc.pass ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-400'}`}><FileText size={16} /></div>
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-700">{doc.name}</p>
+                                        <p className="text-[10px] text-slate-400">{doc.size}</p>
+                                    </div>
+                                </div>
+                                <Badge variant={doc.pass ? 'success' : 'warning'}>{doc.status}</Badge>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* Activity Timeline */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <History size={18} className="text-rose-500" /> ประวัติการดำเนินการ <TorRef section="2.8" />
+                    </h3>
+                    <div className="relative border-l-2 border-slate-100 ml-3 space-y-0">
+                        {[
+                            { time: '07:35', date: '19 มี.ค.', action: 'ตรวจสอบเอกสาร — B/L ไม่ได้แนบ (Optional)', user: 'ระบบ AI', type: 'warning' },
+                            { time: '07:33', date: '19 มี.ค.', action: 'AI Fraud Detection — ผ่าน (Confidence 96.4%)', user: 'ระบบ AI', type: 'success' },
+                            { time: '07:33', date: '19 มี.ค.', action: 'ตรวจสอบ Blacklist/Watchlist — ไม่พบ', user: 'ระบบอัตโนมัติ', type: 'success' },
+                            { time: '07:32', date: '19 มี.ค.', action: 'ตรวจสอบ HS 0804.50.20 กับ Eligible List — ผ่าน', user: 'ระบบอัตโนมัติ', type: 'success' },
+                            { time: '07:32', date: '19 มี.ค.', action: 'ตรวจสอบกฎ ROO (WO) ภายใต้ ACFTA — ผ่าน', user: 'ระบบ AI', type: 'success' },
+                            { time: '07:31', date: '19 มี.ค.', action: 'ตรวจสอบทะเบียนนิติบุคคล DBD — ยืนยัน TAX ID ผ่าน', user: 'DBD API', type: 'info' },
+                            { time: '07:30', date: '19 มี.ค.', action: 'ยื่นคำขอหนังสือรับรอง Form E (ACFTA) → จีน', user: 'Thai Agri Export Co.', type: 'default' },
+                        ].map((log, i) => (
+                            <div key={i} className="relative pl-7 py-2.5">
+                                <div className={`absolute left-[-5px] top-3.5 w-2.5 h-2.5 rounded-full border-2 border-white ${log.type === 'success' ? 'bg-emerald-500' : log.type === 'info' ? 'bg-blue-500' : log.type === 'warning' ? 'bg-amber-500' : 'bg-slate-300'}`}></div>
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <p className="text-[11px] font-bold text-slate-700">{log.action}</p>
+                                        <p className="text-[10px] text-slate-400 mt-0.5">โดย: {log.user}</p>
+                                    </div>
+                                    <span className="text-[10px] font-mono font-bold text-slate-400 shrink-0 ml-2">{log.time}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
+            {/* Action Buttons */}
+            <Card className="p-6 bg-slate-50">
+                <div className="flex items-center justify-between">
+                    <div className="text-xs text-slate-500">
+                        <span className="font-bold text-slate-700">สถานะปัจจุบัน:</span> อยู่ระหว่างขั้นตอนตรวจสอบ (Step 2/4) — รอเจ้าหน้าที่ยืนยันเอกสาร
+                    </div>
+                    <div className="flex gap-2">
+                        <button className="flex items-center gap-2 px-5 py-2.5 bg-rose-100 text-rose-700 rounded-xl text-sm font-bold hover:bg-rose-200 transition-all">
+                            <X size={16} /> ปฏิเสธ
+                        </button>
+                        <button className="flex items-center gap-2 px-5 py-2.5 bg-amber-100 text-amber-700 rounded-xl text-sm font-bold hover:bg-amber-200 transition-all">
+                            <RefreshCw size={16} /> ส่งกลับแก้ไข
+                        </button>
+                        <button className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all">
+                            <CheckCircle2 size={16} /> อนุมัติ
+                        </button>
+                    </div>
+                </div>
+            </Card>
+        </div>
+    );
+
     const ServicesView = () => (
         <div className="space-y-6">
-            {isCreatingApp ? (
+            {selectedApp ? (
+                <ApplicationDetailView />
+            ) : isCreatingApp ? (
                 <ApplicationFormView />
             ) : (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -1562,7 +1793,7 @@ export default function App() {
                                                 <p className="text-[10px] font-bold text-slate-400 uppercase">SLA</p>
                                                 <p className={`text-xs font-bold ${req.slaColor}`}>{req.sla}</p>
                                             </div>
-                                            <button className="p-2 hover:bg-white hover:shadow-md border rounded-xl transition-all"><ChevronRight size={18} className="text-slate-300" /></button>
+                                            <button onClick={() => req.ref === 'REQ-2024-8842' && setSelectedApp(req.ref)} className="p-2 hover:bg-white hover:shadow-md border rounded-xl transition-all"><ChevronRight size={18} className="text-slate-300" /></button>
                                         </div>
                                     </div>
                                 ))}
