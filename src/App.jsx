@@ -1600,7 +1600,7 @@ export default function App() {
 
                             {/* e-Issuance Center */}
                             <Card className="p-5 bg-gradient-to-br from-white to-blue-50/50 border-blue-100">
-                                <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Printer size={18} className="text-blue-500" /> e-Issuance Center <TorRef section="3.3.1.5" /></h3>
+                                <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Printer size={18} className="text-blue-500" /> <Tooltip text="ศูนย์ออกหนังสือรับรองอิเล็กทรอนิกส์ (e-CO) — ดาวน์โหลดและตรวจสอบ CO ที่ออกล่าสุด" position="right"><span className="cursor-help">e-Issuance Center <TorRef section="3.3.1.5" /></span></Tooltip></h3>
                                 <div className="p-4 bg-white border border-blue-100 rounded-2xl shadow-sm relative overflow-hidden group cursor-pointer">
                                     <div className="absolute top-0 right-0 w-14 h-14 bg-blue-600 text-white rounded-bl-3xl flex items-center justify-center translate-x-1 -translate-y-1 group-hover:scale-110 transition-transform"><Sticker size={20} /></div>
                                     <p className="text-[10px] font-bold text-blue-600 uppercase">Latest Issued e-CO</p>
