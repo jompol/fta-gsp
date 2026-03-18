@@ -634,7 +634,7 @@ export default function App() {
                 {/* Top 5 HS Codes */}
                 <Card className="p-6">
                     <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <Filter size={18} className="text-emerald-500" /> Top 5 HS Codes (Export)
+                        <Filter size={18} className="text-emerald-500" /> <Tooltip text="5 อันดับพิกัดสินค้าที่มีมูลค่าส่งออกสูงสุด" position="right"><span className="cursor-help">Top 5 HS Codes (Export)</span></Tooltip>
                     </h3>
                     <div className="space-y-5">
                         {[
@@ -670,14 +670,14 @@ export default function App() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Operation Monitoring</h1>
+                    <Tooltip text="ติดตามการออกหนังสือรับรองถิ่นกำเนิดสินค้าแบบเรียลไทม์" position="bottom"><h1 className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-help">Operation Monitoring</h1></Tooltip>
                     <p className="text-slate-500 text-sm">ติดตามสถิติการออกหนังสือสำคัญและถิ่นกำเนิดสินค้า (Section 3.3.1.4)</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="p-6 border-l-4 border-l-blue-500">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase">FOB Total Value</p>
+                    <Tooltip text="มูลค่ารวมส่งออก ณ ท่าเรือต้นทาง (Free On Board)" position="right"><p className="text-[10px] font-bold text-slate-400 uppercase cursor-help">FOB Total Value</p></Tooltip>
                     <h3 className="text-3xl font-black text-slate-900 mt-1">$12,450.8 M</h3>
                     <div className="flex gap-2 mt-2">
                         <Badge variant="info">USD</Badge>
@@ -685,12 +685,12 @@ export default function App() {
                     </div>
                 </Card>
                 <Card className="p-6 border-l-4 border-l-emerald-500">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase">Total Net Weight</p>
+                    <Tooltip text="น้ำหนักสุทธิรวมของสินค้าที่ส่งออก" position="right"><p className="text-[10px] font-bold text-slate-400 uppercase cursor-help">Total Net Weight</p></Tooltip>
                     <h3 className="text-3xl font-black text-slate-900 mt-1">85,240.5</h3>
                     <p className="text-xs text-slate-500 font-bold mt-2">Metric Tons (KGs)</p>
                 </Card>
                 <Card className="p-6 border-l-4 border-l-indigo-500">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase">Total CO Pages</p>
+                    <Tooltip text="จำนวนหน้ารวมของหนังสือรับรองถิ่นกำเนิดสินค้าที่ออก" position="right"><p className="text-[10px] font-bold text-slate-400 uppercase cursor-help">Total CO Pages</p></Tooltip>
                     <h3 className="text-3xl font-black text-slate-900 mt-1">452,108</h3>
                     <p className="text-xs text-slate-500 font-bold mt-2">Pages Issued</p>
                 </Card>
@@ -698,7 +698,7 @@ export default function App() {
 
             <Card>
                 <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
-                    <h3 className="flex items-center gap-2"><ClipboardCheck size={18} /> CO Issuance Detail (Section 3.3.1.5)</h3>
+                    <h3 className="flex items-center gap-2"><ClipboardCheck size={18} /> <Tooltip text="รายละเอียดการออกหนังสือรับรองถิ่นกำเนิดสินค้า" position="bottom"><span className="cursor-help">CO Issuance Detail (Section 3.3.1.5)</span></Tooltip></h3>
                     <Badge variant="success">Real-time Sync</Badge>
                 </div>
                 <div className="overflow-x-auto">
@@ -758,7 +758,7 @@ export default function App() {
                 <Card className="lg:col-span-2 p-6 bg-gradient-to-br from-white to-blue-50/20">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                            <Globe size={18} className="text-blue-500" /> Market Expansion Tracking (Post-FTA Growth)
+                            <Globe size={18} className="text-blue-500" /> <Tooltip text="ติดตามการขยายตลาดหลังมี FTA — เปรียบเทียบก่อนและหลัง" position="bottom"><span className="cursor-help">Market Expansion Tracking (Post-FTA Growth)</span></Tooltip>
                         </h3>
                         <select className="bg-white border rounded-lg px-2 py-1 text-xs font-bold outline-none cursor-pointer">
                             <option>RCEP Market</option>
@@ -802,7 +802,7 @@ export default function App() {
                 <Card className="p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                            <Lightbulb size={18} className="text-amber-500" /> Opportunity Finder
+                            <Lightbulb size={18} className="text-amber-500" /> <Tooltip text="ค้นหาโอกาส — สินค้าศักยภาพสูงที่ใช้สิทธิยังต่ำ" position="bottom"><span className="cursor-help">Opportunity Finder</span></Tooltip>
                         </h3>
                         <Badge variant="purple">AI Suggest</Badge>
                     </div>
@@ -836,7 +836,7 @@ export default function App() {
                 {/* Policy Support Insight (Section 15.2) */}
                 <Card className="p-6 border-l-4 border-l-indigo-600">
                     <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <Compass size={20} className="text-indigo-600" /> Policy Support Insight (Negotiation Prep)
+                        <Compass size={20} className="text-indigo-600" /> <Tooltip text="ข้อมูลสนับสนุนนโยบาย — เตรียมข้อมูลสำหรับการเจรจา FTA" position="right"><span className="cursor-help">Policy Support Insight (Negotiation Prep)</span></Tooltip>
                     </h3>
                     <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
                         <div className="flex items-start gap-4">
@@ -856,7 +856,7 @@ export default function App() {
                 {/* Strategic KPI Tracking */}
                 <Card className="p-6">
                     <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <Flag size={20} className="text-emerald-500" /> Strategic Success Tracking (Section 14-15)
+                        <Flag size={20} className="text-emerald-500" /> <Tooltip text="ติดตามตัวชี้วัดความสำเร็จเชิงยุทธศาสตร์" position="right"><span className="cursor-help">Strategic Success Tracking (Section 14-15)</span></Tooltip>
                     </h3>
                     <div className="grid grid-cols-2 gap-4">
                         {[
@@ -1202,7 +1202,7 @@ export default function App() {
                 {/* System Health & SLA Tracking (Section 11.5) */}
                 <Card className="p-6 border-t-4 border-t-emerald-500">
                     <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <Zap size={18} className="text-emerald-500" /> System Health & SLA
+                        <Zap size={18} className="text-emerald-500" /> <Tooltip text="สถานะระบบและข้อตกลงระดับบริการ" position="right"><span className="cursor-help">System Health & SLA</span></Tooltip>
                     </h3>
                     <div className="space-y-6">
                         <div className="flex justify-between items-end">
@@ -1274,7 +1274,7 @@ export default function App() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Data Integration Center</h1>
+                    <Tooltip text="ศูนย์บูรณาการข้อมูล — จัดการการนำเข้าและเชื่อมโยงแหล่งข้อมูล" position="bottom"><h1 className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-help">Data Integration Center</h1></Tooltip>
                     <p className="text-slate-500 text-sm">จัดการการนำเข้าข้อมูลและการเชื่อมโยง API (Section 3.1)</p>
                 </div>
                 <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-lg shadow-slate-200">
@@ -1302,7 +1302,7 @@ export default function App() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card className="lg:col-span-2">
-                    <div className="p-4 border-b bg-slate-50 font-bold text-slate-800 flex items-center gap-2"><DatabaseZap size={18} className="text-amber-500" /> Data Cleansing & Transformation Log</div>
+                    <div className="p-4 border-b bg-slate-50 font-bold text-slate-800 flex items-center gap-2"><DatabaseZap size={18} className="text-amber-500" /> <Tooltip text="บันทึกการทำความสะอาดและแปลงข้อมูล" position="bottom"><span className="cursor-help">Data Cleansing & Transformation Log</span></Tooltip></div>
                     <div className="p-4 space-y-4">
                         {[
                             { file: 'TRS_China_2024.xlsx', task: 'HS Mapping', status: 'Completed', error: 0, date: '20/05/2024' },
@@ -1316,7 +1316,7 @@ export default function App() {
                     </div>
                 </Card>
                 <Card className="p-6 bg-slate-900 text-white">
-                    <h3 className="font-bold mb-4 flex items-center gap-2 text-indigo-300"><HardDrive size={20} /> Data Warehouse (Section 3.4)</h3>
+                    <h3 className="font-bold mb-4 flex items-center gap-2 text-indigo-300"><HardDrive size={20} /> <Tooltip text="คลังข้อมูล — โครงสร้างฐานข้อมูลสำหรับวิเคราะห์สถิติย้อนหลัง" position="bottom"><span className="cursor-help">Data Warehouse (Section 3.4)</span></Tooltip></h3>
                     <p className="text-xs text-slate-400 mb-6 leading-relaxed">โมเดลโครงสร้างข้อมูล (Star Schema) สำหรับการประมวลผลสถิติย้อนหลัง 10 ปี ครอบคลุม Tables, Views และ Materialized Views</p>
                     <div className="space-y-3">
                         {['FACT_UTILIZATION', 'DIM_HS_CODE', 'DIM_COUNTRY', 'DIM_AGREEMENT'].map(tbl => (
@@ -1367,7 +1367,7 @@ export default function App() {
                 <Card className="lg:col-span-2 p-6 bg-gradient-to-br from-white to-purple-50/30">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                            <TrendingUp size={20} className="text-purple-500" /> Export & Utilization Prediction (Next 6 Months)
+                            <TrendingUp size={20} className="text-purple-500" /> <Tooltip text="พยากรณ์มูลค่าส่งออกและอัตราการใช้สิทธิล่วงหน้า 6 เดือน" position="bottom"><span className="cursor-help">Export & Utilization Prediction (Next 6 Months)</span></Tooltip>
                         </h3>
                         <button className="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-lg border border-purple-100 flex items-center gap-1">
                             <Zap size={12} /> Run Forecasting
@@ -1538,7 +1538,7 @@ export default function App() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Advanced Analytics</h1>
+                    <Tooltip text="วิเคราะห์เชิงลึก — กรองข้อมูลการค้าตามเงื่อนไขที่กำหนดเอง" position="bottom"><h1 className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-help">Advanced Analytics</h1></Tooltip>
                     <p className="text-slate-500 text-sm">วิเคราะห์ข้อมูลการค้าระหว่างประเทศเชิงลึกแบบกำหนดเงื่อนไข (Section 3.2.1)</p>
                 </div>
             </div>
@@ -1617,7 +1617,7 @@ export default function App() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Data Governance & Catalog</h1>
+                    <Tooltip text="ธรรมาภิบาลข้อมูล — บัญชีข้อมูลภาครัฐและการกำกับดูแลคุณภาพ" position="bottom"><h1 className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-help">Data Governance & Catalog</h1></Tooltip>
                     <p className="text-slate-500 text-sm">การกำกับดูแลข้อมูลและบัญชีข้อมูลภาครัฐ (Section 3.5)</p>
                 </div>
             </div>
@@ -1625,7 +1625,7 @@ export default function App() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card className="lg:col-span-2">
                     <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
-                        <h3 className="font-bold text-slate-800 flex items-center gap-2"><FileJson size={18} /> Data Catalog Explorer</h3>
+                        <h3 className="font-bold text-slate-800 flex items-center gap-2"><FileJson size={18} /> <Tooltip text="สำรวจบัญชีข้อมูล — ค้นหาและดูรายละเอียดชุดข้อมูลทั้งหมด" position="bottom"><span className="cursor-help">Data Catalog Explorer</span></Tooltip></h3>
                         <div className="relative">
                             <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input type="text" placeholder="ค้นหาชุดข้อมูล..." className="bg-white border border-slate-100 rounded-lg py-1.5 pl-8 pr-3 text-xs outline-none focus:ring-1 focus:ring-blue-500" />
@@ -1662,7 +1662,7 @@ export default function App() {
 
                 <div className="space-y-6">
                     <Card className="p-6">
-                        <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><ShieldCheck size={18} className="text-blue-500" /> Data Quality Assessment</h3>
+                        <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><ShieldCheck size={18} className="text-blue-500" /> <Tooltip text="ประเมินคุณภาพข้อมูล — ความถูกต้อง ความสมบูรณ์ และความทันสมัย" position="bottom"><span className="cursor-help">Data Quality Assessment</span></Tooltip></h3>
                         <div className="space-y-4">
                             {[
                                 { label: 'ความถูกต้อง (Accuracy)', pct: 98 },
@@ -1701,7 +1701,7 @@ export default function App() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Reports & Documents</h1>
+                    <Tooltip text="รายงานและเอกสาร — รายงานสำเร็จรูปพร้อมดาวน์โหลด" position="bottom"><h1 className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-help">Reports & Documents</h1></Tooltip>
                     <p className="text-slate-500 text-sm">รายงานสถานการณ์การใช้สิทธิประโยชน์ทางการค้าสำเร็จรูป (Section 3.3.2)</p>
                 </div>
             </div>
@@ -1741,14 +1741,14 @@ export default function App() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Security & Administration</h1>
+                    <Tooltip text="ความปลอดภัยและการบริหารจัดการ — สิทธิ์ผู้ใช้ ประวัติการแก้ไข และ Audit" position="bottom"><h1 className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-help">Security & Administration</h1></Tooltip>
                     <p className="text-slate-500 text-sm">การควบคุมสิทธิ์ ประวัติการแก้ไข และความปลอดภัย (Section 2.8, 2.12, 3.6)</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card className="lg:col-span-1 p-6">
-                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Users size={18} className="text-blue-600" /> User Roles & Group (Section 2.12)</h3>
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Users size={18} className="text-blue-600" /> <Tooltip text="บทบาทและกลุ่มผู้ใช้งาน — จัดการสิทธิ์การเข้าถึงระบบ" position="right"><span className="cursor-help">User Roles & Group (Section 2.12)</span></Tooltip></h3>
                     <div className="space-y-4">
                         {[
                             { role: 'Administrator', users: 3, color: 'border-blue-500' },
@@ -1763,7 +1763,7 @@ export default function App() {
 
                 <Card className="lg:col-span-2">
                     <div className="p-4 border-b bg-slate-50 font-bold text-slate-800 flex justify-between items-center">
-                        <h3 className="flex items-center gap-2"><History size={18} className="text-rose-500" /> Audit Trail & Data Correction (Section 3.2.2)</h3>
+                        <h3 className="flex items-center gap-2"><History size={18} className="text-rose-500" /> <Tooltip text="ประวัติการแก้ไขข้อมูลและบันทึกการตรวจสอบ" position="bottom"><span className="cursor-help">Audit Trail & Data Correction (Section 3.2.2)</span></Tooltip></h3>
                         <button className="text-[10px] text-blue-600 font-black uppercase">View Full Logs</button>
                     </div>
                     <div className="p-0">
