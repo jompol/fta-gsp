@@ -62,7 +62,13 @@ import {
     ArrowLeft,
     ChevronDown,
     UploadCloud,
-    X
+    X,
+    Sun,
+    Moon,
+    Monitor,
+    Type,
+    Minus,
+    Plus
 } from 'lucide-react';
 
 import dftLogo from './assets/logo-dft.png';
@@ -184,6 +190,29 @@ export default function App() {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+
+    // --- Theme & Accessibility ---
+    const [theme, setTheme] = useState(() => localStorage.getItem('fta-theme') || 'light');
+    const [fontSize, setFontSize] = useState(() => parseInt(localStorage.getItem('fta-fontsize') || '100'));
+    const [showSettings, setShowSettings] = useState(false);
+
+    useEffect(() => {
+        localStorage.setItem('fta-theme', theme);
+        const root = document.documentElement;
+        if (theme === 'auto') {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            root.classList.toggle('dark', prefersDark);
+        } else {
+            root.classList.toggle('dark', theme === 'dark');
+        }
+    }, [theme]);
+
+    useEffect(() => {
+        localStorage.setItem('fta-fontsize', fontSize.toString());
+        document.documentElement.style.fontSize = `${fontSize}%`;
+    }, [fontSize]);
+
+    const isDark = theme === 'dark' || (theme === 'auto' && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
     // State for Application Form
     const [isCreatingApp, setIsCreatingApp] = useState(false);
@@ -3882,7 +3911,7 @@ export default function App() {
     }
 
     return (
-        <div className="flex h-screen bg-slate-50 overflow-hidden font-sans antialiased text-slate-900">
+        <div className={`flex h-screen overflow-hidden font-sans antialiased transition-colors duration-300 ${isDark ? 'bg-slate-950 text-slate-200' : 'bg-slate-50 text-slate-900'}`}>
 
             {/* Sidebar Navigation */}
             <aside className={`bg-slate-900 transition-all duration-300 flex flex-col z-30 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
@@ -3979,7 +4008,7 @@ export default function App() {
             <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
 
                 {/* Top Header */}
-                <header className="h-[72px] bg-white/80 backdrop-blur-xl border-b border-slate-100 px-6 flex items-center justify-between shrink-0 sticky top-0 z-20">
+                <header className={`h-[72px] backdrop-blur-xl border-b px-6 flex items-center justify-between shrink-0 sticky top-0 z-20 transition-colors duration-300 ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white/80 border-slate-100'}`}>
                     <Tooltip text={isSidebarOpen ? "ย่อเมนูด้านข้าง" : "ขยายเมนูด้านข้าง"} position="right">
                         <button
                             onClick={() => setSidebarOpen(!isSidebarOpen)}
@@ -4001,7 +4030,7 @@ export default function App() {
                                 <input
                                     type="text"
                                     placeholder="ค้นหาเลขอ้างอิง, พิกัด HS Code, ชื่อบริษัท หรือถาม AI..."
-                                    className="w-full bg-slate-50/80 border border-slate-200/80 rounded-2xl py-3 pl-12 pr-36 text-sm font-medium text-slate-700 placeholder:text-slate-400 focus:bg-white focus:border-blue-300 focus:shadow-[0_0_0_4px_rgba(59,130,246,0.08)] transition-all duration-300 outline-none"
+                                    className={`w-full rounded-2xl py-3 pl-12 pr-36 text-sm font-medium placeholder:text-slate-400 focus:shadow-[0_0_0_4px_rgba(59,130,246,0.08)] transition-all duration-300 outline-none border ${isDark ? 'bg-slate-800/80 border-slate-700 text-slate-200 focus:bg-slate-800 focus:border-blue-500' : 'bg-slate-50/80 border-slate-200/80 text-slate-700 focus:bg-white focus:border-blue-300'}`}
                                 />
                                 <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-2">
                                     <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-violet-600 to-blue-500 text-white text-[10px] font-black rounded-xl shadow-md shadow-violet-200/50 hover:shadow-lg hover:shadow-violet-200/80 hover:scale-105 transition-all cursor-pointer">
@@ -4013,20 +4042,117 @@ export default function App() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        {/* Theme & Font Settings */}
+                        <div className="relative">
+                            <Tooltip text="ตั้งค่าธีมและขนาดตัวอักษร" position="bottom">
+                                <button
+                                    onClick={() => setShowSettings(!showSettings)}
+                                    className={`p-2.5 rounded-xl transition-all ${showSettings ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'}`}
+                                >
+                                    {isDark ? <Moon size={18} /> : <Sun size={18} />}
+                                </button>
+                            </Tooltip>
+
+                            {showSettings && (
+                                <div className={`absolute right-0 top-full mt-2 w-72 rounded-2xl shadow-2xl border z-50 animate-in ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+                                    {/* Arrow */}
+                                    <div className={`absolute -top-2 right-4 w-4 h-4 rotate-45 border-l border-t ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}></div>
+
+                                    <div className="p-5 relative z-10">
+                                        <div className="flex justify-between items-center mb-5">
+                                            <h4 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-800'}`}>การตั้งค่าแสดงผล</h4>
+                                            <button onClick={() => setShowSettings(false)} className={`p-1 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700 text-slate-400' : 'hover:bg-slate-100 text-slate-400'}`}><X size={16} /></button>
+                                        </div>
+
+                                        {/* Theme Selector */}
+                                        <div className="mb-5">
+                                            <p className={`text-[11px] font-bold uppercase tracking-wider mb-2.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>ธีม (Theme)</p>
+                                            <div className={`flex rounded-xl p-1 ${isDark ? 'bg-slate-900' : 'bg-slate-100'}`}>
+                                                {[
+                                                    { id: 'light', label: 'สว่าง', icon: Sun },
+                                                    { id: 'dark', label: 'มืด', icon: Moon },
+                                                    { id: 'auto', label: 'อัตโนมัติ', icon: Monitor },
+                                                ].map(t => (
+                                                    <button
+                                                        key={t.id}
+                                                        onClick={() => setTheme(t.id)}
+                                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all ${theme === t.id
+                                                            ? (isDark ? 'bg-slate-700 text-white shadow-md' : 'bg-white text-slate-900 shadow-md')
+                                                            : (isDark ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600')
+                                                        }`}
+                                                    >
+                                                        <t.icon size={14} /> {t.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Font Size */}
+                                        <div>
+                                            <p className={`text-[11px] font-bold uppercase tracking-wider mb-2.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>ขนาดตัวอักษร</p>
+                                            <div className="flex items-center gap-3">
+                                                <button
+                                                    onClick={() => setFontSize(Math.max(75, fontSize - 5))}
+                                                    disabled={fontSize <= 75}
+                                                    className={`p-2 rounded-xl border transition-all ${fontSize <= 75 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100'} ${isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'}`}
+                                                >
+                                                    <Minus size={14} />
+                                                </button>
+                                                <div className="flex-1 relative">
+                                                    <div className={`h-2 rounded-full ${isDark ? 'bg-slate-700' : 'bg-slate-100'}`}>
+                                                        <div
+                                                            className="h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-full transition-all"
+                                                            style={{ width: `${((fontSize - 75) / 50) * 100}%` }}
+                                                        ></div>
+                                                    </div>
+                                                    <p className={`text-center text-xs font-black mt-1.5 ${isDark ? 'text-white' : 'text-slate-800'}`}>{fontSize}%</p>
+                                                </div>
+                                                <button
+                                                    onClick={() => setFontSize(Math.min(125, fontSize + 5))}
+                                                    disabled={fontSize >= 125}
+                                                    className={`p-2 rounded-xl border transition-all ${fontSize >= 125 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100'} ${isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'}`}
+                                                >
+                                                    <Plus size={14} />
+                                                </button>
+                                            </div>
+                                            <div className="flex justify-between mt-2">
+                                                {[
+                                                    { val: 85, label: 'เล็ก' },
+                                                    { val: 100, label: 'ปกติ' },
+                                                    { val: 115, label: 'ใหญ่' },
+                                                ].map(preset => (
+                                                    <button
+                                                        key={preset.val}
+                                                        onClick={() => setFontSize(preset.val)}
+                                                        className={`text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all ${fontSize === preset.val
+                                                            ? 'bg-blue-100 text-blue-700'
+                                                            : (isDark ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600')
+                                                        }`}
+                                                    >
+                                                        {preset.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                         <Tooltip text="การแจ้งเตือน — มีรายการใหม่ที่ยังไม่ได้อ่าน" position="bottom">
-                            <button className="relative p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
-                                <Bell size={20} />
-                                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 border-2 border-white rounded-full animate-pulse"></span>
+                            <button className={`relative p-2.5 rounded-xl transition-all ${isDark ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-400 hover:bg-slate-100'}`}>
+                                <Bell size={18} />
+                                <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full animate-pulse"></span>
                             </button>
                         </Tooltip>
-                        <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
-                        <button className="flex items-center gap-3 p-1.5 pr-3 hover:bg-slate-100 rounded-lg transition-colors group">
+                        <div className={`h-8 w-[1px] mx-1 ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`}></div>
+                        <button className={`flex items-center gap-3 p-1.5 pr-3 rounded-xl transition-colors group ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>
                             <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs group-hover:bg-blue-600 group-hover:text-white transition-all shrink-0">
                                 {user?.name?.charAt(0).toUpperCase() || 'J'}
                             </div>
                             <div className="text-left hidden lg:block">
-                                <p className="text-[11px] font-extrabold text-slate-900 leading-none truncate max-w-[100px]">{user?.name || 'Jane Doe'}</p>
+                                <p className={`text-[11px] font-extrabold leading-none truncate max-w-[100px] ${isDark ? 'text-white' : 'text-slate-900'}`}>{user?.name || 'Jane Doe'}</p>
                                 <p className="text-[9px] font-bold text-slate-400 mt-0.5 leading-none truncate max-w-[100px]">{user?.role || 'Intelligence Officer'}</p>
                             </div>
                         </button>
@@ -4034,7 +4160,7 @@ export default function App() {
                 </header>
 
                 {/* Dynamic Content View */}
-                <div className="flex-1 overflow-y-auto bg-slate-50/50 p-6 relative">
+                <div className={`flex-1 overflow-y-auto p-6 relative transition-colors duration-300 ${isDark ? 'bg-slate-950' : 'bg-slate-50/50'}`}>
                     {isLoading && (
                         <div className="absolute inset-0 bg-slate-50/60 backdrop-blur-[2px] z-50 flex items-center justify-center">
                             <div className="flex flex-col items-center">
