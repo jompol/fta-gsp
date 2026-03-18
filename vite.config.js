@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/fta-gsp/',
+  base: process.env.GITHUB_PAGES ? '/fta-gsp/' : '/',
   plugins: [
     react(),
     tailwindcss(),
