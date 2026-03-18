@@ -851,65 +851,252 @@ export default function App() {
                     <Tooltip text="ติดตามการออกหนังสือรับรองถิ่นกำเนิดสินค้าแบบเรียลไทม์" position="bottom"><h1 className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-help">Operation Monitoring</h1></Tooltip>
                     <p className="text-slate-500 text-sm">ติดตามสถิติการออกหนังสือสำคัญและถิ่นกำเนิดสินค้า <TorRef section="3.3.1.4" /></p>
                 </div>
+                <div className="flex gap-2">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-bold shadow-md shadow-emerald-200 hover:bg-emerald-700 transition-all">
+                        <FileSpreadsheet size={16} /> Export Excel
+                    </button>
+                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold shadow-md shadow-blue-200 hover:bg-blue-700 transition-all">
+                        <Download size={16} /> Export PDF
+                    </button>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="p-6 border-l-4 border-l-blue-500">
-                    <Tooltip text="มูลค่ารวมส่งออก ณ ท่าเรือต้นทาง (Free On Board)" position="right"><p className="text-[10px] font-bold text-slate-400 uppercase cursor-help">FOB Total Value</p></Tooltip>
-                    <h3 className="text-3xl font-black text-slate-900 mt-1">$12,450.8 M</h3>
-                    <div className="flex gap-2 mt-2">
-                        <Badge variant="info">USD</Badge>
-                        <Badge variant="info">THB 452.1 B</Badge>
+            {/* KPI Cards with Trend (TOR 3.3.1.4) */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                    { title: 'จำนวนฉบับ CO', val: '142,508', sub: 'ฉบับ', trend: '+15.4%', isUp: true, color: 'border-blue-500', icon: FileText },
+                    { title: 'FOB Total Value', val: '$12,450.8M', sub: 'USD', trend: '+9.2%', isUp: true, color: 'border-emerald-500', icon: Globe },
+                    { title: 'Total Net Weight', val: '85,240.5', sub: 'Metric Tons', trend: '+7.8%', isUp: true, color: 'border-amber-500', icon: Layers },
+                    { title: 'จำนวนแผ่น (Pages)', val: '452,108', sub: 'แผ่น', trend: '+12.1%', isUp: true, color: 'border-indigo-500', icon: FileCheck },
+                ].map((kpi, i) => (
+                    <Card key={i} className={`p-5 border-l-4 ${kpi.color}`}>
+                        <div className="flex items-center gap-2 mb-1">
+                            <kpi.icon size={14} className="text-slate-400" />
+                            <p className="text-[10px] font-bold text-slate-400 uppercase">{kpi.title}</p>
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-900">{kpi.val}</h3>
+                        <div className="flex justify-between items-center mt-1">
+                            <span className="text-[11px] text-slate-500 font-medium">{kpi.sub}</span>
+                            <span className={`text-[11px] font-bold flex items-center gap-0.5 ${kpi.isUp ? 'text-emerald-600' : 'text-rose-500'}`}>
+                                {kpi.isUp ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}{kpi.trend}
+                            </span>
+                        </div>
+                    </Card>
+                ))}
+            </div>
+
+            {/* e-CO vs Manual Ratio + CO by Form Type (TOR 3.2.1-6, 3.3.1-5) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* e-CO vs Manual */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Zap size={18} className="text-emerald-500" />
+                        <Tooltip text="สัดส่วนหนังสือรับรองแบบอิเล็กทรอนิกส์ (e-CO) เทียบกับแบบกระดาษ" position="right"><span className="cursor-help">e-CO vs Manual <TorRef section="3.3.1(5)" /></span></Tooltip>
+                    </h3>
+                    <div className="flex items-center justify-center mb-6">
+                        <div className="relative w-36 h-36">
+                            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                                <circle cx="18" cy="18" r="14" fill="none" stroke="#e2e8f0" strokeWidth="4"></circle>
+                                <circle cx="18" cy="18" r="14" fill="none" stroke="#10b981" strokeWidth="4" strokeDasharray="78 22" strokeLinecap="round"></circle>
+                            </svg>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <span className="text-2xl font-black text-emerald-600">78%</span>
+                                <span className="text-[9px] text-slate-400 font-bold">e-CO</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="p-3 bg-emerald-50 rounded-xl text-center border border-emerald-100">
+                            <p className="text-lg font-black text-emerald-700">111,156</p>
+                            <p className="text-[10px] font-bold text-emerald-600">e-CO (อิเล็กทรอนิกส์)</p>
+                        </div>
+                        <div className="p-3 bg-slate-50 rounded-xl text-center border border-slate-200">
+                            <p className="text-lg font-black text-slate-700">31,352</p>
+                            <p className="text-[10px] font-bold text-slate-500">Manual (กระดาษ)</p>
+                        </div>
                     </div>
                 </Card>
-                <Card className="p-6 border-l-4 border-l-emerald-500">
-                    <Tooltip text="น้ำหนักสุทธิรวมของสินค้าที่ส่งออก" position="right"><p className="text-[10px] font-bold text-slate-400 uppercase cursor-help">Total Net Weight</p></Tooltip>
-                    <h3 className="text-3xl font-black text-slate-900 mt-1">85,240.5</h3>
-                    <p className="text-xs text-slate-500 font-bold mt-2">Metric Tons (KGs)</p>
+
+                {/* CO by Form Type */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <FileCheck size={18} className="text-blue-500" />
+                        <Tooltip text="จำนวน CO จำแนกตามประเภทฟอร์มหนังสือรับรอง" position="right"><span className="cursor-help">CO จำแนกตามฟอร์ม <TorRef section="3.2.1(6)" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { form: 'Form D (ASEAN)', count: 52400, pct: 37, color: 'bg-blue-500' },
+                            { form: 'Form E (ACFTA)', count: 35200, pct: 25, color: 'bg-rose-500' },
+                            { form: 'Form JTEPA', count: 18500, pct: 13, color: 'bg-amber-500' },
+                            { form: 'Form RCEP', count: 11200, pct: 8, color: 'bg-purple-500' },
+                            { form: 'Form AK', count: 8900, pct: 6, color: 'bg-emerald-500' },
+                            { form: 'อื่นๆ', count: 16308, pct: 11, color: 'bg-slate-300' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-3">
+                                <div className={`w-2.5 h-2.5 rounded-full ${item.color} shrink-0`}></div>
+                                <span className="text-[11px] font-medium text-slate-600 flex-1">{item.form}</span>
+                                <span className="text-[11px] font-bold text-slate-800">{item.count.toLocaleString()}</span>
+                                <span className="text-[10px] text-slate-400 w-8 text-right">{item.pct}%</span>
+                            </div>
+                        ))}
+                    </div>
                 </Card>
-                <Card className="p-6 border-l-4 border-l-indigo-500">
-                    <Tooltip text="จำนวนหน้ารวมของหนังสือรับรองถิ่นกำเนิดสินค้าที่ออก" position="right"><p className="text-[10px] font-bold text-slate-400 uppercase cursor-help">Total CO Pages</p></Tooltip>
-                    <h3 className="text-3xl font-black text-slate-900 mt-1">452,108</h3>
-                    <p className="text-xs text-slate-500 font-bold mt-2">Pages Issued</p>
+
+                {/* CO by Issuing Office (TOR 3.2.1-6) */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Building2 size={18} className="text-indigo-500" />
+                        <Tooltip text="จำนวน CO จำแนกตามหน่วยงานที่ออก — ส่วนกลางและส่วนภูมิภาค" position="right"><span className="cursor-help">CO จำแนกตามหน่วยงาน <TorRef section="3.2.1(6)" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-4">
+                        {[
+                            { office: 'สำนักงานส่วนกลาง กรุงเทพฯ', count: 82450, pct: 57.9, trend: '+8.2%', isUp: true },
+                            { office: 'สำนักงานบริการส่งออก สนามบิน', count: 28100, pct: 19.7, trend: '+22.5%', isUp: true },
+                            { office: 'สำนักงานภาคตะวันออก (ชลบุรี)', count: 15800, pct: 11.1, trend: '+5.1%', isUp: true },
+                            { office: 'สำนักงานภาคใต้ (สงขลา)', count: 9250, pct: 6.5, trend: '-1.8%', isUp: false },
+                            { office: 'สำนักงานภาคเหนือ (เชียงใหม่)', count: 6908, pct: 4.8, trend: '+3.4%', isUp: true },
+                        ].map((item, i) => (
+                            <div key={i} className="p-3 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-700">{item.office}</p>
+                                        <p className="text-[10px] text-slate-400 mt-0.5">{item.count.toLocaleString()} ฉบับ ({item.pct}%)</p>
+                                    </div>
+                                    <span className={`text-[11px] font-bold flex items-center gap-0.5 ${item.isUp ? 'text-emerald-600' : 'text-rose-500'}`}>
+                                        {item.isUp ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}{item.trend}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </Card>
             </div>
 
-            <Card>
-                <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
-                    <h3 className="flex items-center gap-2"><ClipboardCheck size={18} /> <Tooltip text="รายละเอียดการออกหนังสือรับรองถิ่นกำเนิดสินค้า" position="bottom"><span className="cursor-help">CO Issuance Detail <TorRef section="3.3.1.5" /></span></Tooltip></h3>
-                    <Badge variant="success">Real-time Sync</Badge>
+            {/* Monthly Trend Chart (TOR 3.2.1-7) */}
+            <Card className="p-6">
+                <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <TrendingUp size={18} className="text-blue-500" />
+                    <Tooltip text="แนวโน้มการออก CO รายเดือน เปรียบเทียบปีปัจจุบันกับปีก่อน" position="right"><span className="cursor-help">CO Issuance Monthly Trend <TorRef section="3.2.1(7)" /></span></Tooltip>
+                </h3>
+                <div className="h-48 flex items-end justify-between gap-2 px-2 border-b border-l border-slate-100 relative">
+                    <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30">
+                        {[1,2,3,4].map(l => <div key={l} className="border-t border-slate-200 w-full"></div>)}
+                    </div>
+                    {[
+                        { m: 'ม.ค.', prev: 55, curr: 62 },
+                        { m: 'ก.พ.', prev: 50, curr: 58 },
+                        { m: 'มี.ค.', prev: 60, curr: 70 },
+                        { m: 'เม.ย.', prev: 48, curr: 55 },
+                        { m: 'พ.ค.', prev: 65, curr: 75 },
+                        { m: 'มิ.ย.', prev: 70, curr: 82 },
+                        { m: 'ก.ค.', prev: 72, curr: 88 },
+                        { m: 'ส.ค.', prev: 68, curr: 85 },
+                        { m: 'ก.ย.', prev: 75, curr: 92 },
+                        { m: 'ต.ค.', prev: 78, curr: 95 },
+                        { m: 'พ.ย.', prev: 72, curr: 0 },
+                        { m: 'ธ.ค.', prev: 65, curr: 0 },
+                    ].map((d, i) => (
+                        <div key={i} className="flex-1 h-full flex items-end gap-0.5 z-10 group">
+                            <div className="flex-1 bg-slate-200 rounded-t-sm transition-all group-hover:bg-slate-300" style={{ height: `${d.prev}%` }}></div>
+                            {d.curr > 0 && <div className="flex-1 bg-blue-500 rounded-t-sm transition-all group-hover:bg-blue-600" style={{ height: `${d.curr}%` }}></div>}
+                        </div>
+                    ))}
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                        <thead className="bg-slate-50/50 border-b text-slate-400 font-bold text-[11px]">
-                            <tr>
-                                <th className="p-4 text-left">เลขอ้างอิง (Ref No.)</th>
-                                <th className="p-4 text-left">ประเภทหนังสือสำคัญ</th>
-                                <th className="p-4 text-right">FOB Value</th>
-                                <th className="p-4 text-right">Net Weight</th>
-                                <th className="p-4 text-center">e-CO Status</th>
-                                <th className="p-4 text-center">Print Status</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 text-slate-600">
-                            {[
-                                { id: 'DFT2024-00142', type: 'Form D (ASEAN)', val: '$45,200', weight: '1,200 kg', eco: 'Electronic', print: 'Printed (2)' },
-                                { id: 'DFT2024-00143', type: 'Form E (ASEAN-China)', val: '$120,450', weight: '8,500 kg', eco: 'Electronic', print: 'Unprinted' },
-                                { id: 'DFT2024-00144', type: 'Form AK (ASEAN-Korea)', val: '$12,800', weight: '450 kg', eco: 'Manual', print: 'Printed (1)' },
-                            ].map((row, i) => (
-                                <tr key={i} className="hover:bg-slate-50">
-                                    <td className="p-4 font-mono font-bold text-blue-600">{row.id}</td>
-                                    <td className="p-4 font-medium">{row.type}</td>
-                                    <td className="p-4 text-right font-bold">{row.val}</td>
-                                    <td className="p-4 text-right">{row.weight}</td>
-                                    <td className="p-4 text-center"><Badge variant={row.eco === 'Electronic' ? 'success' : 'default'}>{row.eco}</Badge></td>
-                                    <td className="p-4 text-center text-xs font-bold text-slate-400">{row.print}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                <div className="flex justify-between mt-2 px-1">
+                    {['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'].map(m => (
+                        <span key={m} className="text-[8px] font-bold text-slate-400 flex-1 text-center">{m}</span>
+                    ))}
+                </div>
+                <div className="mt-4 flex justify-center gap-8">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+                        <div className="w-3 h-3 bg-slate-200 rounded-sm"></div> ปี 2566
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+                        <div className="w-3 h-3 bg-blue-500 rounded-sm"></div> ปี 2567
+                    </div>
                 </div>
             </Card>
+
+            {/* Top 10 Products + CO Detail Table */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Top 10 Products by CO (TOR 3.3.1-4) */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <BarChart3 size={18} className="text-amber-500" />
+                        <Tooltip text="10 อันดับสินค้าที่ยื่นขอหนังสือรับรอง CO มากที่สุด" position="right"><span className="cursor-help">Top 10 สินค้ายื่นขอ CO <TorRef section="3.3.1(4)" /></span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { rank: 1, hs: '8703', name: 'รถยนต์นั่ง', co: 18450 },
+                            { rank: 2, hs: '8415', name: 'เครื่องปรับอากาศ', co: 12800 },
+                            { rank: 3, hs: '4001', name: 'ยางธรรมชาติ', co: 11200 },
+                            { rank: 4, hs: '0804', name: 'ผลไม้สด', co: 9800 },
+                            { rank: 5, hs: '1604', name: 'ปลาทูน่ากระป๋อง', co: 8500 },
+                            { rank: 6, hs: '8471', name: 'คอมพิวเตอร์', co: 7200 },
+                            { rank: 7, hs: '3903', name: 'โพลิสไตรีน', co: 6100 },
+                            { rank: 8, hs: '0306', name: 'กุ้งแช่แข็ง', co: 5400 },
+                            { rank: 9, hs: '7108', name: 'ทองคำ', co: 4800 },
+                            { rank: 10, hs: '2710', name: 'น้ำมันปิโตรเลียม', co: 4200 },
+                        ].map((item) => (
+                            <div key={item.rank} className="flex items-center gap-2.5">
+                                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 ${item.rank <= 3 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'}`}>{item.rank}</span>
+                                <span className="text-[10px] font-mono font-bold text-blue-600 w-10">{item.hs}</span>
+                                <span className="text-[11px] text-slate-600 flex-1 truncate">{item.name}</span>
+                                <span className="text-[11px] font-bold text-slate-800">{item.co.toLocaleString()}</span>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* CO Issuance Detail Table (Enhanced) */}
+                <Card className="lg:col-span-2">
+                    <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
+                        <h3 className="flex items-center gap-2"><ClipboardCheck size={18} /> <Tooltip text="รายละเอียดการออกหนังสือรับรองถิ่นกำเนิดสินค้า" position="bottom"><span className="cursor-help">CO Issuance Detail <TorRef section="3.3.1.5" /></span></Tooltip></h3>
+                        <div className="flex items-center gap-2">
+                            <div className="relative">
+                                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                                <input type="text" placeholder="ค้นหาเลขอ้างอิง..." className="bg-white border border-slate-100 rounded-lg py-1.5 pl-8 pr-3 text-xs outline-none focus:ring-1 focus:ring-blue-500 w-44" />
+                            </div>
+                            <Badge variant="success">Real-time Sync</Badge>
+                        </div>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                            <thead className="bg-slate-50/50 border-b text-slate-400 font-bold text-[11px]">
+                                <tr>
+                                    <th className="p-3 text-left">เลขอ้างอิง</th>
+                                    <th className="p-3 text-left">ประเภท</th>
+                                    <th className="p-3 text-left">หน่วยงาน</th>
+                                    <th className="p-3 text-right">FOB Value</th>
+                                    <th className="p-3 text-right">Net Weight</th>
+                                    <th className="p-3 text-center">e-CO</th>
+                                    <th className="p-3 text-center">Print</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 text-slate-600">
+                                {[
+                                    { id: 'DFT2024-00142', type: 'Form D', office: 'ส่วนกลาง', val: '$45,200', weight: '1,200 kg', eco: 'Electronic', print: 'Printed (2)' },
+                                    { id: 'DFT2024-00143', type: 'Form E', office: 'ส่วนกลาง', val: '$120,450', weight: '8,500 kg', eco: 'Electronic', print: 'Unprinted' },
+                                    { id: 'DFT2024-00144', type: 'Form AK', office: 'ชลบุรี', val: '$12,800', weight: '450 kg', eco: 'Manual', print: 'Printed (1)' },
+                                    { id: 'DFT2024-00145', type: 'Form RCEP', office: 'ส่วนกลาง', val: '$88,900', weight: '3,200 kg', eco: 'Electronic', print: 'Printed (3)' },
+                                    { id: 'DFT2024-00146', type: 'Form JTEPA', office: 'สงขลา', val: '$32,100', weight: '2,100 kg', eco: 'Electronic', print: 'Unprinted' },
+                                    { id: 'DFT2024-00147', type: 'Form D', office: 'สนามบิน', val: '$67,500', weight: '4,800 kg', eco: 'Electronic', print: 'Printed (1)' },
+                                ].map((row, i) => (
+                                    <tr key={i} className="hover:bg-slate-50">
+                                        <td className="p-3 font-mono font-bold text-blue-600 text-xs">{row.id}</td>
+                                        <td className="p-3 text-xs font-medium">{row.type}</td>
+                                        <td className="p-3 text-xs text-slate-500">{row.office}</td>
+                                        <td className="p-3 text-right font-bold text-xs">{row.val}</td>
+                                        <td className="p-3 text-right text-xs">{row.weight}</td>
+                                        <td className="p-3 text-center"><Badge variant={row.eco === 'Electronic' ? 'success' : 'default'}>{row.eco}</Badge></td>
+                                        <td className="p-3 text-center text-[10px] font-bold text-slate-400">{row.print}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </Card>
+            </div>
         </div>
     );
 
