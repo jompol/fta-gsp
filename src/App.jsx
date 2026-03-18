@@ -3209,6 +3209,175 @@ export default function App() {
                 </Card>
             </div>
 
+            {/* User Management Table (TOR 2.12) */}
+            <Card>
+                <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                        <Settings size={18} className="text-blue-500" />
+                        <Tooltip text="จัดการผู้ใช้งาน — เพิ่ม ลบ แก้ไข บทบาท และสถานะการเข้าถึง" position="right"><span className="cursor-help">จัดการผู้ใช้งาน (User Management) <TorRef section="2.12" /></span></Tooltip>
+                    </h3>
+                    <div className="flex items-center gap-2">
+                        <div className="relative">
+                            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input type="text" placeholder="ค้นหาผู้ใช้..." className="bg-white border border-slate-100 rounded-lg py-1.5 pl-8 pr-3 text-xs outline-none focus:ring-1 focus:ring-blue-500 w-44" />
+                        </div>
+                        <button className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-md shadow-blue-200 hover:bg-blue-700 transition-all">
+                            <FilePlus size={14} /> เพิ่มผู้ใช้
+                        </button>
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                        <thead className="bg-slate-50/50 border-b text-slate-400 font-bold text-[11px]">
+                            <tr>
+                                <th className="p-3 text-left">ชื่อผู้ใช้</th>
+                                <th className="p-3 text-left">ชื่อ-นามสกุล</th>
+                                <th className="p-3 text-left">หน่วยงาน</th>
+                                <th className="p-3 text-center">บทบาท</th>
+                                <th className="p-3 text-center">สถานะ</th>
+                                <th className="p-3 text-center">Login ล่าสุด</th>
+                                <th className="p-3 text-center">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-slate-600">
+                            {[
+                                { username: 'chalermpol.c', name: 'นายเฉลิมพล ช.', dept: 'ศูนย์เทคโนโลยีสารสนเทศฯ', role: 'Administrator', status: 'Active', lastLogin: '19/03/2567 08:30', roleColor: 'danger' },
+                                { username: 'somchai.p', name: 'นายสมชาย พ.', dept: 'กองสิทธิประโยชน์ทางการค้า', role: 'DFT Officer', status: 'Active', lastLogin: '19/03/2567 09:15', roleColor: 'info' },
+                                { username: 'sumalee.k', name: 'นางสุมาลี ก.', dept: 'สำนักผู้อำนวยการ', role: 'Executive', status: 'Active', lastLogin: '18/03/2567 16:40', roleColor: 'purple' },
+                                { username: 'wichai.t', name: 'นายวิชัย ท.', dept: 'กองสิทธิประโยชน์ทางการค้า', role: 'DFT Officer', status: 'Active', lastLogin: '19/03/2567 07:55', roleColor: 'info' },
+                                { username: 'pranee.s', name: 'นางปราณี ส.', dept: 'ศูนย์เทคโนโลยีสารสนเทศฯ', role: 'Administrator', status: 'Active', lastLogin: '19/03/2567 08:00', roleColor: 'danger' },
+                                { username: 'kittipong.r', name: 'นายกิตติพงศ์ ร.', dept: 'กองสิทธิประโยชน์ทางการค้า', role: 'DFT Officer', status: 'Locked', lastLogin: '15/03/2567 11:20', roleColor: 'info' },
+                                { username: 'apinya.m', name: 'นางอภิญญา ม.', dept: 'สำนักงานภาคตะวันออก', role: 'DFT Officer', status: 'Active', lastLogin: '18/03/2567 14:30', roleColor: 'info' },
+                            ].map((user, i) => (
+                                <tr key={i} className="hover:bg-slate-50">
+                                    <td className="p-3 font-mono font-bold text-blue-600 text-xs">{user.username}</td>
+                                    <td className="p-3 text-xs font-medium text-slate-800">{user.name}</td>
+                                    <td className="p-3 text-xs text-slate-500">{user.dept}</td>
+                                    <td className="p-3 text-center"><Badge variant={user.roleColor}>{user.role}</Badge></td>
+                                    <td className="p-3 text-center"><Badge variant={user.status === 'Active' ? 'success' : 'warning'}>{user.status}</Badge></td>
+                                    <td className="p-3 text-center text-[10px] text-slate-400 font-mono">{user.lastLogin}</td>
+                                    <td className="p-3 text-center">
+                                        <div className="flex items-center justify-center gap-1">
+                                            <button className="p-1.5 hover:bg-blue-50 rounded-lg text-blue-500 transition-colors"><Settings size={14} /></button>
+                                            <button className="p-1.5 hover:bg-amber-50 rounded-lg text-amber-500 transition-colors"><Lock size={14} /></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
+
+            {/* Permission Matrix (TOR 2.12) */}
+            <Card>
+                <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                        <ShieldCheck size={18} className="text-emerald-500" />
+                        <Tooltip text="ตารางสิทธิ์การเข้าถึงระบบจำแนกตามบทบาท — กำหนดได้ว่าใครเข้าถึงเมนูใดบ้าง" position="right"><span className="cursor-help">Permission Matrix (สิทธิ์การเข้าถึง) <TorRef section="2.12" /></span></Tooltip>
+                    </h3>
+                    <button className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-all">
+                        <Settings size={14} /> แก้ไขสิทธิ์
+                    </button>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-[11px]">
+                        <thead>
+                            <tr className="bg-slate-50 text-slate-500 font-bold uppercase border-b">
+                                <th className="p-3 text-left">เมนู / ฟังก์ชัน</th>
+                                <th className="p-3 text-center">ผู้บริหาร</th>
+                                <th className="p-3 text-center">เจ้าหน้าที่</th>
+                                <th className="p-3 text-center">ผู้ดูแลระบบ</th>
+                                <th className="p-3 text-center">ผู้ประกอบการ</th>
+                                <th className="p-3 text-center">บุคคลทั่วไป</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {[
+                                { menu: 'Dashboard — ดูข้อมูลสถิติ', p: [true, true, true, false, false] },
+                                { menu: 'Service Portal — ยื่นคำขอ CO', p: [false, true, false, true, false] },
+                                { menu: 'Operations/CO — ติดตามสถานะ', p: [true, true, true, true, false] },
+                                { menu: 'Data Integration — นำเข้าข้อมูล', p: [false, true, true, false, false] },
+                                { menu: 'Analytics — วิเคราะห์เชิงลึก', p: [true, true, true, false, false] },
+                                { menu: 'Governance — ธรรมาภิบาลข้อมูล', p: [true, false, true, false, false] },
+                                { menu: 'Reports — ดาวน์โหลดรายงาน', p: [true, true, true, true, true] },
+                                { menu: 'Admin — จัดการผู้ใช้/สิทธิ์', p: [false, false, true, false, false] },
+                                { menu: 'AI Intelligence — ใช้งาน AI', p: [true, true, true, false, false] },
+                                { menu: 'Data Correction — แก้ไขข้อมูล', p: [false, true, true, false, false] },
+                                { menu: 'Open Data API — เข้าถึง API', p: [true, true, true, true, true] },
+                                { menu: 'Export Excel/PDF', p: [true, true, true, true, false] },
+                            ].map((row, i) => (
+                                <tr key={i} className="hover:bg-slate-50">
+                                    <td className="p-3 font-medium text-slate-700">{row.menu}</td>
+                                    {row.p.map((v, j) => (
+                                        <td key={j} className="p-3 text-center">
+                                            {v ? (
+                                                <span className="inline-flex w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 items-center justify-center"><CheckCircle2 size={14} /></span>
+                                            ) : (
+                                                <span className="inline-flex w-6 h-6 rounded-full bg-slate-100 text-slate-300 items-center justify-center"><X size={14} /></span>
+                                            )}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
+
+            {/* Access Log / Login History (TOR 2.13, 3.6.3.1.3) */}
+            <Card>
+                <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                        <Fingerprint size={18} className="text-blue-500" />
+                        <Tooltip text="บันทึกการเข้าสู่ระบบ (Access Log) ของผู้ใช้ทั้งหมด เพื่อตรวจสอบกิจกรรมที่ผิดปกติ" position="right"><span className="cursor-help">Access Log / Login History <TorRef section="2.13, 3.6.3.1.3" /></span></Tooltip>
+                    </h3>
+                    <div className="flex items-center gap-2">
+                        <select className="bg-white border border-slate-100 rounded-lg py-1.5 px-3 text-xs outline-none">
+                            <option>วันนี้</option>
+                            <option>7 วันล่าสุด</option>
+                            <option>30 วันล่าสุด</option>
+                        </select>
+                        <button className="text-[10px] text-blue-600 font-black uppercase">Export Log</button>
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-[11px]">
+                        <thead>
+                            <tr className="bg-slate-50 text-slate-500 font-bold uppercase border-b">
+                                <th className="p-3 text-left">วัน-เวลา</th>
+                                <th className="p-3 text-left">ผู้ใช้</th>
+                                <th className="p-3 text-left">กิจกรรม</th>
+                                <th className="p-3 text-left">IP Address</th>
+                                <th className="p-3 text-center">ผลลัพธ์</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {[
+                                { time: '19/03/2567 09:15:42', user: 'somchai.p', action: 'Login via AD SSO', ip: '10.1.15.42', result: 'Success' },
+                                { time: '19/03/2567 08:30:18', user: 'chalermpol.c', action: 'Login via AD SSO', ip: '10.1.15.10', result: 'Success' },
+                                { time: '19/03/2567 08:00:05', user: 'pranee.s', action: 'Login via AD SSO', ip: '10.1.15.11', result: 'Success' },
+                                { time: '19/03/2567 07:55:33', user: 'wichai.t', action: 'Login via AD SSO', ip: '10.1.20.85', result: 'Success' },
+                                { time: '18/03/2567 22:15:08', user: 'unknown', action: 'Brute Force Attempt (5 failed)', ip: '203.154.xx.xx', result: 'Blocked' },
+                                { time: '18/03/2567 18:20:15', user: 'kittipong.r', action: 'Login Failed (wrong password)', ip: '192.168.1.50', result: 'Failed' },
+                                { time: '18/03/2567 16:40:22', user: 'sumalee.k', action: 'Logout', ip: '10.1.10.5', result: 'Success' },
+                                { time: '18/03/2567 14:30:10', user: 'apinya.m', action: 'Login via AD SSO (ภาคตะวันออก)', ip: '10.2.5.15', result: 'Success' },
+                            ].map((log, i) => (
+                                <tr key={i} className="hover:bg-slate-50">
+                                    <td className="p-3 font-mono text-slate-500">{log.time}</td>
+                                    <td className="p-3 font-bold text-slate-800">{log.user}</td>
+                                    <td className="p-3 text-slate-600">{log.action}</td>
+                                    <td className="p-3 font-mono text-slate-400">{log.ip}</td>
+                                    <td className="p-3 text-center">
+                                        <Badge variant={log.result === 'Success' ? 'success' : log.result === 'Blocked' ? 'danger' : 'warning'}>{log.result}</Badge>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
+
             {/* Security Baseline + PDPA + Cybersecurity (TOR 2.14, 2.15, 3.6) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* OWASP / Security Baseline (TOR 2.15, 3.6.3.2) */}
