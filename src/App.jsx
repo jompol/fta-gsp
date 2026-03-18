@@ -1144,41 +1144,140 @@ export default function App() {
                         </div>
                     </Card>
 
+                    {/* Service Hub KPI Summary (TOR Section 3.3.1) */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        {[
+                            { title: 'คำขอทั้งหมด (YTD)', val: '1,248', sub: 'ปีงบประมาณ 2567', icon: FileText, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
+                            { title: 'อนุมัติแล้ว', val: '1,089', sub: '87.3% ของคำขอทั้งหมด', icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
+                            { title: 'รอดำเนินการ', val: '142', sub: 'เฉลี่ย 1.8 ชม./คำขอ', icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
+                            { title: 'เวลาเฉลี่ยออก CO', val: '2.4 ชม.', sub: 'เป้าหมาย SLA < 4 ชม.', icon: Zap, color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' },
+                        ].map((kpi, i) => (
+                            <Card key={i} className={`p-4 border ${kpi.border}`}>
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className={`p-2 rounded-xl ${kpi.bg} ${kpi.color}`}><kpi.icon size={18} /></div>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">{kpi.title}</p>
+                                </div>
+                                <h3 className="text-2xl font-black text-slate-900">{kpi.val}</h3>
+                                <p className="text-[11px] text-slate-500 font-medium mt-1">{kpi.sub}</p>
+                            </Card>
+                        ))}
+                    </div>
+
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <Card className="lg:col-span-2">
                             <div className="p-4 border-b bg-slate-50 flex justify-between items-center font-bold text-slate-800">
-                                <h3 className="flex items-center gap-2"><Activity size={18} className="text-blue-500" /> Active Applications Pipeline</h3>
+                                <h3 className="flex items-center gap-2"><Activity size={18} className="text-blue-500" /> <Tooltip text="รายการคำขอที่อยู่ระหว่างดำเนินการ — คลิกเพื่อดูรายละเอียด" position="bottom"><span className="cursor-help">Active Applications Pipeline</span></Tooltip></h3>
+                                <div className="relative">
+                                    <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                                    <input type="text" placeholder="ค้นหาเลขอ้างอิง..." className="bg-white border border-slate-100 rounded-lg py-1.5 pl-8 pr-3 text-xs outline-none focus:ring-1 focus:ring-blue-500 w-48" />
+                                </div>
                             </div>
                             <div className="p-0 divide-y">
                                 {[
-                                    { ref: 'REQ-2024-8842', company: 'Thai Agri Export Co.', agreement: 'ASEAN-China (ACFTA)', status: 'Verifying', time: '2 ชม. ที่แล้ว', risk: 'Low' },
-                                    { ref: 'REQ-2024-8843', company: 'Pacific Motors Ltd.', agreement: 'RCEP', status: 'Pending Approval', time: '4 ชม. ที่แล้ว', risk: 'Med' },
-                                    { ref: 'REQ-2024-8844', company: 'Global Food Solutions', agreement: 'GSP (USA)', status: 'Approved', time: '6 ชม. ที่แล้ว', risk: 'Low' },
+                                    { ref: 'REQ-2024-8842', company: 'Thai Agri Export Co.', agreement: 'ASEAN-China (ACFTA)', status: 'Verifying', time: '2 ชม. ที่แล้ว', risk: 'Low', sla: '1.5 ชม. เหลือ', slaColor: 'text-emerald-600' },
+                                    { ref: 'REQ-2024-8843', company: 'Pacific Motors Ltd.', agreement: 'RCEP', status: 'Pending Approval', time: '4 ชม. ที่แล้ว', risk: 'Med', sla: '0.5 ชม. เหลือ', slaColor: 'text-amber-600' },
+                                    { ref: 'REQ-2024-8844', company: 'Global Food Solutions', agreement: 'GSP (USA)', status: 'Approved', time: '6 ชม. ที่แล้ว', risk: 'Low', sla: 'เสร็จสิ้น', slaColor: 'text-blue-500' },
+                                    { ref: 'REQ-2024-8845', company: 'Siam Rubber Industries', agreement: 'JTEPA (ญี่ปุ่น)', status: 'Document Review', time: '1 ชม. ที่แล้ว', risk: 'Low', sla: '2.5 ชม. เหลือ', slaColor: 'text-emerald-600' },
+                                    { ref: 'REQ-2024-8846', company: 'Eastern Seafood Co.', agreement: 'AIFTA (อินเดีย)', status: 'Rejected', time: 'เมื่อวาน', risk: 'High', sla: 'ส่งเอกสารเพิ่ม', slaColor: 'text-rose-500' },
                                 ].map((req, i) => (
-                                    <div key={i} className="p-5 hover:bg-slate-50 flex items-center justify-between group transition-all">
-                                        <div className="flex items-center gap-5">
-                                            <div className="p-3 rounded-2xl bg-blue-50 text-blue-600"><FileCheck size={24} /></div>
+                                    <div key={i} className="p-4 hover:bg-slate-50 flex items-center justify-between group transition-all">
+                                        <div className="flex items-center gap-4">
+                                            <div className={`p-2.5 rounded-xl ${req.status === 'Approved' ? 'bg-emerald-50 text-emerald-600' : req.status === 'Rejected' ? 'bg-rose-50 text-rose-600' : 'bg-blue-50 text-blue-600'}`}><FileCheck size={20} /></div>
                                             <div>
-                                                <div className="flex items-center gap-2"><p className="font-mono font-black text-slate-900">{req.ref}</p><Badge variant={req.status === 'Approved' ? 'info' : 'warning'}>{req.status}</Badge></div>
-                                                <p className="text-sm font-bold text-slate-600 mt-0.5">{req.company}</p>
-                                                <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-tighter">{req.agreement} • {req.time}</p>
+                                                <div className="flex items-center gap-2">
+                                                    <p className="font-mono font-black text-slate-900 text-sm">{req.ref}</p>
+                                                    <Badge variant={req.status === 'Approved' ? 'success' : req.status === 'Rejected' ? 'danger' : req.status === 'Verifying' ? 'info' : 'warning'}>{req.status}</Badge>
+                                                    <Badge variant={req.risk === 'High' ? 'danger' : req.risk === 'Med' ? 'warning' : 'default'}>{req.risk} Risk</Badge>
+                                                </div>
+                                                <p className="text-xs font-bold text-slate-600 mt-0.5">{req.company}</p>
+                                                <p className="text-[10px] font-bold text-slate-400 mt-0.5">{req.agreement} • {req.time}</p>
                                             </div>
                                         </div>
-                                        <button className="p-2 hover:bg-white hover:shadow-md border rounded-xl transition-all"><ChevronRight size={20} className="text-slate-300" /></button>
+                                        <div className="text-right flex items-center gap-3">
+                                            <div>
+                                                <p className="text-[10px] font-bold text-slate-400 uppercase">SLA</p>
+                                                <p className={`text-xs font-bold ${req.slaColor}`}>{req.sla}</p>
+                                            </div>
+                                            <button className="p-2 hover:bg-white hover:shadow-md border rounded-xl transition-all"><ChevronRight size={18} className="text-slate-300" /></button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </Card>
-                        <Card className="p-6 bg-gradient-to-br from-white to-blue-50/50 border-blue-100">
-                            <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2"><Printer size={18} className="text-blue-500" /> e-Issuance Center</h3>
-                            <div className="p-4 bg-white border border-blue-100 rounded-2xl shadow-sm relative overflow-hidden group cursor-pointer">
-                                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-600 text-white rounded-bl-3xl flex items-center justify-center translate-x-1 -translate-y-1 group-hover:scale-110 transition-transform"><Sticker size={24} /></div>
-                                <p className="text-[10px] font-bold text-blue-600 uppercase">Latest Issued e-CO</p>
-                                <p className="text-lg font-black text-slate-900 mt-1">DFT-CN-2024012</p>
-                                <div className="mt-4 flex gap-2"><button className="flex-1 py-2 bg-blue-600 text-white text-[10px] font-bold rounded-xl shadow-lg">Download PDF</button><button className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl"><Eye size={14} /></button></div>
-                            </div>
-                        </Card>
+
+                        <div className="space-y-6">
+                            {/* Verification Checklist (TOR Section 3.3.1.4) */}
+                            <Card className="p-5 border-t-4 border-t-blue-500">
+                                <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                    <ShieldQuestion size={18} className="text-blue-500" />
+                                    <Tooltip text="รายการตรวจสอบอัตโนมัติก่อนอนุมัติ — ระบบตรวจสอบ ROO, HS Code, ทะเบียนบริษัท" position="bottom"><span className="cursor-help">Smart Verification Checklist</span></Tooltip>
+                                </h3>
+                                <div className="space-y-3">
+                                    {[
+                                        { label: 'ตรวจสอบทะเบียนนิติบุคคล (DBD)', status: 'pass', detail: 'ยืนยัน TAX ID ผ่าน API กรมพัฒนาธุรกิจการค้า' },
+                                        { label: 'ตรวจสอบกฎถิ่นกำเนิด (ROO)', status: 'pass', detail: 'เกณฑ์ WO สอดคล้องกับ ACFTA Annex 3' },
+                                        { label: 'ตรวจสอบพิกัด HS Code', status: 'pass', detail: 'HS 0804.50 ตรงกับ Eligible List ปี 2567' },
+                                        { label: 'ตรวจสอบเอกสารแนบ', status: 'warning', detail: 'Bill of Lading ยังไม่ได้แนบ (ไม่บังคับ)' },
+                                        { label: 'ตรวจสอบ Blacklist/Watchlist', status: 'pass', detail: 'ไม่พบรายชื่อในฐานข้อมูลเฝ้าระวัง' },
+                                        { label: 'AI Fraud Detection', status: 'pass', detail: 'ความน่าเชื่อถือ 96.4% — ไม่พบความผิดปกติ' },
+                                    ].map((check, i) => (
+                                        <div key={i} className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-all">
+                                            <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${check.status === 'pass' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>
+                                                {check.status === 'pass' ? <CheckCircle2 size={14} /> : <AlertTriangle size={12} />}
+                                            </div>
+                                            <div>
+                                                <p className="text-xs font-bold text-slate-700">{check.label}</p>
+                                                <p className="text-[10px] text-slate-400 mt-0.5">{check.detail}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </Card>
+
+                            {/* e-Issuance Center */}
+                            <Card className="p-5 bg-gradient-to-br from-white to-blue-50/50 border-blue-100">
+                                <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Printer size={18} className="text-blue-500" /> e-Issuance Center</h3>
+                                <div className="p-4 bg-white border border-blue-100 rounded-2xl shadow-sm relative overflow-hidden group cursor-pointer">
+                                    <div className="absolute top-0 right-0 w-14 h-14 bg-blue-600 text-white rounded-bl-3xl flex items-center justify-center translate-x-1 -translate-y-1 group-hover:scale-110 transition-transform"><Sticker size={20} /></div>
+                                    <p className="text-[10px] font-bold text-blue-600 uppercase">Latest Issued e-CO</p>
+                                    <p className="text-lg font-black text-slate-900 mt-1">DFT-CN-2024012</p>
+                                    <p className="text-[10px] text-slate-400 mt-1">Form E (ACFTA) • Thai Agri Export Co.</p>
+                                    <div className="mt-3 flex gap-2"><button className="flex-1 py-2 bg-blue-600 text-white text-[10px] font-bold rounded-xl shadow-lg">Download PDF</button><button className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl"><Eye size={14} /></button></div>
+                                </div>
+                            </Card>
+                        </div>
                     </div>
+
+                    {/* Recent Activity Feed (TOR Section 2.8 - Audit Trail) */}
+                    <Card>
+                        <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
+                            <h3 className="font-bold text-slate-800 flex items-center gap-2"><History size={18} className="text-indigo-500" /> ประวัติการดำเนินการล่าสุด</h3>
+                            <button className="text-[10px] text-blue-600 font-black uppercase hover:underline">ดูทั้งหมด</button>
+                        </div>
+                        <div className="p-4">
+                            <div className="relative border-l-2 border-slate-100 ml-4 space-y-0">
+                                {[
+                                    { time: '10:45', action: 'อนุมัติคำขอ REQ-2024-8844', user: 'ผอ.กองสิทธิฯ', type: 'success' },
+                                    { time: '10:32', action: 'ตรวจสอบเอกสาร REQ-2024-8842 — ผ่านเกณฑ์ ROO', user: 'ระบบ AI', type: 'info' },
+                                    { time: '10:15', action: 'ส่งคำขอใหม่ REQ-2024-8846 — Eastern Seafood Co.', user: 'ผู้ประกอบการ', type: 'default' },
+                                    { time: '09:50', action: 'ปฏิเสธคำขอ REQ-2024-8840 — เอกสารไม่ครบ', user: 'เจ้าหน้าที่ตรวจสอบ', type: 'danger' },
+                                    { time: '09:30', action: 'ออก e-CO DFT-CN-2024012 — Form E (ACFTA)', user: 'ระบบอัตโนมัติ', type: 'success' },
+                                    { time: '09:15', action: 'แก้ไขข้อมูล HS Code REQ-2024-8841 — 0804.50 → 0804.90', user: 'เจ้าหน้าที่', type: 'warning' },
+                                ].map((log, i) => (
+                                    <div key={i} className="relative pl-8 py-3 hover:bg-slate-50 rounded-r-xl transition-all">
+                                        <div className={`absolute left-[-5px] top-4 w-2.5 h-2.5 rounded-full border-2 border-white ${log.type === 'success' ? 'bg-emerald-500' : log.type === 'info' ? 'bg-blue-500' : log.type === 'danger' ? 'bg-rose-500' : log.type === 'warning' ? 'bg-amber-500' : 'bg-slate-300'}`}></div>
+                                        <div className="flex items-start justify-between">
+                                            <div>
+                                                <p className="text-xs font-bold text-slate-700">{log.action}</p>
+                                                <p className="text-[10px] text-slate-400 mt-0.5">โดย: {log.user}</p>
+                                            </div>
+                                            <span className="text-[10px] font-mono font-bold text-slate-400 shrink-0">{log.time}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </Card>
                 </div>
             )}
         </div>
