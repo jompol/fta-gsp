@@ -1814,72 +1814,268 @@ export default function App() {
                     <Tooltip text="วิเคราะห์เชิงลึก — กรองข้อมูลการค้าตามเงื่อนไขที่กำหนดเอง" position="bottom"><h1 className="text-2xl font-extrabold text-slate-900 tracking-tight cursor-help">Advanced Analytics</h1></Tooltip>
                     <p className="text-slate-500 text-sm">วิเคราะห์ข้อมูลการค้าระหว่างประเทศเชิงลึกแบบกำหนดเงื่อนไข (Section 3.2.1)</p>
                 </div>
+                <div className="flex gap-2">
+                    <Tooltip text="ส่งออกข้อมูลที่กรองแล้วเป็นไฟล์ Excel" position="bottom">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-bold shadow-md shadow-emerald-200 hover:bg-emerald-700 transition-all">
+                            <FileSpreadsheet size={16} /> Export Excel
+                        </button>
+                    </Tooltip>
+                    <Tooltip text="ส่งออกรายงานเป็น PDF" position="bottom">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold shadow-md shadow-blue-200 hover:bg-blue-700 transition-all">
+                            <Download size={16} /> Export PDF
+                        </button>
+                    </Tooltip>
+                </div>
             </div>
 
+            {/* Enhanced Filter Panel (TOR 3.2.1-5) */}
             <Card className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
                     <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase">กรอบความตกลง (FTA/GSP)</label>
+                        <label className="text-[11px] font-bold text-slate-500 uppercase">กรอบความตกลง</label>
                         <select className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                            <option>อาเซียน-จีน (ACFTA)</option>
+                            <option>ทั้งหมด</option>
+                            <option>ACFTA (จีน)</option>
+                            <option>AFTA (ASEAN)</option>
                             <option>RCEP</option>
-                            <option>ไทย-ออสเตรเลีย</option>
-                            <option>GSP (USA)</option>
+                            <option>JTEPA (ญี่ปุ่น)</option>
+                            <option>TAFTA (ออสเตรเลีย)</option>
+                            <option>AKFTA (เกาหลี)</option>
+                            <option>AIFTA (อินเดีย)</option>
+                            <option>GSP (สิทธิพิเศษ)</option>
                         </select>
                     </div>
                     <div className="space-y-1.5">
                         <label className="text-[11px] font-bold text-slate-500 uppercase">พิกัดศุลกากร (HS Code)</label>
-                        <input type="text" placeholder="เช่น 080450" className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                        <input type="text" placeholder="เช่น 0804, 87" className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase">ประเทศ / ภูมิภาค</label>
+                        <select className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option>ทุกประเทศ</option>
+                            <option>จีน</option>
+                            <option>ญี่ปุ่น</option>
+                            <option>สหรัฐอเมริกา</option>
+                            <option>ออสเตรเลีย</option>
+                            <option>--- ภูมิภาค ---</option>
+                            <option>อาเซียน</option>
+                            <option>เอเชียตะวันออก</option>
+                            <option>ยุโรป</option>
+                        </select>
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase">กลุ่มสินค้า</label>
+                        <select className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option>ทั้งหมด</option>
+                            <option>เกษตรและเกษตรแปรรูป (01-24)</option>
+                            <option>อุตสาหกรรม (25-97)</option>
+                        </select>
                     </div>
                     <div className="space-y-1.5">
                         <label className="text-[11px] font-bold text-slate-500 uppercase">ช่วงเวลา</label>
-                        <div className="flex gap-2">
-                            <select className="flex-1 bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm"><option>2024</option></select>
-                            <select className="flex-1 bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm"><option>ไตรมาส 1</option></select>
+                        <div className="flex gap-1.5">
+                            <select className="flex-1 bg-slate-50 border border-slate-200 rounded-lg py-2 px-2 text-sm"><option>2024</option><option>2023</option><option>2022</option></select>
+                            <select className="flex-1 bg-slate-50 border border-slate-200 rounded-lg py-2 px-2 text-sm"><option>ทั้งปี</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select>
                         </div>
                     </div>
-                    <div className="flex items-end">
-                        <button className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-200">
-                            <Search size={16} /> ประมวลผลข้อมูล
+                    <div className="flex items-end gap-2">
+                        <button className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-200">
+                            <Search size={16} /> ค้นหา
                         </button>
+                        <Tooltip text="บันทึกเงื่อนไขค้นหานี้เพื่อใช้ซ้ำในภายหลัง" position="bottom">
+                            <button className="py-2 px-3 bg-slate-100 text-slate-500 rounded-lg hover:bg-slate-200 transition-all">
+                                <BookOpen size={16} />
+                            </button>
+                        </Tooltip>
                     </div>
                 </div>
+                <div className="flex items-center gap-2 text-[10px] text-slate-400">
+                    <BookOpen size={12} /> <span className="font-bold">Saved Searches:</span>
+                    <button className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded font-bold hover:bg-blue-100">ACFTA ผลไม้สด 2024</button>
+                    <button className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded font-bold hover:bg-blue-100">RCEP ยานยนต์ Q1-Q3</button>
+                    <button className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded font-bold hover:bg-blue-100">GSP ทั้งหมด 3 ปี</button>
+                </div>
+            </Card>
 
-                <div className="border border-slate-100 rounded-xl overflow-hidden">
+            {/* KPI Summary for Current Filter (TOR 3.2.1) */}
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                {[
+                    { title: 'มูลค่า Eligible', val: '$9,455.1M', trend: '+9.8%', isUp: true },
+                    { title: 'มูลค่า Actual', val: '$7,633.4M', trend: '+11.2%', isUp: true },
+                    { title: 'อัตราใช้สิทธิ', val: '80.73%', trend: '+1.1%', isUp: true },
+                    { title: 'จำนวน CO', val: '35,200', trend: '+14.5%', isUp: true },
+                    { title: 'ดุลการค้า', val: '+$3,212M', trend: '+5.4%', isUp: true },
+                ].map((kpi, i) => (
+                    <Card key={i} className="p-4">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase">{kpi.title}</p>
+                        <div className="flex items-end justify-between mt-1">
+                            <span className="text-xl font-black text-slate-900">{kpi.val}</span>
+                            <span className={`text-[11px] font-bold flex items-center gap-0.5 ${kpi.isUp ? 'text-emerald-600' : 'text-rose-500'}`}>
+                                {kpi.isUp ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}{kpi.trend}
+                            </span>
+                        </div>
+                    </Card>
+                ))}
+            </div>
+
+            {/* Results Table (Enhanced) */}
+            <Card>
+                <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2"><BarChart3 size={18} className="text-blue-500" /> ผลการวิเคราะห์จำแนกรายประเทศ</h3>
+                    <span className="text-[10px] font-bold text-slate-400">เงื่อนไข: ACFTA • ทุกพิกัด • ปี 2024 ทั้งปี</span>
+                </div>
+                <div className="overflow-x-auto">
                     <table className="w-full text-sm">
-                        <thead className="bg-slate-50 border-b text-slate-500 font-bold">
+                        <thead className="bg-slate-50 border-b text-slate-500 font-bold text-[11px]">
                             <tr>
                                 <th className="p-3 text-left">ประเทศคู่ค้า</th>
-                                <th className="p-3 text-right">มูลค่าส่งออก (Eligible)</th>
-                                <th className="p-3 text-right">มูลค่าขอใช้สิทธิ (Actual)</th>
-                                <th className="p-3 text-center">สัดส่วนการใช้สิทธิ</th>
-                                <th className="p-3 text-center">แนวโน้ม (YoY)</th>
+                                <th className="p-3 text-right">Eligible ($M)</th>
+                                <th className="p-3 text-right">Actual ($M)</th>
+                                <th className="p-3 text-center">อัตราใช้สิทธิ</th>
+                                <th className="p-3 text-right">จำนวน CO</th>
+                                <th className="p-3 text-center">YoY</th>
+                                <th className="p-3 text-center">3Y Avg</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 text-slate-600">
                             {[
-                                { country: 'จีน', exp: '4,520.5', act: '3,842.1', util: '84.99%', trend: '+12.4%', color: 'text-emerald-600' },
-                                { country: 'ญี่ปุ่น', exp: '2,145.2', act: '1,520.8', util: '70.89%', trend: '+5.1%', color: 'text-emerald-600' },
-                                { country: 'ออสเตรเลีย', exp: '1,840.0', act: '1,650.4', util: '89.70%', trend: '-2.3%', color: 'text-rose-600' },
-                                { country: 'อินโดนีเซีย', exp: '950.4', act: '620.1', util: '65.25%', trend: '+18.7%', color: 'text-emerald-600' },
+                                { country: 'จีน', exp: '4,520.5', act: '3,842.1', util: '84.99', co: '18,450', trend: '+12.4%', avg: '78.2%', isUp: true },
+                                { country: 'ญี่ปุ่น', exp: '2,145.2', act: '1,520.8', util: '70.89', co: '8,200', trend: '+5.1%', avg: '68.5%', isUp: true },
+                                { country: 'ออสเตรเลีย', exp: '1,840.0', act: '1,650.4', util: '89.70', co: '5,100', trend: '-2.3%', avg: '87.1%', isUp: false },
+                                { country: 'อินโดนีเซีย', exp: '950.4', act: '620.1', util: '65.25', co: '3,450', trend: '+18.7%', avg: '58.4%', isUp: true },
                             ].map((row, i) => (
                                 <tr key={i} className="hover:bg-slate-50 transition-colors">
                                     <td className="p-3 font-bold text-slate-800">{row.country}</td>
-                                    <td className="p-3 text-right">${row.exp}M</td>
-                                    <td className="p-3 text-right">${row.act}M</td>
+                                    <td className="p-3 text-right font-mono">{row.exp}</td>
+                                    <td className="p-3 text-right font-mono">{row.act}</td>
                                     <td className="p-3 text-center">
                                         <div className="flex items-center justify-center gap-2">
-                                            <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                                <div className="bg-blue-500 h-full" style={{ width: row.util }}></div>
+                                            <div className="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                <div className={`h-full rounded-full ${parseFloat(row.util) >= 80 ? 'bg-emerald-500' : parseFloat(row.util) >= 65 ? 'bg-blue-500' : 'bg-amber-500'}`} style={{ width: `${row.util}%` }}></div>
                                             </div>
-                                            <span className="text-[10px] font-bold">{row.util}</span>
+                                            <span className="text-[11px] font-bold">{row.util}%</span>
                                         </div>
                                     </td>
-                                    <td className={`p-3 text-center font-bold text-xs ${row.color}`}>{row.trend}</td>
+                                    <td className="p-3 text-right font-mono">{row.co}</td>
+                                    <td className={`p-3 text-center font-bold text-xs ${row.isUp ? 'text-emerald-600' : 'text-rose-500'}`}>
+                                        <span className="flex items-center justify-center gap-0.5">{row.isUp ? <ArrowUpRight size={12}/> : <ArrowDownRight size={12}/>}{row.trend}</span>
+                                    </td>
+                                    <td className="p-3 text-center text-[11px] font-bold text-slate-500">{row.avg}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                </div>
+            </Card>
+
+            {/* Comparative Analysis & Drill-down (TOR 3.2.1 Comparative Analysis) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* 3-Year Trend Comparison */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <TrendingUp size={18} className="text-indigo-500" />
+                        <Tooltip text="เปรียบเทียบแนวโน้มอัตราการใช้สิทธิ 3 ปีย้อนหลัง (TOR 3.2.1 Comparative)" position="right"><span className="cursor-help">Comparative Analysis: แนวโน้ม 3 ปี</span></Tooltip>
+                    </h3>
+                    <div className="h-48 flex items-end justify-between gap-4 px-2 border-b border-l border-slate-100 relative">
+                        <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30">
+                            {[1,2,3,4].map(l => <div key={l} className="border-t border-slate-200 w-full"></div>)}
+                        </div>
+                        {['Q1','Q2','Q3','Q4'].map((q, i) => {
+                            const d2022 = [62, 65, 68, 64];
+                            const d2023 = [70, 74, 78, 72];
+                            const d2024 = [76, 80, 85, 82];
+                            return (
+                                <div key={i} className="flex-1 h-full flex items-end gap-1 z-10">
+                                    <div className="flex-1 bg-slate-200 rounded-t-sm" style={{ height: `${d2022[i]}%` }}></div>
+                                    <div className="flex-1 bg-blue-400 rounded-t-sm" style={{ height: `${d2023[i]}%` }}></div>
+                                    <div className="flex-1 bg-blue-600 rounded-t-sm" style={{ height: `${d2024[i]}%` }}></div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className="flex justify-between mt-2">
+                        {['Q1','Q2','Q3','Q4'].map(q => <span key={q} className="text-[10px] font-bold text-slate-400 flex-1 text-center">{q}</span>)}
+                    </div>
+                    <div className="mt-4 flex justify-center gap-6">
+                        {[{ label: '2022', color: 'bg-slate-200' },{ label: '2023', color: 'bg-blue-400' },{ label: '2024', color: 'bg-blue-600' }].map(l => (
+                            <div key={l.label} className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+                                <div className={`w-3 h-3 rounded-sm ${l.color}`}></div> {l.label}
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* HS Code Drill-down Detail */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Layers size={18} className="text-amber-500" />
+                        <Tooltip text="เจาะลึกข้อมูลตามพิกัดศุลกากร — แสดงรายละเอียดสินค้าย่อย" position="right"><span className="cursor-help">HS Code Drill-down</span></Tooltip>
+                    </h3>
+                    <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl mb-4">
+                        <div className="flex items-center gap-2">
+                            <span className="text-xs font-mono font-black text-amber-700">HS 08</span>
+                            <ChevronRight size={14} className="text-amber-400" />
+                            <span className="text-xs font-mono font-black text-amber-700">0804</span>
+                            <ChevronRight size={14} className="text-amber-400" />
+                            <span className="text-xs font-mono font-black text-amber-900">0804.50</span>
+                        </div>
+                        <p className="text-[11px] text-amber-600 mt-1">ผลไม้ — ฝรั่ง มะม่วง มังคุด สด</p>
+                    </div>
+                    <div className="space-y-3">
+                        {[
+                            { code: '0804.50.20', name: 'มะม่วงสด', val: '$1,820M', rate: '72.4%', co: '4,200' },
+                            { code: '0804.50.10', name: 'ฝรั่งสด', val: '$650M', rate: '58.2%', co: '1,800' },
+                            { code: '0804.50.30', name: 'มังคุดสด', val: '$1,630M', rate: '82.1%', co: '3,500' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center justify-between p-3 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all cursor-pointer">
+                                <div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[11px] font-mono font-bold text-blue-600">{item.code}</span>
+                                        <span className="text-xs font-bold text-slate-700">{item.name}</span>
+                                    </div>
+                                    <div className="flex gap-4 mt-1 text-[10px] text-slate-400 font-medium">
+                                        <span>CO: {item.co} ฉบับ</span>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-sm font-black text-slate-900">{item.val}</p>
+                                    <p className="text-[11px] font-bold text-emerald-600">{item.rate}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
+            {/* Top Products by Utilization Gap (TOR 3.2.1-5 filter by product) */}
+            <Card className="p-6">
+                <div className="flex justify-between items-center mb-5">
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                        <AlertTriangle size={18} className="text-rose-500" />
+                        <Tooltip text="สินค้าที่มีมูลค่าส่งออกสูงแต่อัตราใช้สิทธิยังต่ำ — โอกาสเพิ่มการใช้สิทธิ" position="right"><span className="cursor-help">Utilization Gap Analysis — สินค้าที่ควรเร่งส่งเสริม</span></Tooltip>
+                    </h3>
+                    <Badge variant="danger">Gap {'>'} 30%</Badge>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                        { hs: '2710.12', name: 'น้ำมันปิโตรเลียม', eligible: '$4,200M', actual: '$1,800M', gap: '57.1%', potential: '$2,400M' },
+                        { hs: '8471.30', name: 'คอมพิวเตอร์พกพา', eligible: '$3,500M', actual: '$1,600M', gap: '54.3%', potential: '$1,900M' },
+                        { hs: '0810.90', name: 'มังคุดสด', eligible: '$1,200M', actual: '$650M', gap: '45.8%', potential: '$550M' },
+                        { hs: '3903.19', name: 'โพลิสไตรีน', eligible: '$2,100M', actual: '$1,200M', gap: '42.9%', potential: '$900M' },
+                    ].map((item, i) => (
+                        <div key={i} className="p-4 border border-rose-100 rounded-xl bg-rose-50/30 hover:bg-rose-50 transition-all">
+                            <div className="flex items-center gap-2 mb-2">
+                                <span className="text-[10px] font-mono font-bold text-rose-600 bg-rose-100 px-1.5 py-0.5 rounded">{item.hs}</span>
+                                <span className="text-xs font-bold text-slate-700">{item.name}</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 text-[10px] mt-3">
+                                <div><span className="text-slate-400">Eligible:</span> <span className="font-bold text-slate-700">{item.eligible}</span></div>
+                                <div><span className="text-slate-400">Actual:</span> <span className="font-bold text-slate-700">{item.actual}</span></div>
+                                <div><span className="text-slate-400">Gap:</span> <span className="font-black text-rose-600">{item.gap}</span></div>
+                                <div><span className="text-slate-400">โอกาส:</span> <span className="font-black text-emerald-600">{item.potential}</span></div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </Card>
         </div>
