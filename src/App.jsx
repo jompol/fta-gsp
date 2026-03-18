@@ -2091,6 +2091,83 @@ export default function App() {
                 </div>
             </div>
 
+            {/* Governance Readiness Overview KPIs (TOR 3.5.9) */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                    { title: 'Governance Readiness', val: '82%', sub: 'ประเมินความพร้อมการกำกับดูแล', icon: ShieldCheck, color: 'text-blue-600', bg: 'bg-blue-50', pct: 82 },
+                    { title: 'Data Quality Score', val: '95%', sub: 'คะแนนคุณภาพข้อมูลรวม', icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50', pct: 95 },
+                    { title: 'Security Assessment', val: '88%', sub: 'ระดับความปลอดภัยข้อมูล', icon: Lock, color: 'text-indigo-600', bg: 'bg-indigo-50', pct: 88 },
+                    { title: 'Risk Assessment', val: 'ต่ำ', sub: 'ความเสี่ยงภาพรวม: 2 จาก 5', icon: AlertTriangle, color: 'text-amber-600', bg: 'bg-amber-50', pct: 40 },
+                ].map((kpi, i) => (
+                    <Card key={i} className="p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className={`p-2 rounded-xl ${kpi.bg} ${kpi.color}`}><kpi.icon size={16} /></div>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase">{kpi.title}</p>
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-900">{kpi.val}</h3>
+                        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mt-2">
+                            <div className={`h-full rounded-full ${kpi.pct >= 90 ? 'bg-emerald-500' : kpi.pct >= 70 ? 'bg-blue-500' : 'bg-amber-500'}`} style={{ width: `${kpi.pct}%` }}></div>
+                        </div>
+                        <p className="text-[10px] text-slate-500 mt-1.5">{kpi.sub}</p>
+                    </Card>
+                ))}
+            </div>
+
+            {/* Data Classification & Category (TOR 3.5.2, 3.5.3) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Shield size={18} className="text-indigo-500" />
+                        <Tooltip text="จัดระดับชั้นข้อมูลตามมาตรฐาน สพร. (TOR 3.5.3)" position="right"><span className="cursor-help">Data Classification Level</span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { level: 'Open (เปิดเผย)', count: 8, desc: 'ข้อมูลสาธารณะ เปิดเผยได้ทั่วไป', color: 'bg-emerald-500', pct: 32 },
+                            { level: 'Public (สาธารณะ)', count: 6, desc: 'เผยแพร่ภายในองค์กร/หน่วยงานรัฐ', color: 'bg-blue-500', pct: 24 },
+                            { level: 'Internal (ใช้ภายใน)', count: 5, desc: 'เผยแพร่เมื่อได้รับอนุญาต', color: 'bg-amber-500', pct: 20 },
+                            { level: 'Confidential (ลับ)', count: 4, desc: 'ข้อมูลส่วนบุคคล / PDPA', color: 'bg-rose-500', pct: 16 },
+                            { level: 'Secret (ลับมาก)', count: 2, desc: 'ข้อมูลความมั่นคงทางการค้า', color: 'bg-slate-800', pct: 8 },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-3">
+                                <div className={`w-3 h-3 rounded-full ${item.color} shrink-0`}></div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[11px] font-bold text-slate-700">{item.level}</span>
+                                        <span className="text-[11px] font-black text-slate-900">{item.count} ชุดข้อมูล</span>
+                                    </div>
+                                    <p className="text-[10px] text-slate-400">{item.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Layers size={18} className="text-purple-500" />
+                        <Tooltip text="จัดหมวดหมู่ข้อมูล 5 หมวด ตามแนวทาง สพร. (TOR 3.5.2)" position="right"><span className="cursor-help">Data Category (หมวดหมู่ข้อมูล)</span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { cat: 'ข้อมูลสาธารณะ', desc: 'สถิติ FTA/GSP, Eligible List, TRS Schedule', count: 12, color: 'border-emerald-500 bg-emerald-50' },
+                            { cat: 'ข้อมูลส่วนบุคคล', desc: 'ข้อมูลผู้ประกอบการ, PDPA Consent', count: 3, color: 'border-rose-500 bg-rose-50' },
+                            { cat: 'ข้อมูลลับทางราชการ', desc: 'ท่าทีเจรจา FTA, กลยุทธ์การค้า', count: 2, color: 'border-slate-700 bg-slate-50' },
+                            { cat: 'ข้อมูลใช้ภายใน', desc: 'Audit Log, ข้อมูลเจ้าหน้าที่, Workflow', count: 5, color: 'border-blue-500 bg-blue-50' },
+                            { cat: 'ข้อมูลความมั่นคง', desc: 'Blacklist, Watchlist, Fraud Detection', count: 3, color: 'border-amber-500 bg-amber-50' },
+                        ].map((item, i) => (
+                            <div key={i} className={`p-3 border-l-4 rounded-r-xl ${item.color}`}>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-xs font-bold text-slate-800">{item.cat}</span>
+                                    <Badge variant="default">{item.count} ชุดข้อมูล</Badge>
+                                </div>
+                                <p className="text-[10px] text-slate-500 mt-1">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
+            {/* Data Catalog + Quality (existing, enhanced) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card className="lg:col-span-2">
                     <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
@@ -2107,6 +2184,8 @@ export default function App() {
                                 { name: 'TB_HS_CODE_MASTER', desc: 'ข้อมูลรหัสพิกัดศุลกากร 2-11 หลัก ปี 2012-2024', owner: 'ศูนย์ไอที', level: 'Public', rows: '45K' },
                                 { name: 'TB_CERT_ORIGIN_ISSUE', desc: 'ข้อมูลประวัติการออกหนังสือรับรองถิ่นกำเนิดสินค้า', owner: 'กองบริหาร', level: 'Internal', rows: '8.5M' },
                                 { name: 'TB_COMPANY_PDPA_DATA', desc: 'ข้อมูลทะเบียนผู้ประกอบการและข้อมูลส่วนบุคคล', owner: 'ศูนย์ไอที', level: 'Confidential', rows: '120K' },
+                                { name: 'TB_ELIGIBLE_LIST', desc: 'รายการสินค้าที่ได้รับสิทธิ FTA/GSP พร้อมอัตราภาษี', owner: 'กองสิทธิฯ', level: 'Public', rows: '85K' },
+                                { name: 'TB_TRS_SCHEDULE', desc: 'ตารางการลดภาษี (Tariff Reduction Schedule) รายความตกลง', owner: 'กองสิทธิฯ', level: 'Public', rows: '320K' },
                             ].map((cat, i) => (
                                 <div key={i} className="p-4 hover:bg-slate-50 flex items-center justify-between group cursor-pointer">
                                     <div className="flex items-center gap-4">
@@ -2130,27 +2209,31 @@ export default function App() {
                 </Card>
 
                 <div className="space-y-6">
-                    <Card className="p-6">
-                        <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><ShieldCheck size={18} className="text-blue-500" /> <Tooltip text="ประเมินคุณภาพข้อมูล — ความถูกต้อง ความสมบูรณ์ และความทันสมัย" position="bottom"><span className="cursor-help">Data Quality Assessment</span></Tooltip></h3>
-                        <div className="space-y-4">
+                    {/* Data Quality Assessment (TOR 3.5.9.2) */}
+                    <Card className="p-5">
+                        <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><ShieldCheck size={18} className="text-blue-500" /> <Tooltip text="ประเมินคุณภาพข้อมูล — ความถูกต้อง ความสมบูรณ์ และความทันสมัย (TOR 3.5.9.2)" position="bottom"><span className="cursor-help">Data Quality Assessment</span></Tooltip></h3>
+                        <div className="space-y-3">
                             {[
                                 { label: 'ความถูกต้อง (Accuracy)', pct: 98 },
                                 { label: 'ความสมบูรณ์ (Completeness)', pct: 95 },
                                 { label: 'ความทันสมัย (Timeliness)', pct: 92 },
+                                { label: 'ความสอดคล้อง (Consistency)', pct: 89 },
+                                { label: 'ความพร้อมใช้ (Availability)', pct: 99 },
                             ].map((q, i) => (
                                 <div key={i} className="space-y-1">
                                     <div className="flex justify-between text-[11px] font-bold">
                                         <span className="text-slate-600">{q.label}</span>
-                                        <span className="text-emerald-600">{q.pct}%</span>
+                                        <span className={q.pct >= 95 ? 'text-emerald-600' : q.pct >= 90 ? 'text-blue-600' : 'text-amber-600'}>{q.pct}%</span>
                                     </div>
                                     <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                                        <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${q.pct}%` }}></div>
+                                        <div className={`h-full rounded-full ${q.pct >= 95 ? 'bg-emerald-500' : q.pct >= 90 ? 'bg-blue-500' : 'bg-amber-500'}`} style={{ width: `${q.pct}%` }}></div>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </Card>
 
+                    {/* Metadata Standard */}
                     <Card className="p-5 bg-blue-900 text-white shadow-xl shadow-blue-200">
                         <h4 className="font-bold text-blue-200 flex items-center gap-2 mb-2"><FileSpreadsheet size={16} /> Metadata Standard</h4>
                         <p className="text-xs text-blue-100 leading-relaxed mb-4">จัดทำคำอธิบายชุดข้อมูลเชิงเทคนิค (Technical Metadata) และเชิงธุรกิจ (Business Metadata) อ้างอิงมาตรฐาน สพร.</p>
@@ -2161,6 +2244,165 @@ export default function App() {
                         </div>
                     </Card>
                 </div>
+            </div>
+
+            {/* RASCI Matrix + Open Data API + Data Flow (TOR 3.5.7, 3.5.8, 3.5.1) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* RASCI Matrix (TOR 3.5.7) */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Users size={18} className="text-blue-500" />
+                        <Tooltip text="แบบจำลอง RASCI กำหนดบทบาทหน้าที่ผู้รับผิดชอบข้อมูล (TOR 3.5.7)" position="right"><span className="cursor-help">RASCI Matrix</span></Tooltip>
+                    </h3>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-[10px]">
+                            <thead>
+                                <tr className="bg-slate-50 text-slate-500 font-bold uppercase">
+                                    <th className="p-2 text-left">กระบวนงาน</th>
+                                    <th className="p-2 text-center">กองสิทธิฯ</th>
+                                    <th className="p-2 text-center">ศูนย์ IT</th>
+                                    <th className="p-2 text-center">ผู้บริหาร</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {[
+                                    { process: 'นำเข้าข้อมูล', r1: 'R', r2: 'S', r3: 'I' },
+                                    { process: 'ตรวจสอบคุณภาพ', r1: 'A', r2: 'R', r3: 'I' },
+                                    { process: 'จัดชั้นความลับ', r1: 'C', r2: 'R', r3: 'A' },
+                                    { process: 'เผยแพร่ข้อมูล', r1: 'R', r2: 'S', r3: 'A' },
+                                    { process: 'บำรุงรักษา DW', r1: 'I', r2: 'R', r3: 'C' },
+                                    { process: 'จัดทำ Metadata', r1: 'R', r2: 'A', r3: 'I' },
+                                ].map((row, i) => (
+                                    <tr key={i} className="hover:bg-slate-50">
+                                        <td className="p-2 font-bold text-slate-700">{row.process}</td>
+                                        {[row.r1, row.r2, row.r3].map((v, j) => (
+                                            <td key={j} className="p-2 text-center">
+                                                <span className={`inline-flex w-6 h-6 rounded-full items-center justify-center font-black text-[9px] ${v === 'R' ? 'bg-blue-100 text-blue-700' : v === 'A' ? 'bg-emerald-100 text-emerald-700' : v === 'S' ? 'bg-amber-100 text-amber-700' : v === 'C' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-400'}`}>{v}</span>
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        {[{ l: 'R', c: 'bg-blue-100 text-blue-700', n: 'Responsible' },{ l: 'A', c: 'bg-emerald-100 text-emerald-700', n: 'Accountable' },{ l: 'S', c: 'bg-amber-100 text-amber-700', n: 'Support' },{ l: 'C', c: 'bg-purple-100 text-purple-700', n: 'Consulted' },{ l: 'I', c: 'bg-slate-100 text-slate-400', n: 'Informed' }].map(item => (
+                            <span key={item.l} className={`inline-flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded ${item.c}`}>{item.l} = {item.n}</span>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* Open Data API (TOR 3.5.8) */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Globe size={18} className="text-emerald-500" />
+                        <Tooltip text="API สำหรับชุดข้อมูลสาธารณะ (Open Data) เพื่อเชื่อมต่อกับระบบภายนอก (TOR 3.5.8)" position="right"><span className="cursor-help">Open Data API</span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { method: 'GET', path: '/api/v1/utilization', desc: 'สถิติการใช้สิทธิ FTA/GSP', status: 'Active' },
+                            { method: 'GET', path: '/api/v1/hs-codes', desc: 'รายการพิกัดศุลกากร', status: 'Active' },
+                            { method: 'GET', path: '/api/v1/eligible-list', desc: 'Eligible List รายความตกลง', status: 'Active' },
+                            { method: 'GET', path: '/api/v1/trs-schedule', desc: 'ตาราง TRS ลดภาษี', status: 'Active' },
+                            { method: 'GET', path: '/api/v1/co-statistics', desc: 'สถิติการออก CO', status: 'Beta' },
+                        ].map((api, i) => (
+                            <div key={i} className="p-3 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-[9px] font-black text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">{api.method}</span>
+                                    <code className="text-[11px] font-mono font-bold text-slate-700">{api.path}</code>
+                                    <Badge variant={api.status === 'Active' ? 'success' : 'purple'}>{api.status}</Badge>
+                                </div>
+                                <p className="text-[10px] text-slate-400">{api.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                {/* Data Flow Overview (TOR 3.5.1) */}
+                <Card className="p-6">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Activity size={18} className="text-indigo-500" />
+                        <Tooltip text="แผนภาพการไหลของข้อมูล แสดงการเชื่อมโยงจากต้นทางถึงปลายทาง (TOR 3.5.1)" position="left"><span className="cursor-help">Data Flow Overview</span></Tooltip>
+                    </h3>
+                    <div className="space-y-2">
+                        {[
+                            { from: 'SMART-I / ROVERS', to: 'ETL Pipeline', arrow: true },
+                            { from: 'ETL Pipeline', to: 'Data Warehouse', arrow: true },
+                            { from: 'Data Warehouse', to: 'Analytics Engine', arrow: true },
+                            { from: 'Analytics Engine', to: 'Dashboard / Reports', arrow: true },
+                            { from: 'Dashboard / Reports', to: 'ผู้ใช้งาน / Open API', arrow: false },
+                        ].map((step, i) => (
+                            <div key={i}>
+                                <div className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-lg">
+                                    <div className="w-6 h-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-[10px] font-black shrink-0">{i + 1}</div>
+                                    <div className="flex items-center gap-2 flex-1">
+                                        <span className="text-[11px] font-bold text-slate-700">{step.from}</span>
+                                        <ChevronRight size={14} className="text-indigo-400 shrink-0" />
+                                        <span className="text-[11px] font-bold text-indigo-600">{step.to}</span>
+                                    </div>
+                                </div>
+                                {step.arrow && <div className="flex justify-center"><div className="w-0.5 h-2 bg-slate-200"></div></div>}
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
+            {/* Security & Risk Detail (TOR 3.5.9.3, 3.5.9.4) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="p-6 border-t-4 border-t-indigo-500">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <Lock size={18} className="text-indigo-500" />
+                        <Tooltip text="ประเมินความมั่นคงปลอดภัยข้อมูลตามมาตรฐาน (TOR 3.5.9.3, 3.6)" position="right"><span className="cursor-help">Data Security Assessment</span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { item: 'Access Control (การควบคุมการเข้าถึง)', score: 'ผ่าน', detail: 'AD Authentication + RBAC 3 ระดับ', pass: true },
+                            { item: 'Encryption (การเข้ารหัส)', score: 'ผ่าน', detail: 'SSL/TLS, AES-256 at rest', pass: true },
+                            { item: 'PDPA Compliance', score: 'ผ่าน', detail: 'Consent Management + Data Masking', pass: true },
+                            { item: 'Audit Logging', score: 'ผ่าน', detail: 'บันทึกทุกการเข้าถึง/แก้ไข (Section 2.8)', pass: true },
+                            { item: 'Vulnerability Scan', score: 'เตือน', detail: '2 รายการ Medium severity ต้องแพทช์', pass: false },
+                            { item: 'Backup & Recovery', score: 'ผ่าน', detail: 'Daily backup + tested DR plan', pass: true },
+                        ].map((check, i) => (
+                            <div key={i} className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50">
+                                <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${check.pass ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>
+                                    {check.pass ? <CheckCircle2 size={14} /> : <AlertTriangle size={12} />}
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-center">
+                                        <p className="text-xs font-bold text-slate-700">{check.item}</p>
+                                        <Badge variant={check.pass ? 'success' : 'warning'}>{check.score}</Badge>
+                                    </div>
+                                    <p className="text-[10px] text-slate-400 mt-0.5">{check.detail}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                <Card className="p-6 border-t-4 border-t-amber-500">
+                    <h3 className="font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <AlertTriangle size={18} className="text-amber-500" />
+                        <Tooltip text="ประเมินความเสี่ยงข้อมูล ระบุปัจจัยเสี่ยงและแนวทางลดความเสี่ยง (TOR 3.5.9.4)" position="right"><span className="cursor-help">Data Risk Assessment</span></Tooltip>
+                    </h3>
+                    <div className="space-y-3">
+                        {[
+                            { risk: 'ข้อมูลรั่วไหลจากการเข้าถึงไม่ถูกต้อง', level: 'ต่ำ', color: 'bg-emerald-100 text-emerald-700 border-emerald-200', mitigation: 'RBAC + AD Authentication + Access Log' },
+                            { risk: 'ข้อมูลสูญหายจากระบบล่ม', level: 'ต่ำ', color: 'bg-emerald-100 text-emerald-700 border-emerald-200', mitigation: 'Daily Backup + Cloud DR + 3-year warranty' },
+                            { risk: 'ข้อมูลถูกแก้ไขโดยไม่ได้รับอนุญาต', level: 'ปานกลาง', color: 'bg-amber-100 text-amber-700 border-amber-200', mitigation: 'Audit Trail + Data Correction Log (Section 3.2.2)' },
+                            { risk: 'การโจมตีทางไซเบอร์ (OWASP Top 10)', level: 'ปานกลาง', color: 'bg-amber-100 text-amber-700 border-amber-200', mitigation: 'WAF + Penetration Test + Vulnerability Scan' },
+                            { risk: 'การละเมิด PDPA จากข้อมูลส่วนบุคคล', level: 'ต่ำ', color: 'bg-emerald-100 text-emerald-700 border-emerald-200', mitigation: 'Data Masking + Consent + NDA (Section 1.9)' },
+                        ].map((item, i) => (
+                            <div key={i} className="p-3 border border-slate-100 rounded-xl hover:bg-slate-50">
+                                <div className="flex justify-between items-start mb-1.5">
+                                    <p className="text-xs font-bold text-slate-700 flex-1">{item.risk}</p>
+                                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${item.color}`}>{item.level}</span>
+                                </div>
+                                <p className="text-[10px] text-slate-400"><span className="font-bold text-slate-500">แนวทางลดเสี่ยง:</span> {item.mitigation}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
             </div>
         </div>
     );
