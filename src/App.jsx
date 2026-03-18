@@ -70,25 +70,80 @@ import dftLogo from './assets/logo-dft.png';
 // --- UI Components ---
 
 const Tooltip = ({ children, text, position = "top" }) => {
-    const positionStyles = {
-        top: { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: 8 },
-        bottom: { top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 8 },
-        left: { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: 8 },
-        right: { left: '100%', top: '50%', transform: 'translateY(-50%)', marginLeft: 8 },
+    const [show, setShow] = useState(false);
+    const [coords, setCoords] = useState({ top: 0, left: 0 });
+    const ref = React.useRef(null);
+
+    const handleMouseEnter = () => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        let top, left;
+        switch (position) {
+            case 'bottom':
+                top = rect.bottom + 8;
+                left = rect.left + rect.width / 2;
+                break;
+            case 'left':
+                top = rect.top + rect.height / 2;
+                left = rect.left - 8;
+                break;
+            case 'right':
+                top = rect.top + rect.height / 2;
+                left = rect.right + 8;
+                break;
+            default: // top
+                top = rect.top - 8;
+                left = rect.left + rect.width / 2;
+        }
+        setCoords({ top, left });
+        setShow(true);
     };
-    const arrowStyles = {
-        top: { top: '100%', left: '50%', transform: 'translateX(-50%)', borderWidth: 5, borderColor: '#1e293b transparent transparent transparent' },
-        bottom: { bottom: '100%', left: '50%', transform: 'translateX(-50%)', borderWidth: 5, borderColor: 'transparent transparent #1e293b transparent' },
-        left: { left: '100%', top: '50%', transform: 'translateY(-50%)', borderWidth: 5, borderColor: 'transparent transparent transparent #1e293b' },
-        right: { right: '100%', top: '50%', transform: 'translateY(-50%)', borderWidth: 5, borderColor: 'transparent #1e293b transparent transparent' },
+
+    const transformMap = {
+        top: 'translate(-50%, -100%)',
+        bottom: 'translate(-50%, 0)',
+        left: 'translate(-100%, -50%)',
+        right: 'translate(0, -50%)',
     };
+
+    const arrowMap = {
+        top: { bottom: -9, left: '50%', transform: 'translateX(-50%)', borderColor: '#1e293b transparent transparent transparent' },
+        bottom: { top: -9, left: '50%', transform: 'translateX(-50%)', borderColor: 'transparent transparent #1e293b transparent' },
+        left: { right: -9, top: '50%', transform: 'translateY(-50%)', borderColor: 'transparent transparent transparent #1e293b' },
+        right: { left: -9, top: '50%', transform: 'translateY(-50%)', borderColor: 'transparent #1e293b transparent transparent' },
+    };
+
     return (
-        <div className="tooltip-wrap" style={{ position: 'relative', display: 'inline-flex' }}>
+        <div
+            ref={ref}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={() => setShow(false)}
+            style={{ position: 'relative', display: 'inline-flex' }}
+        >
             {children}
-            <div className="tooltip-box" style={{ position: 'absolute', ...positionStyles[position], padding: '6px 12px', backgroundColor: '#1e293b', color: '#fff', fontSize: 12, borderRadius: 8, zIndex: 50, whiteSpace: 'nowrap', pointerEvents: 'none', boxShadow: '0 10px 25px rgba(0,0,0,0.2)', maxWidth: 280 }}>
-                {text}
-                <div style={{ position: 'absolute', ...arrowStyles[position], width: 0, height: 0, borderStyle: 'solid' }}></div>
-            </div>
+            {show && (
+                <div style={{
+                    position: 'fixed',
+                    top: coords.top,
+                    left: coords.left,
+                    transform: transformMap[position],
+                    padding: '8px 14px',
+                    backgroundColor: '#1e293b',
+                    color: '#fff',
+                    fontSize: 12,
+                    lineHeight: 1.5,
+                    borderRadius: 8,
+                    zIndex: 9999,
+                    whiteSpace: 'normal',
+                    pointerEvents: 'none',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.25)',
+                    maxWidth: 280,
+                    width: 'max-content',
+                }}>
+                    {text}
+                    <div style={{ position: 'absolute', ...arrowMap[position], width: 0, height: 0, borderStyle: 'solid', borderWidth: 5 }}></div>
+                </div>
+            )}
         </div>
     );
 };

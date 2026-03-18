@@ -16,19 +16,6 @@
   animation: fade-in 0.5s ease-out, slide-in-from-bottom-4 0.5s ease-out;
 }
 
-/* Tooltip hover behavior */
-.tooltip-wrap .tooltip-box {
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0.95);
-  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
-}
-.tooltip-wrap:hover .tooltip-box {
-  opacity: 1;
-  visibility: visible;
-  transform: scale(1);
-}
-
 /* Font import moved to top */
 body {
   font-family: 'Inter', sans-serif;
