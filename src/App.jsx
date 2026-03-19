@@ -347,7 +347,7 @@ export default function App() {
                     department: 'Department of Foreign Trade',
                     id: 'DFT-' + Math.floor(Math.random() * 10000)
                 });
-                setShowPDPAModal(true);
+                setIsLoggedIn(true);
                 setLoginProcess(null);
             }, 800);
         }, 1500);
@@ -4160,7 +4160,7 @@ export default function App() {
                 {/* Public Access Button */}
                 <div className="mt-4 w-full max-w-sm">
                     <button
-                        onClick={() => setIsPublicView(true)}
+                        onClick={() => setShowPDPAModal(true)}
                         className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600 text-sm font-bold transition-all bg-white/70"
                     >
                         <Globe size={16} /> ดูข้อมูลสาธารณะ (ไม่ต้องเข้าสู่ระบบ)
@@ -4247,7 +4247,7 @@ export default function App() {
                                 </label>
                                 <button
                                     disabled={!pdpaChecked}
-                                    onClick={() => { setIsLoggedIn(true); setShowPDPAModal(false); setPdpaChecked(false); }}
+                                    onClick={() => { setIsPublicView(true); setShowPDPAModal(false); setPdpaChecked(false); }}
                                     className={`w-full py-3.5 rounded-2xl font-extrabold text-sm transition-all flex items-center justify-center gap-2 ${pdpaChecked ? 'bg-slate-900 text-white hover:bg-slate-700 shadow-lg' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
                                 >
                                     <ShieldCheck size={17} /> ยืนยันและเข้าใช้งานระบบ
