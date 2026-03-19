@@ -4184,12 +4184,80 @@ export default function App() {
         </div>
     );
 
-    // If not logged in, render public view or sign-in view
+    // If not logged in, render public view or sign-in view (+ PDPA modal on top if needed)
     if (!isLoggedIn && isPublicView) {
         return <PublicDashboardView />;
     }
     if (!isLoggedIn) {
-        return <SignInView />;
+        return (
+            <>
+                <SignInView />
+                {showPDPAModal && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+                        <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"></div>
+                        <div
+                            className="relative w-full max-w-lg mx-4 rounded-3xl shadow-2xl overflow-hidden bg-white"
+                            style={{ animation: 'fade-in 0.2s ease-out, slide-in-from-bottom-4 0.3s ease-out' }}
+                        >
+                            <div className="bg-slate-900 px-7 pt-7 pb-5">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center shrink-0">
+                                        <ShieldCheck size={24} className="text-blue-300" />
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            <h2 className="text-lg font-extrabold text-white">นโยบายคุ้มครองข้อมูลส่วนบุคคล</h2>
+                                            <TorRef section="1.9, 2.14" />
+                                        </div>
+                                        <p className="text-slate-400 text-xs mt-0.5">Personal Data Protection Act (PDPA) — พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="px-7 py-6 space-y-4 max-h-[50vh] overflow-y-auto content-scroll">
+                                <p className="text-sm text-slate-600 leading-relaxed">
+                                    กรมการค้าต่างประเทศ ในฐานะผู้ควบคุมข้อมูลส่วนบุคคล ขอแจ้งให้ทราบถึงการเก็บรวบรวมและการใช้ข้อมูลส่วนบุคคลของท่านในระบบ FTA-GSP Intelligence Portal ดังต่อไปนี้
+                                </p>
+                                <div className="space-y-3">
+                                    {[
+                                        { num: '1', title: 'วัตถุประสงค์การเก็บข้อมูล', desc: 'เพื่อใช้ในการยืนยันตัวตน บริหารจัดการสิทธิ์การเข้าถึงระบบ และบันทึกประวัติการใช้งานเพื่อความมั่นคงปลอดภัยของระบบสารสนเทศ' },
+                                        { num: '2', title: 'ประเภทข้อมูลที่เก็บรวบรวม', desc: 'ชื่อ-นามสกุล, รหัสประจำตัวเจ้าหน้าที่, บันทึก log การเข้าถึงระบบ, ที่อยู่ IP, และข้อมูลที่กรอกในแบบคำขอ CO' },
+                                        { num: '3', title: 'สิทธิ์ของเจ้าของข้อมูล', desc: 'ท่านมีสิทธิ์ขอเข้าถึง แก้ไข ลบ หรือโอนข้อมูล รวมถึงสิทธิ์คัดค้านการประมวลผล โดยติดต่อ: pdpa@dft.go.th' },
+                                    ].map(item => (
+                                        <div key={item.num} className="flex gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                            <div className="w-6 h-6 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">{item.num}</div>
+                                            <div>
+                                                <p className="text-xs font-bold text-slate-800 mb-0.5">{item.title}</p>
+                                                <p className="text-[11px] text-slate-500 leading-relaxed">{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="px-7 py-5 bg-slate-50 border-t border-slate-100 space-y-4">
+                                <label className="flex items-start gap-3 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={pdpaChecked}
+                                        onChange={e => setPdpaChecked(e.target.checked)}
+                                        className="mt-0.5 w-4 h-4 rounded border-2 border-slate-300 accent-blue-600 shrink-0"
+                                    />
+                                    <span className="text-xs text-slate-600 leading-relaxed font-medium">
+                                        ข้าพเจ้าได้อ่านและเข้าใจนโยบายคุ้มครองข้อมูลส่วนบุคคลข้างต้น และยินยอมให้กรมการค้าต่างประเทศเก็บรวบรวมและใช้ข้อมูลส่วนบุคคลของข้าพเจ้าตามวัตถุประสงค์ที่ระบุไว้
+                                    </span>
+                                </label>
+                                <button
+                                    disabled={!pdpaChecked}
+                                    onClick={() => { setIsLoggedIn(true); setShowPDPAModal(false); setPdpaChecked(false); }}
+                                    className={`w-full py-3.5 rounded-2xl font-extrabold text-sm transition-all flex items-center justify-center gap-2 ${pdpaChecked ? 'bg-slate-900 text-white hover:bg-slate-700 shadow-lg' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+                                >
+                                    <ShieldCheck size={17} /> ยืนยันและเข้าใช้งานระบบ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </>
+        );
     }
 
     return (
@@ -4642,88 +4710,6 @@ export default function App() {
             </main>
         </div>
 
-        {/* PDPA Consent Modal — แสดงครั้งแรกหลัง login สำเร็จ */}
-        {showPDPAModal && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center">
-                <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"></div>
-                <div
-                    className="relative w-full max-w-lg mx-4 rounded-3xl shadow-2xl overflow-hidden bg-white"
-                    style={{ animation: 'fade-in 0.2s ease-out, slide-in-from-bottom-4 0.3s ease-out' }}
-                >
-                    {/* Header */}
-                    <div className="bg-slate-900 px-7 pt-7 pb-5">
-                        <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center shrink-0">
-                                <ShieldCheck size={24} className="text-blue-300" />
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <h2 className="text-lg font-extrabold text-white">นโยบายคุ้มครองข้อมูลส่วนบุคคล</h2>
-                                    <TorRef section="1.9, 2.14" />
-                                </div>
-                                <p className="text-slate-400 text-xs mt-0.5">Personal Data Protection Act (PDPA) — พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Body */}
-                    <div className="px-7 py-6 space-y-4 max-h-[50vh] overflow-y-auto content-scroll">
-                        <p className="text-sm text-slate-600 leading-relaxed">
-                            กรมการค้าต่างประเทศ ในฐานะผู้ควบคุมข้อมูลส่วนบุคคล ขอแจ้งให้ทราบถึงการเก็บรวบรวมและการใช้ข้อมูลส่วนบุคคลของท่านในระบบ FTA-GSP Intelligence Portal ดังต่อไปนี้
-                        </p>
-                        <div className="space-y-3">
-                            {[
-                                {
-                                    num: '1', title: 'วัตถุประสงค์การเก็บข้อมูล',
-                                    desc: 'เพื่อใช้ในการยืนยันตัวตน บริหารจัดการสิทธิ์การเข้าถึงระบบ และบันทึกประวัติการใช้งานเพื่อความมั่นคงปลอดภัยของระบบสารสนเทศ'
-                                },
-                                {
-                                    num: '2', title: 'ประเภทข้อมูลที่เก็บรวบรวม',
-                                    desc: 'ชื่อ-นามสกุล, รหัสประจำตัวเจ้าหน้าที่, บันทึก log การเข้าถึงระบบ, ที่อยู่ IP, และข้อมูลที่กรอกในแบบคำขอ CO'
-                                },
-                                {
-                                    num: '3', title: 'สิทธิ์ของเจ้าของข้อมูล',
-                                    desc: 'ท่านมีสิทธิ์ขอเข้าถึง แก้ไข ลบ หรือโอนข้อมูล รวมถึงสิทธิ์คัดค้านการประมวลผล โดยติดต่อผู้ควบคุมข้อมูล: pdpa@dft.go.th'
-                                },
-                            ].map(item => (
-                                <div key={item.num} className="flex gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <div className="w-6 h-6 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">{item.num}</div>
-                                    <div>
-                                        <p className="text-xs font-bold text-slate-800 mb-0.5">{item.title}</p>
-                                        <p className="text-[11px] text-slate-500 leading-relaxed">{item.desc}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Footer */}
-                    <div className="px-7 py-5 bg-slate-50 border-t border-slate-100 space-y-4">
-                        <label className="flex items-start gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={pdpaChecked}
-                                onChange={e => setPdpaChecked(e.target.checked)}
-                                className="mt-0.5 w-4 h-4 rounded border-2 border-slate-300 accent-blue-600 shrink-0"
-                            />
-                            <span className="text-xs text-slate-600 leading-relaxed font-medium">
-                                ข้าพเจ้าได้อ่านและเข้าใจนโยบายคุ้มครองข้อมูลส่วนบุคคลข้างต้น และยินยอมให้กรมการค้าต่างประเทศ เก็บรวบรวมและใช้ข้อมูลส่วนบุคคลของข้าพเจ้าตามวัตถุประสงค์ที่ระบุไว้
-                            </span>
-                        </label>
-                        <button
-                            disabled={!pdpaChecked}
-                            onClick={() => { setIsLoggedIn(true); setShowPDPAModal(false); setPdpaChecked(false); }}
-                            className={`w-full py-3.5 rounded-2xl font-extrabold text-sm transition-all flex items-center justify-center gap-2 ${pdpaChecked
-                                ? 'bg-slate-900 text-white hover:bg-slate-700 shadow-lg'
-                                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                            }`}
-                        >
-                            <ShieldCheck size={17} /> ยืนยันและเข้าใช้งานระบบ
-                        </button>
-                    </div>
-                </div>
-            </div>
-        )}
         </>
     );
 }
