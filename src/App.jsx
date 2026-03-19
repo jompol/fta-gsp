@@ -255,6 +255,20 @@ export default function App() {
     const [formStep, setFormStep] = useState(1);
     const [reportPreview, setReportPreview] = useState(null);
     const [selectedApp, setSelectedApp] = useState(null);
+    const [exportModal, setExportModal] = useState(null); // null or { title, type }
+    const [exportFormat, setExportFormat] = useState('pdf');
+    const [exporting, setExporting] = useState(false);
+    const [exportDone, setExportDone] = useState(false);
+
+    const handleExport = () => {
+        setExporting(true);
+        setExportDone(false);
+        setTimeout(() => {
+            setExporting(false);
+            setExportDone(true);
+            setTimeout(() => setExportDone(false), 3000);
+        }, 2000);
+    };
 
     // --- Dashboard Multi-Criteria Search State ---
     const [dashSearch, setDashSearch] = useState({
@@ -3441,6 +3455,21 @@ export default function App() {
         );
     };
 
+    const reportsList = [
+        { id: 'annual', title: 'สรุปภาพรวม FTA & GSP รายปี', period: 'ปีงบประมาณ 2567', type: 'Annual Report', tor: '3.3.2(1)', icon: <PieChart size={20} className="text-indigo-500" />, size: '2.4 MB', pages: 16, updated: '15 มี.ค. 2567' },
+        { id: null, title: 'กลุ่มสินค้าศักยภาพ Top 20', period: 'ไตรมาส 1/2567', type: 'Analysis Report', tor: '3.3.2(2)', icon: <BarChart3 size={20} className="text-emerald-500" />, size: '1.8 MB', pages: 12, updated: '10 มี.ค. 2567' },
+        { id: null, title: 'รายงานสถานการณ์รายความตกลง', period: 'อัปเดตล่าสุด: เม.ย. 67', type: 'Agreement Focus', tor: '3.3.2(1)', icon: <Globe size={20} className="text-blue-500" />, size: '3.1 MB', pages: 24, updated: '18 มี.ค. 2567' },
+        { id: null, title: 'สถิติการออกหนังสือรับรองถิ่นกำเนิด', period: 'สะสมตั้งแต่ต้นปี (YTD)', type: 'Operations Log', tor: '3.3.1.5', icon: <FileText size={20} className="text-amber-500" />, size: '1.2 MB', pages: 8, updated: '19 มี.ค. 2567' },
+        { id: null, title: 'รายงานการส่งออกรายประเทศสมาชิก', period: 'เปรียบเทียบ 3 ปี ย้อนหลัง', type: 'Comparative', tor: '3.2.1', icon: <Activity size={20} className="text-rose-500" />, size: '4.5 MB', pages: 32, updated: '12 มี.ค. 2567' },
+    ];
+
+    const exportFormats = [
+        { id: 'pdf', label: 'PDF', desc: 'เอกสารแบบอ่านอย่างเดียว พร้อมพิมพ์', ext: '.pdf', icon: FileText, color: 'text-rose-600', bg: 'bg-rose-50', border: 'border-rose-200' },
+        { id: 'docx', label: 'DOCX', desc: 'เอกสาร Word แก้ไขเนื้อหาได้', ext: '.docx', icon: FileText, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
+        { id: 'xlsx', label: 'XLSX', desc: 'ตาราง Excel วิเคราะห์ข้อมูลต่อได้', ext: '.xlsx', icon: FileSpreadsheet, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
+        { id: 'csv', label: 'CSV', desc: 'ข้อมูลดิบ นำเข้าระบบอื่นได้', ext: '.csv', icon: Database, color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
+    ];
+
     const ReportsView = () => {
         if (reportPreview === 'annual') return <AnnualReportPreview />;
         return (
@@ -3453,13 +3482,7 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                    { id: 'annual', title: 'สรุปภาพรวม FTA & GSP รายปี', period: 'ปีงบประมาณ 2567', type: 'Annual Report', tor: '3.3.2(1)', icon: <PieChart size={20} className="text-indigo-500" /> },
-                    { id: null, title: 'กลุ่มสินค้าศักยภาพ Top 20', period: 'ไตรมาส 1/2567', type: 'Analysis Report', tor: '3.3.2(2)', icon: <BarChart3 size={20} className="text-emerald-500" /> },
-                    { id: null, title: 'รายงานสถานการณ์รายความตกลง', period: 'อัปเดตล่าสุด: เม.ย. 67', type: 'Agreement Focus', tor: '3.3.2(1)', icon: <Globe size={20} className="text-blue-500" /> },
-                    { id: null, title: 'สถิติการออกหนังสือรับรองถิ่นกำเนิด', period: 'สะสมตั้งแต่ต้นปี (YTD)', type: 'Operations Log', tor: '3.3.1.5', icon: <FileText size={20} className="text-amber-500" /> },
-                    { id: null, title: 'รายงานการส่งออกรายประเทศสมาชิก', period: 'เปรียบเทียบ 3 ปี ย้อนหลัง', type: 'Comparative', tor: '3.2.1', icon: <Activity size={20} className="text-rose-500" /> },
-                ].map((rep, i) => (
+                {reportsList.map((rep, i) => (
                     <Card key={i} className="hover:shadow-lg transition-all cursor-pointer group">
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-4">
@@ -3468,21 +3491,125 @@ export default function App() {
                             </div>
                             <h4 className="font-bold text-slate-800 mb-1 leading-tight">{rep.title}</h4>
                             <p className="text-xs text-slate-400 font-medium">{rep.period} {rep.tor && <TorRef section={rep.tor} />}</p>
-                            <div className="mt-6 flex gap-2">
+                            <div className="flex gap-3 mt-2 text-[10px] text-slate-400">
+                                <span>{rep.pages} หน้า</span>
+                                <span>{rep.size}</span>
+                                <span>อัปเดต: {rep.updated}</span>
+                            </div>
+                            <div className="mt-5 flex gap-2">
                                 <button
                                     onClick={() => rep.id && setReportPreview(rep.id)}
-                                    className={`flex-1 py-2 text-[10px] font-bold rounded-lg border transition-colors flex items-center justify-center gap-1.5 uppercase ${rep.id ? 'bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border-slate-100' : 'bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed'}`}
+                                    className={`flex-1 py-2.5 text-[10px] font-bold rounded-xl border transition-colors flex items-center justify-center gap-1.5 uppercase ${rep.id ? 'bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border-slate-100' : 'bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed'}`}
                                 >
                                     <Eye size={12} /> Preview
                                 </button>
-                                <button className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 uppercase shadow-md shadow-blue-100">
-                                    <Download size={12} /> Download
+                                <button
+                                    onClick={() => setExportModal({ title: rep.title, type: rep.type })}
+                                    className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 uppercase shadow-md shadow-blue-100"
+                                >
+                                    <Download size={12} /> Export
                                 </button>
                             </div>
                         </div>
                     </Card>
                 ))}
             </div>
+
+            {/* Export Modal */}
+            {exportModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={() => { setExportModal(null); setExportDone(false); }}>
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in"></div>
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className={`relative w-full max-w-lg mx-4 rounded-3xl shadow-2xl overflow-hidden animate-in ${isDark ? 'bg-slate-900 border border-slate-700' : 'bg-white'}`}
+                        style={{ animation: 'fade-in 0.2s ease-out, slide-in-from-bottom-4 0.3s ease-out' }}
+                    >
+                        {/* Header */}
+                        <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>ส่งออกรายงาน <TorRef section="2.3" /></h3>
+                                    <p className={`text-sm mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{exportModal.title}</p>
+                                </div>
+                                <button onClick={() => { setExportModal(null); setExportDone(false); }} className={`p-2 rounded-xl transition-colors ${isDark ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-400'}`}><X size={20} /></button>
+                            </div>
+                        </div>
+
+                        {/* Format Selection */}
+                        <div className="p-6">
+                            <p className={`text-[11px] font-bold uppercase tracking-wider mb-3 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>เลือกรูปแบบไฟล์</p>
+                            <div className="grid grid-cols-2 gap-3">
+                                {exportFormats.map(fmt => (
+                                    <button
+                                        key={fmt.id}
+                                        onClick={() => setExportFormat(fmt.id)}
+                                        className={`p-4 rounded-2xl border-2 text-left transition-all ${exportFormat === fmt.id
+                                            ? `${fmt.border} ${fmt.bg} shadow-md scale-[1.02]`
+                                            : (isDark ? 'border-slate-700 hover:border-slate-600' : 'border-slate-100 hover:border-slate-200')
+                                        }`}
+                                    >
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <div className={`p-2 rounded-xl ${fmt.bg} ${fmt.color}`}><fmt.icon size={18} /></div>
+                                            <div>
+                                                <p className={`text-sm font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>{fmt.label}</p>
+                                                <p className="text-[10px] text-slate-400">{fmt.ext}</p>
+                                            </div>
+                                        </div>
+                                        <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{fmt.desc}</p>
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Export Options */}
+                            <div className="mt-5 space-y-3">
+                                <p className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>ตัวเลือกเพิ่มเติม</p>
+                                <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-slate-50'}`}>
+                                    <label className="flex items-center gap-3 cursor-pointer">
+                                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-slate-300 text-blue-600" />
+                                        <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>รวมกราฟและแผนภูมิ</span>
+                                    </label>
+                                    <label className="flex items-center gap-3 cursor-pointer mt-2.5">
+                                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-slate-300 text-blue-600" />
+                                        <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>รวมข้อมูลดิบในภาคผนวก</span>
+                                    </label>
+                                    <label className="flex items-center gap-3 cursor-pointer mt-2.5">
+                                        <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-blue-600" />
+                                        <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>ใส่ลายน้ำ "กรมการค้าต่างประเทศ"</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className={`px-6 py-4 border-t flex items-center justify-between ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+                            <div className="text-[11px] text-slate-400">
+                                {exportDone ? (
+                                    <span className="flex items-center gap-1.5 text-emerald-600 font-bold"><CheckCircle2 size={14} /> ส่งออกสำเร็จ! ไฟล์พร้อมดาวน์โหลด</span>
+                                ) : (
+                                    <span>รูปแบบ: <span className="font-bold text-slate-600">{exportFormats.find(f => f.id === exportFormat)?.label}</span> • ขนาดประมาณ {exportFormat === 'csv' ? '0.5 MB' : exportFormat === 'xlsx' ? '1.2 MB' : '2.4 MB'}</span>
+                                )}
+                            </div>
+                            <button
+                                onClick={handleExport}
+                                disabled={exporting}
+                                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${exporting
+                                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                                    : exportDone
+                                        ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700'
+                                        : 'bg-blue-600 text-white shadow-lg shadow-blue-200 hover:bg-blue-700'}`}
+                            >
+                                {exporting ? (
+                                    <><RefreshCw size={16} className="animate-spin" /> กำลังสร้างไฟล์...</>
+                                ) : exportDone ? (
+                                    <><Download size={16} /> ดาวน์โหลด {exportFormats.find(f => f.id === exportFormat)?.label}</>
+                                ) : (
+                                    <><Download size={16} /> ส่งออก {exportFormats.find(f => f.id === exportFormat)?.label}</>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
         );
     };
