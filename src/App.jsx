@@ -389,7 +389,11 @@ export default function App() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Intelligence Dashboard</h1>
+                    <Tooltip text="แดชบอร์ดวิเคราะห์ภาพรวมการใช้สิทธิประโยชน์ทางการค้า FTA & GSP แบบ Real-time" position="bottom">
+                        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3 cursor-help group">
+                            <LayoutDashboard className="text-blue-600 group-hover:text-blue-800 group-hover:scale-110 transition-all duration-200" size={32} /> Intelligence Dashboard
+                        </h1>
+                    </Tooltip>
                     <p className="text-slate-500 text-sm">ข้อมูลสรุปภาพรวมการใช้สิทธิประโยชน์ทางการค้า (FTA & GSP) <TorRef section="3.2.1, 3.3.1" /></p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -1780,9 +1784,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
-                                <ClipboardCheck className="text-blue-600" size={32} /> Service Hub: End-to-End Workflow
-                            </h1>
+                            <Tooltip text="ศูนย์บริการครบวงจร — ยื่นคำขอ ตรวจสอบ อนุมัติ และออกเอกสาร e-CO ในระบบเดียว" position="bottom">
+                                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3 cursor-help group">
+                                    <ClipboardCheck className="text-blue-600 group-hover:text-blue-800 group-hover:scale-110 transition-all duration-200" size={32} /> Service Hub: End-to-End Workflow
+                                </h1>
+                            </Tooltip>
                             <p className="text-slate-500 text-sm">การให้บริการครบวงจร: ยื่นคำขอ {'→'} ตรวจสอบ {'→'} อนุมัติ {'→'} ออกเอกสาร e-CO <TorRef section="3.3.1" /></p>
                         </div>
                         <button
