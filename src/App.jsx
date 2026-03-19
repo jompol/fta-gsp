@@ -181,6 +181,9 @@ const Badge = ({ children, variant = "default" }) => {
 export default function App() {
     // --- Authentication State ---
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isPublicView, setIsPublicView] = useState(false);
+    const [showPDPAModal, setShowPDPAModal] = useState(false);
+    const [pdpaChecked, setPdpaChecked] = useState(false);
     const [user, setUser] = useState(null);
     const [loginProcess, setLoginProcess] = useState(null); // null, 'checking', 'success'
     const [authError, setAuthError] = useState('');
@@ -344,7 +347,7 @@ export default function App() {
                     department: 'Department of Foreign Trade',
                     id: 'DFT-' + Math.floor(Math.random() * 10000)
                 });
-                setIsLoggedIn(true);
+                setShowPDPAModal(true);
                 setLoginProcess(null);
             }, 800);
         }, 1500);
@@ -3969,7 +3972,104 @@ export default function App() {
         </div>
     );
 
-    // --- 7. Sign-In View (Simulated AD SSO from demo) ---
+    // --- 7. Public Dashboard View (No Login Required) ---
+    const PublicDashboardView = () => (
+        <div className="min-h-screen bg-slate-50 font-sans">
+            {/* Top Bar */}
+            <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+                <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <img src={dftLogo} alt="DFT" className="h-9" />
+                        <div>
+                            <p className="text-xs font-black text-slate-800 leading-tight">ระบบ FTA-GSP Intelligence Portal</p>
+                            <p className="text-[10px] text-slate-400 font-medium">กรมการค้าต่างประเทศ</p>
+                        </div>
+                        <span className="ml-2 px-2.5 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full border border-emerald-200 uppercase tracking-wider">ข้อมูลสาธารณะ</span>
+                    </div>
+                    <button
+                        onClick={() => setIsPublicView(false)}
+                        className="flex items-center gap-2 px-5 py-2 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-700 transition-all shadow-sm"
+                    >
+                        <LogIn size={15} /> เข้าสู่ระบบ
+                    </button>
+                </div>
+            </header>
+
+            <div className="max-w-6xl mx-auto px-6 py-10 space-y-10">
+                {/* Hero */}
+                <div className="text-center space-y-3">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100 mb-2">
+                        <Globe size={13} /> ข้อมูลเปิดเผยสาธารณะ — Open Data
+                    </div>
+                    <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">สถิติการใช้สิทธิประโยชน์ทางการค้า</h1>
+                    <p className="text-slate-500 text-sm max-w-xl mx-auto">ข้อมูลภาพรวมการส่งออกและการใช้สิทธิประโยชน์ภายใต้ความตกลง FTA และ GSP ของไทย เผยแพร่โดยกรมการค้าต่างประเทศ</p>
+                </div>
+
+                {/* KPI Cards */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                        { label: 'มูลค่าส่งออกภายใต้ FTA/GSP', value: '$48.2B', sub: 'ปีงบประมาณ 2567', icon: TrendingUp, color: 'text-blue-600', bg: 'bg-blue-50' },
+                        { label: 'กรอบ FTA ที่มีผลบังคับใช้', value: '17', sub: 'กรอบความตกลง', icon: Globe, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                        { label: 'อัตราการใช้สิทธิเฉลี่ย', value: '68.4%', sub: 'เทียบกับมูลค่าส่งออกทั้งหมด', icon: BarChart3, color: 'text-amber-600', bg: 'bg-amber-50' },
+                        { label: 'ใบรับรองถิ่นกำเนิด (CO)', value: '1.24M', sub: 'ฉบับที่ออกในปี 2567', icon: FileCheck, color: 'text-purple-600', bg: 'bg-purple-50' },
+                    ].map((kpi, i) => (
+                        <div key={i} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-3">
+                            <div className={`w-10 h-10 rounded-xl ${kpi.bg} flex items-center justify-center`}>
+                                <kpi.icon size={20} className={kpi.color} />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-extrabold text-slate-900">{kpi.value}</p>
+                                <p className="text-xs font-bold text-slate-600 mt-0.5">{kpi.label}</p>
+                                <p className="text-[11px] text-slate-400 mt-0.5">{kpi.sub}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* FTA Frameworks */}
+                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <h2 className="text-base font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+                        <Globe size={18} className="text-blue-600" /> กรอบความตกลง FTA ที่ไทยมีผลบังคับใช้
+                        <span className="ml-auto text-xs font-bold text-slate-400">17 กรอบ</span>
+                    </h2>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                        {[
+                            'อาเซียน (AFTA)', 'ไทย-ออสเตรเลีย', 'อาเซียน-ออสเตรเลีย-NZ', 'ไทย-นิวซีแลนด์',
+                            'ไทย-ชิลี', 'อาเซียน-จีน (ACFTA)', 'ไทย-อินเดีย', 'อาเซียน-อินเดีย',
+                            'ไทย-ญี่ปุ่น (JTEPA)', 'อาเซียน-ญี่ปุ่น', 'อาเซียน-เกาหลี', 'อาเซียน-ฮ่องกง',
+                            'ไทย-เปรู', 'RCEP', 'ไทย-ศรีลังกา', 'ไทย-EFTA', 'ไทย-ภูฏาน',
+                        ].map((fta, i) => (
+                            <div key={i} className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-lg border border-slate-100 text-xs font-semibold text-slate-700">
+                                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full shrink-0"></div>
+                                {fta}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* CTA Banner */}
+                <div className="bg-gradient-to-r from-slate-900 to-blue-900 rounded-2xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <p className="text-xs font-bold text-blue-300 uppercase tracking-widest mb-1">สำหรับเจ้าหน้าที่และผู้ประกอบการ</p>
+                        <h3 className="text-xl font-extrabold mb-1">เข้าสู่ระบบเพื่อใช้งานเต็มรูปแบบ</h3>
+                        <p className="text-sm text-slate-300">วิเคราะห์ข้อมูลเชิงลึก ยื่นคำขอ CO และติดตามสถานะแบบ Real-time</p>
+                    </div>
+                    <button
+                        onClick={() => setIsPublicView(false)}
+                        className="shrink-0 flex items-center gap-2 px-8 py-3.5 bg-white text-slate-900 rounded-xl font-extrabold text-sm hover:bg-blue-50 transition-all shadow-xl"
+                    >
+                        <LogIn size={18} /> เข้าสู่ระบบ
+                    </button>
+                </div>
+
+                <p className="text-center text-[11px] text-slate-400 pb-6">
+                    ข้อมูลที่แสดงเป็นข้อมูลสถิติสาธารณะ อ้างอิงจากรายงานประจำปีกรมการค้าต่างประเทศ • เผยแพร่ตามนโยบาย Open Government Data
+                </p>
+            </div>
+        </div>
+    );
+
+    // --- 8. Sign-In View (Simulated AD SSO from demo) ---
     const SignInView = () => (
         <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 relative overflow-hidden font-sans">
             {/* Background Decorative Elements */}
@@ -4057,7 +4157,17 @@ export default function App() {
                     </div>
                 </Card>
 
-                <div className="mt-8 flex flex-col items-center gap-4">
+                {/* Public Access Button */}
+                <div className="mt-4 w-full max-w-sm">
+                    <button
+                        onClick={() => setIsPublicView(true)}
+                        className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600 text-sm font-bold transition-all bg-white/70"
+                    >
+                        <Globe size={16} /> ดูข้อมูลสาธารณะ (ไม่ต้องเข้าสู่ระบบ)
+                    </button>
+                </div>
+
+                <div className="mt-6 flex flex-col items-center gap-4">
                     <div className="flex items-center gap-6 opacity-40">
                         <img src={dftLogo} alt="DFT" className="h-8 grayscale hover:grayscale-0 transition-all cursor-help" />
                         <div className="h-6 w-[1px] bg-slate-300"></div>
@@ -4074,12 +4184,16 @@ export default function App() {
         </div>
     );
 
-    // If not logged in, render only the Sign-in view
+    // If not logged in, render public view or sign-in view
+    if (!isLoggedIn && isPublicView) {
+        return <PublicDashboardView />;
+    }
     if (!isLoggedIn) {
         return <SignInView />;
     }
 
     return (
+        <>
         <div className={`flex h-screen overflow-hidden font-sans antialiased transition-colors duration-300 ${isDark ? 'bg-slate-950 text-slate-200' : 'bg-slate-50 text-slate-900'}`}>
 
             {/* Sidebar Navigation */}
@@ -4527,5 +4641,89 @@ export default function App() {
 
             </main>
         </div>
+
+        {/* PDPA Consent Modal — แสดงครั้งแรกหลัง login สำเร็จ */}
+        {showPDPAModal && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center">
+                <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"></div>
+                <div
+                    className="relative w-full max-w-lg mx-4 rounded-3xl shadow-2xl overflow-hidden bg-white"
+                    style={{ animation: 'fade-in 0.2s ease-out, slide-in-from-bottom-4 0.3s ease-out' }}
+                >
+                    {/* Header */}
+                    <div className="bg-slate-900 px-7 pt-7 pb-5">
+                        <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center shrink-0">
+                                <ShieldCheck size={24} className="text-blue-300" />
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <h2 className="text-lg font-extrabold text-white">นโยบายคุ้มครองข้อมูลส่วนบุคคล</h2>
+                                    <TorRef section="1.9, 2.14" />
+                                </div>
+                                <p className="text-slate-400 text-xs mt-0.5">Personal Data Protection Act (PDPA) — พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Body */}
+                    <div className="px-7 py-6 space-y-4 max-h-[50vh] overflow-y-auto content-scroll">
+                        <p className="text-sm text-slate-600 leading-relaxed">
+                            กรมการค้าต่างประเทศ ในฐานะผู้ควบคุมข้อมูลส่วนบุคคล ขอแจ้งให้ทราบถึงการเก็บรวบรวมและการใช้ข้อมูลส่วนบุคคลของท่านในระบบ FTA-GSP Intelligence Portal ดังต่อไปนี้
+                        </p>
+                        <div className="space-y-3">
+                            {[
+                                {
+                                    num: '1', title: 'วัตถุประสงค์การเก็บข้อมูล',
+                                    desc: 'เพื่อใช้ในการยืนยันตัวตน บริหารจัดการสิทธิ์การเข้าถึงระบบ และบันทึกประวัติการใช้งานเพื่อความมั่นคงปลอดภัยของระบบสารสนเทศ'
+                                },
+                                {
+                                    num: '2', title: 'ประเภทข้อมูลที่เก็บรวบรวม',
+                                    desc: 'ชื่อ-นามสกุล, รหัสประจำตัวเจ้าหน้าที่, บันทึก log การเข้าถึงระบบ, ที่อยู่ IP, และข้อมูลที่กรอกในแบบคำขอ CO'
+                                },
+                                {
+                                    num: '3', title: 'สิทธิ์ของเจ้าของข้อมูล',
+                                    desc: 'ท่านมีสิทธิ์ขอเข้าถึง แก้ไข ลบ หรือโอนข้อมูล รวมถึงสิทธิ์คัดค้านการประมวลผล โดยติดต่อผู้ควบคุมข้อมูล: pdpa@dft.go.th'
+                                },
+                            ].map(item => (
+                                <div key={item.num} className="flex gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                    <div className="w-6 h-6 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">{item.num}</div>
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-800 mb-0.5">{item.title}</p>
+                                        <p className="text-[11px] text-slate-500 leading-relaxed">{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="px-7 py-5 bg-slate-50 border-t border-slate-100 space-y-4">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={pdpaChecked}
+                                onChange={e => setPdpaChecked(e.target.checked)}
+                                className="mt-0.5 w-4 h-4 rounded border-2 border-slate-300 accent-blue-600 shrink-0"
+                            />
+                            <span className="text-xs text-slate-600 leading-relaxed font-medium">
+                                ข้าพเจ้าได้อ่านและเข้าใจนโยบายคุ้มครองข้อมูลส่วนบุคคลข้างต้น และยินยอมให้กรมการค้าต่างประเทศ เก็บรวบรวมและใช้ข้อมูลส่วนบุคคลของข้าพเจ้าตามวัตถุประสงค์ที่ระบุไว้
+                            </span>
+                        </label>
+                        <button
+                            disabled={!pdpaChecked}
+                            onClick={() => { setIsLoggedIn(true); setShowPDPAModal(false); setPdpaChecked(false); }}
+                            className={`w-full py-3.5 rounded-2xl font-extrabold text-sm transition-all flex items-center justify-center gap-2 ${pdpaChecked
+                                ? 'bg-slate-900 text-white hover:bg-slate-700 shadow-lg'
+                                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                            }`}
+                        >
+                            <ShieldCheck size={17} /> ยืนยันและเข้าใช้งานระบบ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+        </>
     );
 }
