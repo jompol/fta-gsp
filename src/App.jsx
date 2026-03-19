@@ -195,6 +195,42 @@ export default function App() {
     const [theme, setTheme] = useState(() => localStorage.getItem('fta-theme') || 'light');
     const [fontSize, setFontSize] = useState(() => parseInt(localStorage.getItem('fta-fontsize') || '100'));
     const [showSettings, setShowSettings] = useState(false);
+    const [showAISearch, setShowAISearch] = useState(false);
+    const [aiQuery, setAiQuery] = useState('');
+    const [aiSearching, setAiSearching] = useState(false);
+    const [aiResult, setAiResult] = useState(null);
+
+    // ⌘K shortcut
+    useEffect(() => {
+        const handler = (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                setShowAISearch(prev => !prev);
+            }
+            if (e.key === 'Escape') setShowAISearch(false);
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, []);
+
+    const handleAISearch = () => {
+        if (!aiQuery.trim()) return;
+        setAiSearching(true);
+        setAiResult(null);
+        setTimeout(() => {
+            setAiResult({
+                answer: `จากการวิเคราะห์ข้อมูลในระบบ FTA-GSP พบว่า "${aiQuery}" มีความเกี่ยวข้องกับข้อมูลดังนี้:`,
+                items: [
+                    { type: 'stat', title: 'มูลค่าส่งออกที่เกี่ยวข้อง', value: '$4,520.5M', desc: 'ภายใต้กรอบ ACFTA ปี 2567', icon: Globe },
+                    { type: 'doc', title: 'REQ-2024-8842', value: 'Verifying', desc: 'Thai Agri Export Co. — Form E (ACFTA)', icon: FileCheck },
+                    { type: 'hs', title: 'HS 0804.50.20', value: 'มะม่วงสด', desc: 'อัตราใช้สิทธิ 72.4% | Eligible List ✓', icon: Layers },
+                    { type: 'report', title: 'รายงานสรุปภาพรวม FTA & GSP', value: 'Annual Report', desc: 'ปีงบประมาณ 2567 — พร้อมดาวน์โหลด', icon: FileText },
+                ],
+                suggestion: 'แนะนำ: ลองดูหน้า Analytics เพื่อวิเคราะห์เชิงลึกเพิ่มเติม หรือใช้ Multi-Criteria Search บน Dashboard'
+            });
+            setAiSearching(false);
+        }, 1500);
+    };
 
     useEffect(() => {
         localStorage.setItem('fta-theme', theme);
@@ -4033,10 +4069,10 @@ export default function App() {
                                     className={`w-full rounded-2xl py-3 pl-12 pr-36 text-sm font-medium placeholder:text-slate-400 focus:shadow-[0_0_0_4px_rgba(59,130,246,0.08)] transition-all duration-300 outline-none border ${isDark ? 'bg-slate-800/80 border-slate-700 text-slate-200 focus:bg-slate-800 focus:border-blue-500' : 'bg-slate-50/80 border-slate-200/80 text-slate-700 focus:bg-white focus:border-blue-300'}`}
                                 />
                                 <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                    <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-violet-600 to-blue-500 text-white text-[10px] font-black rounded-xl shadow-md shadow-violet-200/50 hover:shadow-lg hover:shadow-violet-200/80 hover:scale-105 transition-all cursor-pointer">
+                                    <button onClick={() => setShowAISearch(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-violet-600 to-blue-500 text-white text-[10px] font-black rounded-xl shadow-md shadow-violet-200/50 hover:shadow-lg hover:shadow-violet-200/80 hover:scale-105 transition-all cursor-pointer">
                                         <Sparkles size={12} /> AI Search
-                                    </span>
-                                    <span className="hidden lg:flex items-center gap-1 px-2 py-1.5 bg-slate-100/80 text-slate-400 text-[10px] font-mono font-bold rounded-lg border border-slate-200/80">⌘K</span>
+                                    </button>
+                                    <button onClick={() => setShowAISearch(true)} className="hidden lg:flex items-center gap-1 px-2 py-1.5 bg-slate-100/80 text-slate-400 text-[10px] font-mono font-bold rounded-lg border border-slate-200/80 hover:bg-slate-200/80 transition-all">⌘K</button>
                                 </div>
                             </div>
                         </div>
@@ -4158,6 +4194,165 @@ export default function App() {
                         </button>
                     </div>
                 </header>
+
+                {/* AI Search Modal */}
+                {showAISearch && (
+                    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]" onClick={() => setShowAISearch(false)}>
+                        {/* Backdrop */}
+                        <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in"></div>
+
+                        {/* Modal */}
+                        <div
+                            onClick={(e) => e.stopPropagation()}
+                            className={`relative w-full max-w-2xl mx-4 rounded-3xl shadow-2xl overflow-hidden animate-in ${isDark ? 'bg-slate-900 border border-slate-700' : 'bg-white border border-slate-200'}`}
+                            style={{ animation: 'fade-in 0.2s ease-out, slide-in-from-bottom-4 0.3s ease-out' }}
+                        >
+                            {/* Search Input */}
+                            <div className={`p-5 border-b ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2.5 bg-gradient-to-br from-violet-600 to-blue-500 rounded-xl text-white shadow-lg shadow-violet-200/30">
+                                        <BrainCircuit size={20} />
+                                    </div>
+                                    <div className="flex-1 relative">
+                                        <input
+                                            type="text"
+                                            value={aiQuery}
+                                            onChange={(e) => setAiQuery(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleAISearch()}
+                                            placeholder="ถามอะไรก็ได้... เช่น สถิติ ACFTA ปี 2567, สถานะ REQ-2024-8842, HS 0804"
+                                            autoFocus
+                                            className={`w-full py-2 text-base font-medium outline-none bg-transparent ${isDark ? 'text-white placeholder:text-slate-500' : 'text-slate-800 placeholder:text-slate-400'}`}
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={handleAISearch}
+                                        disabled={aiSearching || !aiQuery.trim()}
+                                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${aiSearching || !aiQuery.trim()
+                                            ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                            : 'bg-gradient-to-r from-violet-600 to-blue-500 text-white shadow-lg shadow-violet-200/50 hover:scale-105'}`}
+                                    >
+                                        {aiSearching ? <RefreshCw size={16} className="animate-spin" /> : <Search size={16} />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="max-h-[60vh] overflow-y-auto content-scroll">
+                                {/* AI Searching State */}
+                                {aiSearching && (
+                                    <div className="p-10 flex flex-col items-center justify-center gap-4">
+                                        <div className="relative">
+                                            <div className="w-16 h-16 rounded-full bg-gradient-to-r from-violet-500 to-blue-500 animate-pulse"></div>
+                                            <BrainCircuit size={28} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white" />
+                                        </div>
+                                        <div className="text-center">
+                                            <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>AI กำลังวิเคราะห์ข้อมูล...</p>
+                                            <p className="text-xs text-slate-400 mt-1">ค้นหาจาก Data Warehouse, CO Records, Eligible List</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* AI Result */}
+                                {aiResult && !aiSearching && (
+                                    <div className="p-5 space-y-4">
+                                        {/* AI Answer */}
+                                        <div className={`p-4 rounded-2xl flex items-start gap-3 ${isDark ? 'bg-violet-500/10 border border-violet-500/20' : 'bg-gradient-to-r from-violet-50 to-blue-50 border border-violet-100'}`}>
+                                            <Sparkles size={18} className="text-violet-500 shrink-0 mt-0.5" />
+                                            <div>
+                                                <p className={`text-sm font-medium leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{aiResult.answer}</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Result Items */}
+                                        <div className="space-y-2">
+                                            <p className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>ผลลัพธ์ที่เกี่ยวข้อง</p>
+                                            {aiResult.items.map((item, i) => (
+                                                <div key={i} className={`p-4 rounded-xl flex items-center justify-between cursor-pointer transition-all group ${isDark ? 'hover:bg-slate-800 border border-slate-800' : 'hover:bg-slate-50 border border-slate-100'}`}>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className={`p-2.5 rounded-xl transition-transform group-hover:scale-110 ${item.type === 'stat' ? 'bg-blue-100 text-blue-600' : item.type === 'doc' ? 'bg-emerald-100 text-emerald-600' : item.type === 'hs' ? 'bg-amber-100 text-amber-600' : 'bg-indigo-100 text-indigo-600'}`}>
+                                                            <item.icon size={18} />
+                                                        </div>
+                                                        <div>
+                                                            <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>{item.title}</p>
+                                                            <p className="text-[11px] text-slate-400">{item.desc}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <Badge variant={item.type === 'stat' ? 'info' : item.type === 'doc' ? 'warning' : item.type === 'hs' ? 'success' : 'purple'}>{item.value}</Badge>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* AI Suggestion */}
+                                        <div className={`p-3 rounded-xl flex items-start gap-2 ${isDark ? 'bg-slate-800' : 'bg-slate-50'}`}>
+                                            <Lightbulb size={14} className="text-amber-500 shrink-0 mt-0.5" />
+                                            <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{aiResult.suggestion}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Quick Actions — shown when no query */}
+                                {!aiResult && !aiSearching && (
+                                    <div className="p-5 space-y-4">
+                                        <div>
+                                            <p className={`text-[10px] font-bold uppercase tracking-wider mb-3 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>ลองถามคำถามเหล่านี้</p>
+                                            <div className="space-y-2">
+                                                {[
+                                                    'สถิติการใช้สิทธิ ACFTA ปี 2567 เป็นอย่างไร?',
+                                                    'ตรวจสอบสถานะคำขอ REQ-2024-8842',
+                                                    'HS Code 0804 มีอัตราใช้สิทธิเท่าไหร่?',
+                                                    'ประเทศไหนมีมูลค่าส่งออกสูงสุด?',
+                                                    'รายงานสรุป FTA & GSP รายปี',
+                                                ].map((q, i) => (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => { setAiQuery(q); }}
+                                                        className={`w-full text-left p-3 rounded-xl text-sm font-medium flex items-center gap-3 transition-all ${isDark ? 'text-slate-400 hover:bg-slate-800 hover:text-white' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'}`}
+                                                    >
+                                                        <Search size={14} className="text-slate-300 shrink-0" />
+                                                        {q}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <p className={`text-[10px] font-bold uppercase tracking-wider mb-3 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>ลัดไปยัง</p>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                {[
+                                                    { label: 'Dashboard', icon: LayoutDashboard, color: 'text-blue-500' },
+                                                    { label: 'ยื่นคำขอ CO', icon: FilePlus, color: 'text-emerald-500' },
+                                                    { label: 'รายงาน', icon: FileText, color: 'text-indigo-500' },
+                                                    { label: 'Analytics', icon: BarChart3, color: 'text-amber-500' },
+                                                    { label: 'AI Intelligence', icon: BrainCircuit, color: 'text-purple-500' },
+                                                    { label: 'Governance', icon: ShieldCheck, color: 'text-rose-500' },
+                                                ].map((shortcut, i) => (
+                                                    <button key={i} onClick={() => { handleTabChange(shortcut.label === 'ยื่นคำขอ CO' ? 'services' : shortcut.label === 'รายงาน' ? 'reports' : shortcut.label === 'AI Intelligence' ? 'ai' : shortcut.label.toLowerCase()); setShowAISearch(false); }} className={`p-3 rounded-xl text-center flex flex-col items-center gap-2 transition-all ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-50'}`}>
+                                                        <shortcut.icon size={20} className={shortcut.color} />
+                                                        <span className={`text-[11px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{shortcut.label}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Footer */}
+                            <div className={`px-5 py-3 border-t flex items-center justify-between ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+                                <div className="flex items-center gap-3 text-[10px] text-slate-400">
+                                    <span className="flex items-center gap-1"><span className="px-1.5 py-0.5 bg-slate-100 rounded font-mono font-bold text-[9px]">Enter</span> ค้นหา</span>
+                                    <span className="flex items-center gap-1"><span className="px-1.5 py-0.5 bg-slate-100 rounded font-mono font-bold text-[9px]">Esc</span> ปิด</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+                                    <span className="flex items-center gap-1 px-1.5 py-0.5 bg-gradient-to-r from-violet-500/10 to-blue-500/10 text-violet-500 rounded font-bold">
+                                        <Sparkles size={10} /> Powered by AI
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Dynamic Content View */}
                 <div className={`flex-1 overflow-y-auto p-6 relative transition-colors duration-300 content-scroll ${isDark ? 'bg-slate-950' : 'bg-slate-50/50'}`}>
